@@ -1,0 +1,80 @@
+name = "swap-space-marketing-page"
+compatibility_date = "2025-10-17"
+
+[assets]
+directory = "."
+
+[[assets.rules]]
+type = "Data"
+globs = ["**/*.html"]
+fallthrough = true
+
+[[assets.rules]]
+type = "Data"
+globs = ["**/*.css"]
+fallthrough = true
+
+[[assets.rules]]
+type = "Data"
+globs = ["**/*.js"]
+fallthrough = true
+
+[[assets.rules]]
+type = "Data"
+globs = ["**/*.json"]
+fallthrough = true
+
+[[assets.rules]]
+type = "Data"
+globs = ["**/*.svg"]
+fallthrough = true
+
+[[assets.rules]]
+type = "Data"
+globs = ["**/*.png"]
+fallthrough = true
+
+[[assets.rules]]
+type = "Data"
+globs = ["**/*.jpg"]
+fallthrough = true
+
+[[assets.rules]]
+type = "Data"
+globs = ["**/*.jpeg"]
+fallthrough = true
+
+[[assets.rules]]
+type = "Data"
+globs = ["**/*.gif"]
+fallthrough = true
+
+[[assets.rules]]
+type = "Data"
+globs = ["**/*.webp"]
+fallthrough = true
+
+[[assets.rules]]
+type = "Data"
+globs = ["**/*.ico"]
+fallthrough = true
+
+[[assets.rules]]
+type = "Data"
+globs = ["**/*.woff"]
+fallthrough = true
+
+[[assets.rules]]
+type = "Data"
+globs = ["**/*.woff2"]
+fallthrough = true
+
+[[assets.rules]]
+type = "Data"
+globs = ["**/*.ttf"]
+fallthrough = true
+
+[[assets.rules]]
+type = "Data"
+globs = ["**/*.eot"]
+fallthrough = true
