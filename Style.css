@@ -1,0 +1,595 @@
+/* Geist Font Family */
+@font-face {
+  font-family: 'Geist';
+  src: url('assets/Geist-Thin_oY14u_1p12rXOA48CjRJJ.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Geist';
+  src: url('assets/Geist-ExtraLight_wBuq_ep6mbm56E0GOC-Jq.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Geist';
+  src: url('assets/Geist-Light_SWddobz4bLmb9RV33OAh1.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Geist';
+  src: url('assets/Geist-Regular_mbVT_SmsTvyJMAw1fxROp.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Geist';
+  src: url('assets/Geist-Medium_Jg6B-stEFhOflMHleox4D.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Geist';
+  src: url('assets/Geist-SemiBold_hwscF-kRHXo8XSftNHkjB.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Geist';
+  src: url('assets/Geist-Bold_nVi4kiOs_3Bb_EFbLMflT.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Geist';
+  src: url('assets/Geist-ExtraBold_s7FMi-vuQMrtsm6yMTBP-.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Geist';
+  src: url('assets/Geist-Black_Ju3LHzNLOEQQeaZpqzH5F.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+}
+
+/* General Sans Font Family */
+@font-face {
+  font-family: 'General Sans';
+  src: url('assets/GeneralSans-Extralight_XOIvXDMVjrQjA2RJVmMfx.woff2') format('woff2');
+  font-weight: 200;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'General Sans';
+  src: url('assets/GeneralSans-Light_I5QWbbDGbbHN0PzYPlpfb.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'General Sans';
+  src: url('assets/GeneralSans-Regular_PSNyf7gAjf1bllr78ibII.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'General Sans';
+  src: url('assets/GeneralSans-Medium_p939H1O492_KUD6MiOoG_.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'General Sans';
+  src: url('assets/GeneralSans-Semibold_jhF6NrZUTupUeNRpF44RX.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'General Sans';
+  src: url('assets/GeneralSans-Bold_0YcVelds450z2DBAMW2_j.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'General Sans';
+  src: url('assets/GeneralSans-ExtralightItalic_hMVP9oJnwkL7eFCvgfzb5.woff2') format('woff2');
+  font-weight: 200;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'General Sans';
+  src: url('assets/GeneralSans-LightItalic_rHDzE1RL8WOyGbVGpNHik.woff2') format('woff2');
+  font-weight: 300;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'General Sans';
+  src: url('assets/GeneralSans-Italic_LLFjOImMyg0Qfo-ZhH4CX.woff') format('woff');
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'General Sans';
+  src: url('assets/GeneralSans-MediumItalic_KyzCNJQ54GPJzY9WGIej5.ttf') format('truetype');
+  font-weight: 500;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'General Sans';
+  src: url('assets/GeneralSans-SemiboldItalic_g_njuSBCTWR2C_ce1utxz.woff2') format('woff2');
+  font-weight: 600;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'General Sans';
+  src: url('assets/GeneralSans-BoldItalic_mgrti70hvRT4Ze0APMgCF.woff') format('woff');
+  font-weight: 700;
+  font-style: italic;
+}
+
+/* CSS Reset - Remove all default margins and padding */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body{
+  background-color: #FFF;
+  font-family: 'General Sans', sans-serif;
+  color: #364152;
+  letter-spacing: -0.4px;
+}
+
+/* Global heading styles */
+h1, h2, h3, h4, h5, h6 {
+  color: #202939;
+  letter-spacing: -0.4px;
+}
+
+/* Global body text styles */
+p {
+  color: #364152;
+  letter-spacing: -0.4px;
+}
+.masthead{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: start;
+  padding-left: 40px;
+padding-right: 40px;
+padding-top: 40px;
+}
+.logo{
+  width: 200px;
+  height: 40px;
+}
+.secondary-button{
+  padding-top: 12px;
+  padding-bottom: 12px;
+  padding-left: 16px;
+  padding-right: 16px;
+  background-color: #FFF;
+  color: #079455;
+  font-weight: 500;
+  width: 120px;
+  height: auto;
+  border:solid 0.5px #079455;
+  border-radius: 40px;
+  font-size: 16px;
+  letter-spacing: -0.4px;
+}
+.hero{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  gap: 12px;
+  padding: 40px;
+}
+.h1-text{
+  width: 50%;
+  font-size: 4rem;
+  text-align: center;
+  font-weight: 500;
+  padding-top: 60px;
+  margin: 0;
+}
+
+.body-text{
+  font-weight: 400;
+  font-size: 1.1rem;
+  width: 60%;
+  text-align: center;
+  margin-top: 8px;
+  padding: 0;
+}
+.swap-text{
+  font-style: italic;
+  color: #079455;
+}
+.button-primary{
+  width: fit-content;
+  height: 60px;
+  background-color: #079455;
+  color:#FFF;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 16px 22px;
+  border-radius: 200px;
+  border: solid 2px #FFF;
+  margin-top: 12px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  font-family: 'General Sans', sans-serif;
+  box-sizing: border-box;
+  letter-spacing: -0.4px;
+}
+
+.button-primary::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  cursor: pointer;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 70%
+  );
+  animation: shimmer 4.5s infinite;
+  pointer-events: none;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%) translateY(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) translateY(100%) rotate(45deg);
+  }
+}
+.highlight-text{
+  font-size: 1rem;
+  font-weight: 600;
+}
+.hero-img{
+  width: 90%;
+  border-radius: 12px;
+  margin-top: 24px;
+}
+.home-section{
+  background-color: #FFF;
+  padding: 40px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 12px
+;
+}
+.h2-text{
+font-size: 3rem;
+width: 40%;
+text-align: center;
+margin-top: 40px;
+font-weight: 600;
+}
+.img-wrapper{
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  margin: 24px;
+  width: 100%;
+  align-items: space-between;
+}
+.carousel-img{
+  width: 32%;
+}
+.how-it-works{
+background-color: #FFF;
+padding: 40px;
+}
+.works-wrapper{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.h2-texts{
+  font-size: 3.2rem;
+  font-weight: 500;
+  width: 40%;
+  padding-bottom: 32px;
+}
+
+.how-it-works{
+  padding: 40px;
+}
+
+.col-wrapper-3{
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+  align-items: flex-start;
+}
+.column{
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  flex: 1;
+}
+.col-img-3{
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+}
+.h4-text{
+  text-align: left;
+  width: 100%;
+  margin: 0;
+  padding-top: 12px;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+.body-text-text{
+  text-align: left;
+  width: 100%;
+  margin: 0;
+  font-weight: 400;
+}
+.pricing-section{
+  padding-top: 80px;
+
+  padding-bottom: 80px;
+  position: relative;
+}
+.pricing-text{
+  width: 50%;
+  font-size: 2.2rem;
+  font-weight: 500;
+  text-align: left;
+  line-height: 1.5;
+  letter-spacing: -0.4px;
+  color: #FFF;
+  font-weight: 400;
+  padding-top: 80px;
+  
+}
+.pricing-background{
+  background-image: url('assets/Pricing\ bg\ img.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 100vh;
+  padding: 40px;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 216px;
+}
+.pricing-content-left{
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 599px;
+}
+.pricing-text{
+  width: 100%;
+  font-size: 30px;
+  font-weight: 500;
+  text-align: left;
+  line-height: 38px;
+  color: #FFF;
+  margin: 0;
+}
+.body-text-white{
+  color: #FFF;
+  width: 100%;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  margin: 0;
+}
+.price-comparison{
+  width: 523px;
+  position: relative;
+  flex-shrink: 0;
+  min-height: 500px;
+}
+.comparison-card{
+  background-color: #FFF;
+  border-radius: 12px;
+  padding: 32px 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  margin-top: 80px;
+  opacity: 0;
+  transform: translateX(30px) scale(0.95);
+  transition: all 1500ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition-delay: 0s;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+.comparison-card.active{
+  position: relative;
+  margin-top: 80px;
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  transition: all 1500ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition-delay: 0.08s;
+  pointer-events: auto;
+}
+#mutualCard:not(.active){
+  transform: translateX(-30px) scale(0.95);
+}
+#swapcreditsCard:not(.active){
+  transform: translateX(30px) scale(0.95);
+}
+.card-title{
+  font-size: 18px;
+  font-weight: 600;
+  color: #202939;
+  text-align: center;
+  margin: 0;
+  line-height: 28px;
+}
+.card-description{
+  font-size: 16px;
+  font-weight: 400;
+  color: #364152;
+  text-align: center;
+  margin: 0;
+  line-height: 24px;
+}
+.comparison-label{
+  font-size: 16px;
+  font-weight: 500;
+  color: #202939;
+  text-align: center;
+  margin: 0;
+  line-height: 24px;
+}
+.comparison-boxes{
+  display: flex;
+  width: 100%;
+}
+.comparison-box-left,
+.comparison-box-right{
+  flex: 1;
+  background-color: #FFF;
+  border: 1px solid #d5d9eb;
+  padding: 24px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+.comparison-box-left{
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+  border-right: none;
+}
+.comparison-box-right{
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+.comparison-box-left.swapcredits,
+.comparison-box-right.swapcredits{
+  border-color: rgba(7, 148, 85, 0.2);
+}
+.box-label{
+  font-size: 14px;
+  font-weight: 400;
+  color: #364152;
+  margin: 0;
+  line-height: 20px;
+  text-align: center;
+}
+.box-value{
+  font-size: 20px;
+  font-weight: 600;
+  color: #202939;
+  margin: 0;
+  line-height: 30px;
+  text-align: center;
+}
+.box-value-green{
+  font-size: 20px;
+  font-weight: 600;
+  color: #079455;
+  margin: 0;
+  line-height: 30px;
+  text-align: center;
+}
+.toggle-group{
+  background-color: #EEF2F6;
+  border-radius: 40px;
+  padding: 4px;
+  display: inline-flex;
+  position: relative;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+}
+.toggle-group::before{
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: calc(50% - 4px);
+  height: calc(100% - 8px);
+  background-color: #FFF;
+  border-radius: 36px;
+  transition: left 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  z-index: 1;
+}
+.toggle-group[data-active="swapcredits"]::before{
+  left: calc(50%);
+}
+.toggle-btn{
+  background: transparent;
+  border: none;
+  padding: 12px 32px;
+  min-height: 40px;
+  border-radius: 36px;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 20px;
+  color: #888;
+  cursor: pointer;
+  transition: color 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: 'General Sans', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  position: relative;
+  z-index: 2;
+  outline: none;
+  letter-spacing: -0.4px;
+}
+.toggle-btn.active{
+  color: #202939;
+  font-weight: 600;
+}
+.toggle-btn:not(.active){
+  color: #888;
+}
