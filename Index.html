@@ -863,10 +863,27 @@ Join Swap Space today and start your journey toward budget-friendly travel, home
               }
             }
             
+            // Build location string from address object
+            let location = 'Location not specified';
+            if (property.address) {
+              const addressParts = [];
+              if (property.address.city) {
+                addressParts.push(property.address.city);
+              }
+              if (property.address.country) {
+                addressParts.push(property.address.country);
+              }
+              if (addressParts.length > 0) {
+                location = addressParts.join(', ');
+              } else if (property.address.addressLine) {
+                location = property.address.addressLine;
+              }
+            }
+            
             return {
               id: property.propertyId?.toString() || '',
               title: property.propertyTitle || 'Untitled Property',
-              location: property.address || 'Location not specified',
+              location: location,
               images: property.images?.map(img => img.imageUrl) || [],
               host: {
                 name: property.hostName || 'Host',
@@ -882,68 +899,11 @@ Join Swap Space today and start your journey toward budget-friendly travel, home
               doubleBedNumber: property.doubleBedNumber || 0,
               largeDoubleBedNumber: property.largeDoubleBedNumber || 0,
               bedroomNumber: property.bedroomNumber,
-              availableMonths: extractAvailableMonths(property.availableDateRanges),
-              availabilityText: formatAvailabilityText(property.availableDateRanges),
+              availableMonths: property.publicAvailableMonths || [],
               isAvailable: property.isAvailable || false,
               isPublished: property.isPublished || false
             };
           });
-        }
-        
-        // Extract months from available date ranges
-        function extractAvailableMonths(dateRanges) {
-          if (!dateRanges || !Array.isArray(dateRanges) || dateRanges.length === 0) {
-            return [];
-          }
-          
-          const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-                            'July', 'August', 'September', 'October', 'November', 'December'];
-          const months = new Set();
-          
-          dateRanges.forEach(range => {
-            if (range.startDate) {
-              const startDate = new Date(range.startDate);
-              months.add(monthNames[startDate.getMonth()]);
-            }
-            if (range.endDate) {
-              const endDate = new Date(range.endDate);
-              months.add(monthNames[endDate.getMonth()]);
-            }
-          });
-          
-          return Array.from(months).sort((a, b) => {
-            return monthNames.indexOf(a) - monthNames.indexOf(b);
-          });
-        }
-        
-        // Format availability text from date ranges
-        function formatAvailabilityText(dateRanges) {
-          if (!dateRanges || !Array.isArray(dateRanges) || dateRanges.length === 0) {
-            return null;
-          }
-          
-          if (dateRanges.length === 1 && dateRanges[0].startDate && dateRanges[0].endDate) {
-            const start = new Date(dateRanges[0].startDate);
-            const end = new Date(dateRanges[0].endDate);
-            const formatDate = (date) => {
-              const day = date.getDate();
-              const month = date.toLocaleDateString('en-US', { month: 'long' });
-              return `${day}${getOrdinalSuffix(day)} ${month}`;
-            };
-            return `Available to Swap | ${formatDate(start)} - ${formatDate(end)}`;
-          }
-          
-          return `Available to Swap | Multiple dates available`;
-        }
-        
-        function getOrdinalSuffix(day) {
-          if (day > 3 && day < 21) return 'th';
-          switch (day % 10) {
-            case 1: return 'st';
-            case 2: return 'nd';
-            case 3: return 'rd';
-            default: return 'th';
-          }
         }
 
         function createListingCard(listing) {
