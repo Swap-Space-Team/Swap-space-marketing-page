@@ -1,6 +1,10 @@
 <!doctype html>
 <html lang="en">
+  <!-- ============================================
+       HEAD SECTION
+       ============================================ -->
   <head>
+    <!-- Stylesheet -->
     <link
       rel="stylesheet"
       type="text/css"
@@ -350,13 +354,23 @@ Join Swap Space today and start your journey toward budget-friendly travel, home
       gtag("config", "G-0G5XEDEJH7");
     </script>
   </head>
+
+  <!-- ============================================
+       BODY SECTION
+       ============================================ -->
   <body>
+    <!-- ============================================
+         HEADER / MASTHEAD SECTION
+         ============================================ -->
     <div class="masthead">
       <img class="logo" src="assets/Swapspace-Logo-Primary-Rgb_1_VjSw6R2piRZ0oV5VmNJOs.svg" alt="Swap-space-logo">
 
       <a href="https://app.swap-space.com/login" class="secondary-button">Log in</a>
     </div>
 
+    <!-- ============================================
+         HERO SECTION
+         ============================================ -->
     <section class="hero">
       <h1 class="h1-text">
         Travel more, <span class="swap-text">swap</span> the space you already have.
@@ -372,6 +386,9 @@ Join Swap Space today and start your journey toward budget-friendly travel, home
     </section>
 
     <!-- This where the listed homes section starts -->
+    <!-- ============================================
+         LISTED HOMES SECTION
+         ============================================ -->
     <section class="listed-homes">
       <p class="highlight-text">
         Browse homes listed by other home-swappers
@@ -387,9 +404,11 @@ Join Swap Space today and start your journey toward budget-friendly travel, home
 
       </div>
     </section>
-
     <!-- This where the listed homes section ends -->
 
+    <!-- ============================================
+         HOME SECTION
+         ============================================ -->
     <section class="home-section">
 
       <h2 class="h2-text">
@@ -409,6 +428,9 @@ Join Swap Space today and start your journey toward budget-friendly travel, home
       </div>
     </section>
 
+    <!-- ============================================
+         HOW IT WORKS SECTION
+         ============================================ -->
     <section class="how-it-works">
       <p class="highlight-text">
         How it works
@@ -458,6 +480,9 @@ Join Swap Space today and start your journey toward budget-friendly travel, home
      <!--This is the end of the how it works card -->
     </section>
 
+    <!-- ============================================
+         PRICING SECTION
+         ============================================ -->
     <section class="pricing-section">
       <div class="pricing-background">
         <div class="pricing-content-left">
@@ -517,6 +542,9 @@ Join Swap Space today and start your journey toward budget-friendly travel, home
       </div>
     </section>
 
+    <!-- ============================================
+         SWAP LOCATION SECTION
+         ============================================ -->
     <section class="swap-location">
       <h2 class="h2-text">
         Ready to swap your home?
@@ -565,7 +593,10 @@ Join Swap Space today and start your journey toward budget-friendly travel, home
      
     </section>
 
-    <section class="faq-section">
+  <!-- ============================================
+       FAQ SECTION
+       ============================================ -->
+  <section class="faq-section">
       <h2 class="h2-text">
         Frequently asked questions
       </h2>
@@ -686,6 +717,9 @@ Join Swap Space today and start your journey toward budget-friendly travel, home
       </div>
     </section>
 
+    <!-- ============================================
+         FOOTER SECTION
+         ============================================ -->
     <footer class="footer">
       <div class="footer-content">
         <div class="footer-brand">
@@ -723,8 +757,9 @@ Join Swap Space today and start your journey toward budget-friendly travel, home
       </div>
     </footer>
 
-
-
+    <!-- ============================================
+         JAVASCRIPT SECTIONS
+         ============================================ -->
 
     <!-- Fillout Form Embed -->
     <div id="formOverlay" style="display:none; position:fixed; top:0px; left:0px; right:0px; bottom:0px; z-index:9999; background-color:rgba(0,0,0,0.5);">
@@ -733,7 +768,9 @@ Join Swap Space today and start your journey toward budget-friendly travel, home
       <script src="https://server.fillout.com/embed/v1/"></script>
     </div>
 
-    
+    <!-- ============================================
+         MAIN JAVASCRIPT FUNCTIONALITY
+         ============================================ -->
     <script>
       document.addEventListener('DOMContentLoaded', function() {
         const formOverlay = document.getElementById('formOverlay');
@@ -833,6 +870,9 @@ Join Swap Space today and start your journey toward budget-friendly travel, home
         // Fetch and render listings from backend
         const listedHomesWrapper = document.querySelector('.listed-homes-wrapper');
         
+        // ============================================
+        // LISTING CARDS API INTEGRATION
+        // ============================================
         // Backend API endpoint
         const API_ENDPOINT = 'https://staging-backend.swap-space.com/api/v1/properties/public';
         
@@ -1168,6 +1208,15 @@ Join Swap Space today and start your journey toward budget-friendly travel, home
 
           card.appendChild(imageContainer);
           card.appendChild(propertyInfo);
+
+          // Add click handler to navigate to property details page
+          card.style.cursor = 'pointer';
+          card.addEventListener('click', function() {
+            const propertyId = listing.id || listing.propertyId;
+            if (propertyId) {
+              window.location.href = `Propertydetails.html?id=${propertyId}`;
+            }
+          });
 
           return card;
         }
