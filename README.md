@@ -89,3 +89,9 @@ Then visit `http://localhost:3000/Index.html` in your browser.
 - The server will serve files from the root directory
 - Changes to HTML/CSS will require a browser refresh
 - The server runs on port 3000 by default
+
+## Production build / Vercel
+
+- Run `npm run build` to copy the static site into `dist/`
+- Vercel is configured (see `vercel.json`) to run this build and deploy the `dist` folder
+- The rewrite in `vercel.json` ensures the root path serves `Index.html`

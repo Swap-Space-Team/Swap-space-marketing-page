@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "live-server --port=3000 --open=/Index.html --watch=.",
     "start": "live-server --port=3000 --watch=.",
-    "serve": "python3 -m http.server 3000"
+    "serve": "python3 -m http.server 3000",
+    "clean": "rm -rf dist && mkdir -p dist",
+    "build": "npm run clean && rsync -av --exclude 'node_modules' --exclude 'dist' --exclude '.git' --exclude '.cursor' --exclude '.DS_Store' --exclude '.vercel' ./ dist/"
   },
   "keywords": [
     "swapspace",
