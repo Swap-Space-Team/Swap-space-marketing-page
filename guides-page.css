@@ -1,0 +1,483 @@
+@import url('lenis/dist/lenis.css');
+
+/* ============================================
+   GUIDES PAGE STYLES
+   ============================================ */
+
+/* Body background - gradient wash */
+body {
+  background-color: #F5F5F5;
+  position: relative;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: "";
+  position: absolute;
+  top: -200px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 160%;
+  height: 650px;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(23, 178, 106, 0.1) 50%,
+    rgba(247, 144, 9, 0.1) 50%,
+    rgba(81, 169, 81, 0.1) 50%,
+    rgba(245, 245, 245, 0.5) 50%
+  );
+  filter: blur(200px);
+  z-index: 0;
+}
+
+main,
+.guides-top-bar,
+.guides-hero,
+.guides-grid-section,
+.footer {
+  position: relative;
+  z-index: 1;
+}
+
+/* Guides Header */
+.guides-top-bar {
+  position: relative;
+  width: 100%;
+  padding: 30px 80px;
+  box-sizing: border-box;
+  border-bottom: 1px solid #CDD5DF;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  background: transparent;
+}
+
+.guides-brand {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.guides-top-links {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  align-items: center;
+}
+
+.guides-logo-link {
+  display: inline-flex;
+  align-items: center;
+}
+
+.guides-logo {
+  width: 200px;
+  height: 42px;
+  object-fit: contain;
+}
+
+.guides-page-indicator {
+  font-family: 'General Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: #4B5565;
+  letter-spacing: -0.4px;
+}
+
+.guides-nav-link {
+  font-family: 'General Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: #4B5565;
+  text-decoration: none;
+  letter-spacing: -0.4px;
+  transition: color 0.2s ease;
+}
+
+.guides-nav-link.active {
+  color: #202939;
+  font-weight: 600;
+}
+
+.guides-nav-link:hover {
+  color: #202939;
+}
+
+.guides-contact-button {
+  margin-left: auto;
+  transform: none;
+  position: relative;
+  padding: 12px 16px;
+  background-color: #FFF;
+  color: #079455;
+  font-family: 'Geist', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  border: 2px solid #079455;
+  border-radius: 40px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 20px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.guides-contact-button:hover {
+  background-color: #079455;
+  color: #FFF;
+}
+
+/* Guides Hero Section */
+.guides-hero {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 48px 40px 60px 40px;
+  background: transparent;
+}
+
+.guides-hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  max-width: 467px;
+  text-align: center;
+}
+
+.guides-hero-title {
+  font-family: 'General Sans', sans-serif;
+  font-size: 72px;
+  font-weight: 700;
+  color: #202939;
+  letter-spacing: -1.44px;
+  margin: 0;
+  line-height: 90px;
+  width: 100%;
+}
+
+.guides-hero-description {
+  font-family: 'General Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  color: #4B5565;
+  letter-spacing: -0.4px;
+  line-height: 28px;
+  margin: 0;
+  width: 100%;
+}
+
+/* Guides Grid Section */
+.guides-grid-section {
+  background-color: #F5F5F5;
+  padding: 0 40px 80px 40px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.guides-grid {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+/* Guide Card */
+.guide-card {
+  display: flex;
+  flex-direction: column;
+  background-color: transparent;
+  gap: 16px;
+  width: 349px;
+  flex-shrink: 0;
+}
+
+.guide-card-image {
+  width: 100%;
+  height: 235px;
+  overflow: hidden;
+  border-radius: 12px;
+  position: relative;
+}
+
+.guide-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 50%;
+  border-radius: 12px;
+  display: block;
+}
+
+.guide-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.guide-card-link {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.guide-card-link:focus-visible .guide-card-image {
+  outline: 2px solid rgba(7, 148, 85, 0.4);
+  outline-offset: 4px;
+}
+
+.guide-card-title {
+  font-family: 'General Sans', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #364152;
+  letter-spacing: -0.4px;
+  margin: 0;
+  line-height: 30px;
+  width: 100%;
+}
+
+.guide-card-description {
+  font-family: 'General Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: #364152;
+  letter-spacing: -0.08px;
+  line-height: 30px;
+  margin: 0;
+  width: 100%;
+}
+
+.guide-card-button {
+  min-width: 40px;
+  min-height: 40px;
+  border-radius: 40px;
+  border: 1px solid #D5D7DA;
+  background-color: #FFF;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 8px 12px;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  margin-top: 0;
+  align-self: flex-start;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(10, 13, 18, 0.18), inset 0 -2px 0 rgba(10, 13, 18, 0.05);
+  transition: padding 600ms ease-in-out, box-shadow 600ms ease-in-out;
+  text-decoration: none;
+  color: inherit;
+}
+
+.guide-card-button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(7, 148, 85, 0.35);
+}
+
+.guide-card-button svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.guide-card-button-label {
+  font-family: 'Geist', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  color: #0A0D12;
+  white-space: nowrap;
+  opacity: 0;
+  max-width: 0;
+  margin-right: -8px;
+  transition: opacity 600ms ease-in-out, max-width 600ms ease-in-out;
+}
+
+.guide-card-button:hover,
+.guide-card-button:focus-visible {
+  padding: 8px 18px;
+}
+
+.guide-card-button:hover .guide-card-button-label,
+.guide-card-button:focus-visible .guide-card-button-label {
+  opacity: 1;
+  max-width: 50px;
+  margin-right: 0;
+}
+
+/* ============================================
+   RESPONSIVE STYLES
+   ============================================ */
+
+/* Tablet and Below (max-width: 1024px) */
+@media screen and (max-width: 1024px) {
+  .guides-top-bar {
+    padding: 28px 24px;
+    gap: 24px;
+  }
+
+  .guides-top-links {
+    justify-content: center;
+  }
+
+  .guides-hero {
+    padding: 40px 24px 40px 24px;
+  }
+
+  .guides-hero-title {
+    font-size: 56px;
+    line-height: 70px;
+  }
+
+  .guides-hero-description {
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .guides-grid-section {
+    padding: 0 24px 60px 24px;
+  }
+
+  .guides-grid {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .guide-card {
+    width: calc(50% - 12px);
+    min-width: 300px;
+  }
+}
+
+/* Mobile (max-width: 768px) */
+@media screen and (max-width: 768px) {
+  .guides-top-bar {
+    flex-direction: column;
+    padding: 24px 16px;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .guides-top-links {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .guides-nav-link {
+    font-size: 14px;
+  }
+
+  .guides-brand {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .guides-logo {
+    width: 150px;
+    height: 30px;
+  }
+
+  .guides-page-indicator {
+    font-size: 14px;
+  }
+
+  .guides-contact-button {
+    align-self: stretch;
+    justify-content: center;
+    font-size: 14px;
+    padding: 10px 16px;
+  }
+
+  .guides-hero {
+    padding: 32px 16px 40px 16px;
+  }
+
+  .guides-hero-content {
+    max-width: 100%;
+  }
+
+  .guides-hero-title {
+    font-size: 48px;
+    line-height: 60px;
+    letter-spacing: -0.96px;
+  }
+
+  .guides-hero-description {
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .guides-grid-section {
+    padding: 0 16px 48px 16px;
+  }
+
+  .guides-grid {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .guide-card {
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .guide-card-image {
+    height: 200px;
+  }
+}
+
+/* Small Mobile (max-width: 480px) */
+@media screen and (max-width: 480px) {
+  .guides-hero-title {
+    font-size: 36px;
+    line-height: 45px;
+    letter-spacing: -0.72px;
+  }
+
+  .guides-hero-description {
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .guide-card-image {
+    height: 180px;
+  }
+
+  .guide-card-title {
+    font-size: 18px;
+    line-height: 26px;
+  }
+
+  .guide-card-description {
+    font-size: 14px;
+    line-height: 22px;
+  }
+
+  .guide-card-button {
+    width: 36px;
+    height: 36px;
+    padding: 6px 10px;
+  }
+
+  .guide-card-button svg {
+    width: 18px;
+    height: 18px;
+  }
+}

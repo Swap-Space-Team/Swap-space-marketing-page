@@ -1,3 +1,5 @@
+@import url('lenis/dist/lenis.css');
+
 /* ============================================
    FONT DEFINITIONS
    ============================================ */
@@ -311,6 +313,49 @@ padding-top: 40px;
   font-size: 1rem;
   font-weight: 600;
 }
+
+.featured-in-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #E9EAEB;
+  width: 100%;
+  max-width: 600px;
+}
+
+.featured-in-label {
+  font-family: 'Geist', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 18px;
+  color: #697586;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.featured-in-logos {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.featured-in-logo {
+  height: 24px;
+  width: auto;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.featured-in-logo:hover {
+  opacity: 1;
+}
+
 .hero-img{
   width: 90%;
   border-radius: 12px;
@@ -902,6 +947,16 @@ padding: 40px;
     font-size: 1rem;
   }
   
+  .featured-in-section {
+    max-width: 500px;
+    margin-top: 16px;
+    padding-top: 16px;
+  }
+  
+  .featured-in-logo {
+    height: 22px;
+  }
+  
   .home-section{
     padding: 24px;
   }
@@ -1048,6 +1103,20 @@ padding: 40px;
   .highlight-text{
     text-align: center;
     padding-top: 8px;
+  }
+  
+  .featured-in-section {
+    max-width: 100%;
+    margin-top: 12px;
+    padding-top: 12px;
+  }
+  
+  .featured-in-label {
+    font-size: 11px;
+  }
+  
+  .featured-in-logo {
+    height: 20px;
   }
   
   .hero-img{

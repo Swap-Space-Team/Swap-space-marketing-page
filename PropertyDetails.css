@@ -83,6 +83,44 @@
   margin: 0;
 }
 
+.featured-in-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #E9EAEB;
+}
+
+.featured-in-label {
+  font-family: 'Geist', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #697586;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.featured-in-logos {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.featured-in-logo {
+  height: 32px;
+  width: auto;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.featured-in-logo:hover {
+  opacity: 1;
+}
+
 .property-amenities-icons {
   display: flex;
   gap: 8px;
@@ -595,6 +633,19 @@
     width: 100%;
     min-width: 300px;
     height: 250px;
+  }
+
+  .featured-in-section {
+    margin-bottom: 20px;
+    padding-top: 12px;
+  }
+
+  .featured-in-label {
+    font-size: 12px;
+  }
+
+  .featured-in-logo {
+    height: 28px;
   }
 
   .property-amenities-icons {
