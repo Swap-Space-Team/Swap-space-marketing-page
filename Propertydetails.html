@@ -1,0 +1,569 @@
+<!doctype html>
+<html lang="en">
+  <!-- ============================================
+       HEAD SECTION
+       ============================================ -->
+  <head>
+    <!-- Global Stylesheet -->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="Style.css"
+    />
+    <!-- Property Details Specific Stylesheet -->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="PropertyDetails.css"
+    />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>
+      Property Details | Swap Space
+    </title>
+  </head>
+
+  <!-- ============================================
+       BODY SECTION
+       ============================================ -->
+  <body>
+    <!-- ============================================
+         HEADER / MASTHEAD SECTION
+         ============================================ -->
+    <div class="masthead">
+      <a href="Index.html">
+        <img class="logo" src="assets/Swapspace-Logo-Primary-Rgb_1_VjSw6R2piRZ0oV5VmNJOs.svg" alt="Swap-space-logo">
+      </a>
+
+      <a href="https://app.swap-space.com/login" class="secondary-button">Log in</a>
+    </div>
+
+    <!-- ============================================
+         PROPERTY DETAILS PAGE
+         ============================================ -->
+    <div class="property-details-container">
+      <!-- Image Gallery Section -->
+      <div class="property-image-gallery">
+        <div class="image-gallery-scroll">
+          <div class="gallery-image-item">
+            <img src="" alt="Property image" class="gallery-image" id="galleryImage1">
+          </div>
+          <div class="gallery-image-item">
+            <img src="" alt="Property image" class="gallery-image" id="galleryImage2">
+          </div>
+          <div class="gallery-image-item">
+            <img src="" alt="Property image" class="gallery-image" id="galleryImage3">
+          </div>
+          <div class="gallery-image-item">
+            <img src="" alt="Property image" class="gallery-image" id="galleryImage4">
+          </div>
+        </div>
+        <button class="view-all-photos-btn">View all photos</button>
+      </div>
+
+      <!-- Main Content Section -->
+      <div class="property-main-content">
+        <!-- Left Column: Property Info -->
+        <div class="property-info-column">
+          <!-- Title and Location -->
+          <div class="property-header">
+            <h1 class="property-title" id="propertyTitle">Lovely cottage in the countryside</h1>
+            <p class="property-location" id="propertyLocation">North street, Brighton, United Kingdom.</p>
+          </div>
+
+  
+
+          <!-- Amenities Icons -->
+          <div class="property-amenities-icons">
+            <div class="amenity-item">
+              <img src="assets/sofa-icon.svg" alt="Sitting room" class="amenity-icon">
+              <span class="amenity-text" id="livingRoomsText">1 Sitting room</span>
+            </div>
+            <div class="amenity-item">
+              <img src="assets/bed-icon.svg" alt="Bedrooms" class="amenity-icon">
+              <span class="amenity-text" id="bedroomsText">3 Bedrooms</span>
+            </div>
+            <div class="amenity-item">
+              <img src="assets/bath-icon.svg" alt="Bathrooms" class="amenity-icon">
+              <span class="amenity-text" id="bathroomsText">2 Bathrooms</span>
+            </div>
+            <div class="amenity-item" id="guestsAmenityItem" style="display: none;">
+              <div class="amenity-icon" id="guestsIcon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <span class="amenity-text" id="guestsText">3 Guest max</span>
+            </div>
+            <div class="amenity-item">
+              <div class="amenity-icon" id="petsIcon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <span class="amenity-text" id="petsText">Pets allowed</span>
+            </div>
+          </div>
+
+          <!-- Amenities Pills Section -->
+          <div class="amenities-section">
+            <h2 class="amenities-heading">Amenities</h2>
+            <div class="amenities-pills" id="amenitiesPills">
+              <!-- Amenities will be populated from API -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Swap Card -->
+        <div class="property-swap-card">
+          <!-- Mutual Swaps Card -->
+          <div class="comparison-card active" id="mutualCard">
+            <h3 class="card-title">Unlimited mutual swaps</h3>
+            <p class="card-description">Swap with homes with other members without using any SwapCredits. Travel freely with mutual swaps.</p>
+            <p class="comparison-label">Comparison if you're staying for 7 nights</p>
+            <div class="comparison-boxes">
+              <div class="comparison-box-left">
+                <p class="box-label">Swap with SwapSpace</p>
+                <p class="box-value-green">Free & unlimited</p>
+              </div>
+              <div class="comparison-box-right">
+                <p class="box-label">Hotels or Airbnb</p>
+                <p class="box-value">£1,000</p>
+              </div>
+            </div>
+            <div class="toggle-group" data-active="mutual">
+              <button class="toggle-btn active" data-switch="mutual">Mutual swap</button>
+              <button class="toggle-btn" data-switch="swapcredits">One way Swap</button>
+            </div>
+            <button class="button-primary apply-button">See if your home qualifies</button>
+          </div>
+
+          <!-- SwapCredits Card -->
+          <div class="comparison-card" id="swapcreditsCard">
+            <p class="card-description">When you host, you earn SwapCredits that you can use for one-way stays. The more you host, the more you can travel</p>
+            <p class="comparison-label">Comparison if you're staying for 7 nights</p>
+            <div class="comparison-boxes">
+              <div class="comparison-box-left swapcredits">
+                <p class="box-label">Swap with SwapSpace</p>
+                <p class="box-value-green">7 SwapCredits</p>
+              </div>
+              <div class="comparison-box-right swapcredits">
+                <p class="box-label">Hotels or Airbnb</p>
+                <p class="box-value">£1,000</p>
+              </div>
+            </div>
+            <div class="toggle-group" data-active="swapcredits">
+              <button class="toggle-btn" data-switch="mutual">Mutual swap</button>
+              <button class="toggle-btn active" data-switch="swapcredits">One way Swap</button>
+            </div>
+            <button class="button-primary apply-button">See if your home qualifies</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Host Information Section -->
+      <div class="property-host-section">
+        <div class="host-header">
+          <div class="host-info">
+            <img src="" alt="Host avatar" class="host-avatar" id="hostAvatar">
+            <div class="host-details">
+              <p class="host-name" id="hostName">Member's home</p>
+              <p class="host-member-since" id="hostMemberSince">Member since January 2025</p>
+            </div>
+          </div>
+        </div>
+        <div class="host-availability">
+          <span class="availability-label">Swap available:</span>
+          <div class="availability-badges" id="availabilityBadges">
+            <!-- Available months will be populated from API -->
+          </div>
+        </div>
+        <p class="host-membership-note">
+          SwapSpace is a members-only community and host profiles are only available to members
+          <a href="#" class="apply-link">Apply to list your home and Swap</a>
+        </p>
+      </div>
+
+      <!-- About This Home Section -->
+      <div class="property-about-section" id="aboutSection">
+        <div class="about-header" id="aboutHeader">
+          <h2 class="about-heading">About this home</h2>
+          <button class="about-toggle-btn" id="aboutToggleBtn">See more</button>
+        </div>
+        <div class="about-expanded-content" id="aboutExpandedContent" style="display: none;">
+          <h2 class="about-heading">About this place</h2>
+          <div class="about-description-wrapper">
+            <p class="about-description about-description-blurred" id="propertyDescription">
+              <!-- Property description will be populated from API -->
+            </p>
+            <div class="about-blur-overlay" id="aboutBlurOverlay">
+              <div class="about-blur-content">
+                <p class="about-blur-message">SwapSpace is a members-only community and home details are only available to members.</p>
+                <button class="button-primary">Apply to list your home</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="about-toggle-btn about-toggle-btn-bottom" id="aboutToggleBtnBottom" style="display: none;">See Less</button>
+      </div>
+    </div>
+
+    <!-- ============================================
+         JAVASCRIPT SECTIONS
+         ============================================ -->
+
+    <!-- ============================================
+         PROPERTY DETAILS API INTEGRATION
+         ============================================ -->
+    <script>
+      // Get property ID from URL query parameter
+      function getPropertyIdFromUrl() {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('id') || urlParams.get('propertyId');
+      }
+
+      // API endpoint
+      const PROPERTY_API_ENDPOINT = 'https://staging-backend.swap-space.com/api/v1/properties/public/{propertyId}';
+
+      // Convert text to sentence case (first letter capitalized, rest lowercase, underscores replaced with spaces)
+      function toSentenceCase(text) {
+        if (!text || typeof text !== 'string') return text;
+        // Replace underscores with spaces, then convert to sentence case
+        const withSpaces = text.replace(/_/g, ' ');
+        // Split by spaces, capitalize first letter of each word, join back
+        return withSpaces.split(' ').map(word => {
+          if (word.length === 0) return word;
+          return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+        }).join(' ');
+      }
+
+      // Transform API response to match expected format
+      function transformPropertyData(apiData) {
+        return {
+          id: apiData.propertyId?.toString() || '',
+          title: apiData.propertyTitle || 'Untitled Property',
+          location: buildLocationString(apiData.address),
+          images: apiData.images?.map(img => typeof img === 'string' ? img : img.imageUrl) || [],
+          host: {
+            name: apiData.hostName || 'Host',
+            avatar: apiData.profilePhotoUrl || '',
+            memberSince: apiData.memberSince || 'January 2025'
+          },
+          amenities: {
+            bedrooms: apiData.bedroomNumber || 0,
+            bathrooms: apiData.bathroomNumber || 0,
+            livingRooms: apiData.livingRoomNumber || 0,
+            maxGuests: apiData.maxGuests || 0,
+            petsAllowed: apiData.petsAllowed || false
+          },
+          amenitiesList: apiData.amenities || [],
+          availableMonths: apiData.publicAvailableMonths || [],
+          description: apiData.propertyDescription || ''
+        };
+      }
+
+      // Build location string from address object
+      function buildLocationString(address) {
+        if (!address) return 'Location not specified';
+        const addressParts = [];
+        if (address.addressLine) addressParts.push(address.addressLine);
+        if (address.city) addressParts.push(address.city);
+        if (address.country) addressParts.push(address.country);
+        return addressParts.length > 0 ? addressParts.join(', ') : 'Location not specified';
+      }
+
+      // Render property data to the page
+      function renderPropertyData(property) {
+        // Title and location
+        document.getElementById('propertyTitle').textContent = property.title;
+        document.getElementById('propertyLocation').textContent = property.location;
+
+        // Images
+        const imageElements = [
+          document.getElementById('galleryImage1'),
+          document.getElementById('galleryImage2'),
+          document.getElementById('galleryImage3'),
+          document.getElementById('galleryImage4')
+        ];
+        
+        property.images.forEach((imageUrl, index) => {
+          if (imageElements[index]) {
+            imageElements[index].src = imageUrl;
+            imageElements[index].style.display = 'block';
+          }
+        });
+
+        // Hide unused image slots
+        for (let i = property.images.length; i < 4; i++) {
+          if (imageElements[i]) {
+            imageElements[i].parentElement.style.display = 'none';
+          }
+        }
+
+        // Amenities icons
+        const livingRooms = property.amenities.livingRooms || 0;
+        const bedrooms = property.amenities.bedrooms || 0;
+        const bathrooms = property.amenities.bathrooms || 0;
+        const maxGuests = property.amenities.maxGuests || 0;
+
+        document.getElementById('livingRoomsText').textContent = `${livingRooms} Sitting room${livingRooms !== 1 ? 's' : ''}`;
+        document.getElementById('bedroomsText').textContent = `${bedrooms} Bedroom${bedrooms !== 1 ? 's' : ''}`;
+        document.getElementById('bathroomsText').textContent = `${bathrooms} Bathroom${bathrooms !== 1 ? 's' : ''}`;
+        document.getElementById('guestsText').textContent = `${maxGuests} Guest max`;
+        
+        if (property.amenities.petsAllowed) {
+          document.getElementById('petsText').textContent = 'Pets allowed';
+          document.getElementById('petsText').parentElement.style.display = 'flex';
+        } else {
+          document.getElementById('petsText').parentElement.style.display = 'none';
+        }
+
+        // Amenities pills
+        const amenitiesContainer = document.getElementById('amenitiesPills');
+        amenitiesContainer.innerHTML = '';
+        
+        if (property.amenitiesList && property.amenitiesList.length > 0) {
+          property.amenitiesList.forEach(amenity => {
+            const pill = document.createElement('div');
+            pill.className = 'amenity-pill';
+            pill.textContent = toSentenceCase(amenity);
+            amenitiesContainer.appendChild(pill);
+          });
+        }
+
+        // Host information
+        document.getElementById('hostName').textContent = `Member's home`;
+        document.getElementById('hostMemberSince').textContent = property.host.memberSince ? `Member since ${property.host.memberSince}` : '';
+        if (property.host.avatar) {
+          document.getElementById('hostAvatar').src = property.host.avatar;
+        }
+
+        // Available months
+        const availabilityContainer = document.getElementById('availabilityBadges');
+        availabilityContainer.innerHTML = '';
+        
+        if (property.availableMonths && property.availableMonths.length > 0) {
+          property.availableMonths.forEach(month => {
+            const badge = document.createElement('div');
+            badge.className = 'availability-badge';
+            badge.textContent = month;
+            availabilityContainer.appendChild(badge);
+          });
+        }
+
+        // About this home description
+        const descriptionElement = document.getElementById('propertyDescription');
+        const descriptionContainer = document.getElementById('aboutDescriptionContainer');
+        const aboutSection = document.getElementById('aboutSection');
+        
+        if (property.description) {
+          descriptionElement.textContent = property.description;
+          // Show description container if there's content
+          // Initially hidden, will be shown when "See more" is clicked
+        } else {
+          descriptionElement.textContent = 'No description available.';
+        }
+      }
+
+      // Fetch property details from API
+      async function fetchPropertyDetails() {
+        const propertyId = getPropertyIdFromUrl();
+        
+        if (!propertyId) {
+          console.error('Property ID not found in URL');
+          document.querySelector('.property-details-container').innerHTML = 
+            '<div class="property-error">Property ID not found in URL. Please navigate from a property listing.</div>';
+          return;
+        }
+
+        try {
+          // Replace {propertyId} placeholder with actual property ID
+          const endpoint = PROPERTY_API_ENDPOINT.replace('{propertyId}', propertyId);
+          const response = await fetch(endpoint);
+          
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          
+          const data = await response.json();
+          const transformed = transformPropertyData(data);
+          renderPropertyData(transformed);
+        } catch (error) {
+          console.error('Error fetching property details:', error);
+          // Show error message to user
+          document.querySelector('.property-details-container').innerHTML = 
+            '<div class="property-error">Error loading property details. Please try again later.</div>';
+        }
+      }
+
+      // Initialize page when DOM is loaded
+      document.addEventListener('DOMContentLoaded', function() {
+        fetchPropertyDetails();
+
+        // Price comparison toggle functionality (same as Index.html)
+        const toggleButtons = document.querySelectorAll('.toggle-btn');
+        const toggleGroups = document.querySelectorAll('.toggle-group');
+        const mutualCard = document.getElementById('mutualCard');
+        const swapcreditsCard = document.getElementById('swapcreditsCard');
+
+        function updateToggleState(switchType) {
+          // Remove active class from all buttons and cards
+          toggleButtons.forEach(function(btn) {
+            btn.classList.remove('active');
+          });
+          if (mutualCard) mutualCard.classList.remove('active');
+          if (swapcreditsCard) swapcreditsCard.classList.remove('active');
+          
+          // Update toggle groups
+          toggleGroups.forEach(function(group) {
+            group.setAttribute('data-active', switchType);
+          });
+
+          // Update card visibility
+          if (switchType === 'mutual') {
+            if (mutualCard) mutualCard.classList.add('active');
+          } else if (switchType === 'swapcredits') {
+            if (swapcreditsCard) swapcreditsCard.classList.add('active');
+          }
+
+          // Update all toggle buttons to match the active card
+          toggleButtons.forEach(function(btn) {
+            if (btn.getAttribute('data-switch') === switchType) {
+              btn.classList.add('active');
+            }
+          });
+        }
+
+        toggleButtons.forEach(function(button) {
+          button.addEventListener('click', function() {
+            const switchType = this.getAttribute('data-switch');
+            updateToggleState(switchType);
+          });
+        });
+
+        // About this home expand/collapse functionality
+        const aboutToggleBtn = document.getElementById('aboutToggleBtn');
+        const aboutToggleBtnBottom = document.getElementById('aboutToggleBtnBottom');
+        const aboutHeader = document.getElementById('aboutHeader');
+        const aboutExpandedContent = document.getElementById('aboutExpandedContent');
+        const aboutSection = document.getElementById('aboutSection');
+        let isExpanded = false;
+
+        const aboutBlurOverlay = document.getElementById('aboutBlurOverlay');
+        
+        function toggleAboutSection() {
+          isExpanded = !isExpanded;
+          
+          if (isExpanded) {
+            // Show expanded content
+            if (aboutExpandedContent) {
+              aboutExpandedContent.style.display = 'flex';
+              // Trigger reflow to ensure transition works
+              void aboutExpandedContent.offsetWidth;
+              aboutExpandedContent.classList.add('visible');
+            }
+            if (aboutHeader) {
+              aboutHeader.classList.add('hidden');
+              setTimeout(() => {
+                if (aboutHeader) aboutHeader.style.display = 'none';
+              }, 1200);
+            }
+            if (aboutToggleBtnBottom) {
+              aboutToggleBtnBottom.style.display = 'block';
+              void aboutToggleBtnBottom.offsetWidth;
+              aboutToggleBtnBottom.classList.add('visible');
+            }
+            if (aboutBlurOverlay) {
+              aboutBlurOverlay.style.display = 'flex';
+              void aboutBlurOverlay.offsetWidth;
+              aboutBlurOverlay.classList.add('visible');
+            }
+            if (aboutSection) {
+              aboutSection.style.paddingBottom = '48px';
+            }
+          } else {
+            // Hide expanded content
+            if (aboutExpandedContent) {
+              aboutExpandedContent.classList.remove('visible');
+              setTimeout(() => {
+                if (aboutExpandedContent) aboutExpandedContent.style.display = 'none';
+              }, 1200);
+            }
+            if (aboutHeader) {
+              aboutHeader.style.display = 'flex';
+              void aboutHeader.offsetWidth;
+              aboutHeader.classList.remove('hidden');
+            }
+            if (aboutToggleBtnBottom) {
+              aboutToggleBtnBottom.classList.remove('visible');
+              setTimeout(() => {
+                if (aboutToggleBtnBottom) aboutToggleBtnBottom.style.display = 'none';
+              }, 1200);
+            }
+            if (aboutBlurOverlay) {
+              aboutBlurOverlay.classList.remove('visible');
+              setTimeout(() => {
+                if (aboutBlurOverlay) aboutBlurOverlay.style.display = 'none';
+              }, 1200);
+            }
+            if (aboutSection) {
+              aboutSection.style.paddingBottom = '24px';
+            }
+          }
+        }
+
+        if (aboutToggleBtn && aboutExpandedContent) {
+          aboutToggleBtn.addEventListener('click', toggleAboutSection);
+          
+          if (aboutToggleBtnBottom) {
+            aboutToggleBtnBottom.addEventListener('click', toggleAboutSection);
+          }
+        }
+      });
+    </script>
+
+    <!-- ============================================
+         FILLOUT FORM EMBED
+         ============================================ -->
+    <!-- Fillout Form Embed -->
+    <div id="formOverlay" style="display:none; position:fixed; top:0px; left:0px; right:0px; bottom:0px; z-index:9999; background-color:rgba(0,0,0,0.5);">
+      <div data-fillout-id="rnUDrrVmztus" data-fillout-embed-type="fullscreen" style="width:100%;height:100%;" data-fillout-inherit-parameters></div>
+      <button id="closeForm" style="position:absolute; top:20px; right:20px; z-index:10000; background:#fff; border:none; padding:10px 20px; border-radius:5px; cursor:pointer; font-size:16px;">Close</button>
+      <script src="https://server.fillout.com/embed/v1/"></script>
+    </div>
+
+    <!-- ============================================
+         FORM OVERLAY FUNCTIONALITY
+         ============================================ -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const formOverlay = document.getElementById('formOverlay');
+        const closeFormBtn = document.getElementById('closeForm');
+
+        // Use event delegation to handle clicks on any button with class 'button-primary' or 'apply-link'
+        // This works for buttons anywhere on the page, even if added dynamically
+        document.addEventListener('click', function(e) {
+          if (e.target && (e.target.classList.contains('button-primary') || e.target.classList.contains('apply-link'))) {
+            e.preventDefault(); // Prevent default link behavior
+            formOverlay.style.display = 'block';
+          }
+        });
+
+        closeFormBtn.addEventListener('click', function() {
+          formOverlay.style.display = 'none';
+        });
+
+        // Close form when clicking outside the form area
+        formOverlay.addEventListener('click', function(e) {
+          if (e.target === formOverlay) {
+            formOverlay.style.display = 'none';
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
+
