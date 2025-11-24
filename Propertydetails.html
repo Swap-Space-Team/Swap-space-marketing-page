@@ -138,7 +138,7 @@
               <button class="toggle-btn active" data-switch="mutual">Mutual swap</button>
               <button class="toggle-btn" data-switch="swapcredits">One way Swap</button>
             </div>
-            <button class="button-primary apply-button">See if your home's a fit</button>
+            <button class="button-primary apply-button">See if your home qualifies</button>
           </div>
 
           <!-- SwapCredits Card -->
@@ -159,7 +159,7 @@
               <button class="toggle-btn" data-switch="mutual">Mutual swap</button>
               <button class="toggle-btn active" data-switch="swapcredits">One way Swap</button>
             </div>
-            <button class="button-primary apply-button">See if your home's a fit</button>
+            <button class="button-primary apply-button">See if your home qualifies</button>
           </div>
         </div>
       </div>
@@ -170,7 +170,7 @@
           <div class="host-info">
             <img src="" alt="Host avatar" class="host-avatar" id="hostAvatar">
             <div class="host-details">
-              <p class="host-name" id="hostName">Hosted by Daniel</p>
+              <p class="host-name" id="hostName">Member's home</p>
               <p class="host-member-since" id="hostMemberSince">Member since January 2025</p>
             </div>
           </div>
@@ -335,8 +335,8 @@
         }
 
         // Host information
-        document.getElementById('hostName').textContent = `Hosted by ${property.host.name}`;
-        document.getElementById('hostMemberSince').textContent = `Member since ${property.host.memberSince}`;
+        document.getElementById('hostName').textContent = `Member's home`;
+        document.getElementById('hostMemberSince').textContent = property.host.memberSince ? `Member since ${property.host.memberSince}` : '';
         if (property.host.avatar) {
           document.getElementById('hostAvatar').src = property.host.avatar;
         }

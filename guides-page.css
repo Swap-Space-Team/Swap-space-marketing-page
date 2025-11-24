@@ -45,12 +45,14 @@ main,
 .guides-top-bar {
   position: relative;
   width: 100%;
-  padding: 30px 80px;
+  padding: 24px 40px;
   box-sizing: border-box;
   border-bottom: 1px solid #CDD5DF;
   display: flex;
   align-items: center;
-  gap: 32px;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
   background: transparent;
 }
 
@@ -59,14 +61,6 @@ main,
   align-items: flex-end;
   gap: 8px;
   flex-shrink: 0;
-}
-
-.guides-top-links {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  align-items: center;
 }
 
 .guides-logo-link {
@@ -86,25 +80,6 @@ main,
   font-weight: 500;
   color: #4B5565;
   letter-spacing: -0.4px;
-}
-
-.guides-nav-link {
-  font-family: 'General Sans', sans-serif;
-  font-size: 16px;
-  font-weight: 500;
-  color: #4B5565;
-  text-decoration: none;
-  letter-spacing: -0.4px;
-  transition: color 0.2s ease;
-}
-
-.guides-nav-link.active {
-  color: #202939;
-  font-weight: 600;
-}
-
-.guides-nav-link:hover {
-  color: #202939;
 }
 
 .guides-contact-button {
@@ -329,12 +304,8 @@ main,
 /* Tablet and Below (max-width: 1024px) */
 @media screen and (max-width: 1024px) {
   .guides-top-bar {
-    padding: 28px 24px;
-    gap: 24px;
-  }
-
-  .guides-top-links {
-    justify-content: center;
+    padding: 20px 24px;
+    gap: 16px;
   }
 
   .guides-hero {
@@ -370,28 +341,19 @@ main,
 @media screen and (max-width: 768px) {
   .guides-top-bar {
     flex-direction: column;
-    padding: 24px 16px;
+    padding: 16px 16px 12px 16px;
     gap: 12px;
     align-items: flex-start;
   }
 
-  .guides-top-links {
-    width: 100%;
-    justify-content: flex-start;
-  }
-
-  .guides-nav-link {
-    font-size: 14px;
-  }
-
   .guides-brand {
     width: 100%;
-    justify-content: center;
+    justify-content: space-between;
   }
 
   .guides-logo {
-    width: 150px;
-    height: 30px;
+    width: 160px;
+    height: auto;
   }
 
   .guides-page-indicator {

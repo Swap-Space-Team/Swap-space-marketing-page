@@ -376,7 +376,7 @@ Join Swap Space today and start your journey toward budget-friendly travel, home
         SwapSpace is a members-only community of verified homeowners and renters exchanging homes to explore the world in simpler, and more personal way. We’re opening spots for 100 founding members.   
       </p>
       <p class="highlight-text"> Travel 7 nights for free with SwapCredits before you host</p>
-      <button class="button-primary"> See if your home's a fit 
+      <button class="button-primary">See if your home qualifies
       </button>
       
       <!-- Featured In Section -->
@@ -406,7 +406,7 @@ Join Swap Space today and start your journey toward budget-friendly travel, home
         <h2 class="h2-texts">
         Travel meaningfully through homeswapping
         </h2>
-        <button class="button-primary"> See if your home's a fit 
+        <button class="button-primary">See if your home qualifies
         </button>
       </div>
       <div class="listed-homes-wrapper">
@@ -426,7 +426,7 @@ Join Swap Space today and start your journey toward budget-friendly travel, home
       <p class="body-text">
         The answer to travelling more affordably is right where you live. By swapping homes with like-minded people, you save on costs and unlock authentic experiences wherever you go.
       </p>
-      <button class="button-primary"> See if your home's a fit 
+      <button class="button-primary">See if your home qualifies
       </button>
       <div class="img-wrapper">
         <img class="carousel-img" src="assets/img_1_-_photo_by_Kseniya_9kZkXSRehbalqrWQumU6o.png">
@@ -448,7 +448,7 @@ Join Swap Space today and start your journey toward budget-friendly travel, home
       <h2 class="h2-texts">
         It starts with one connection
       </h2>
-      <button class="button-primary"> See if your home's a fit 
+      <button class="button-primary">See if your home qualifies
       </button>
     </div>
  <!-- The first how it works card starts here -->
@@ -501,7 +501,7 @@ Join Swap Space today and start your journey toward budget-friendly travel, home
           <div class="body-text-white">
             By exchanging homes, members discover a more personal and affordable way to travel that is built on trust, connection and shared experiences.
           </div>
-          <button class="button-primary"> See if your home's a fit 
+          <button class="button-primary">See if your home qualifies
           </button>
         </div>
         
@@ -597,7 +597,7 @@ Join Swap Space today and start your journey toward budget-friendly travel, home
         We’re now welcoming applications from homeowners and renters in the United Kingdom, the United States, and across Europe. 
         <br>Submit your application and we’ll review it to see if your home’s a fit for the community.      
       </p>
-      <button class="button-primary"> See if your home's a fit 
+      <button class="button-primary">See if your home qualifies
       </button>
      
     </section>
@@ -1067,18 +1067,18 @@ Join Swap Space today and start your journey toward budget-friendly travel, home
           // Host overlay
           const hostOverlay = document.createElement('div');
           hostOverlay.className = 'listing-host-overlay';
-          if (listing.host && listing.host.name) {
+          if (listing.host) {
             const avatar = document.createElement('img');
             avatar.className = 'listing-host-avatar';
             avatar.src = listing.host.avatar || '';
-            avatar.alt = listing.host.name || 'Host';
+            avatar.alt = 'Member avatar';
             avatar.onerror = function() { 
               this.style.display = 'none';
             };
             
             const hostName = document.createElement('p');
             hostName.className = 'listing-host-name';
-            hostName.textContent = `${listing.host.name}'s home`;
+            hostName.textContent = "Member's home";
             
             hostOverlay.appendChild(avatar);
             hostOverlay.appendChild(hostName);
@@ -1086,7 +1086,7 @@ Join Swap Space today and start your journey toward budget-friendly travel, home
             // Fallback for direct hostName property
             const hostName = document.createElement('p');
             hostName.className = 'listing-host-name';
-            hostName.textContent = `${listing.hostName}'s home`;
+            hostName.textContent = "Member's home";
             hostOverlay.appendChild(hostName);
           }
 
