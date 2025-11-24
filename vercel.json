@@ -1,11 +1,10 @@
 {
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist",
-  "rewrites": [
-    {
-      "source": "/",
-      "destination": "/Index.html"
-    }
+  "version": 2,
+  "builds": [
+    { "src": "dist/**", "use": "@vercel/static" }
+  ],
+  "routes": [
+    { "src": "/", "dest": "/Index.html" }
   ]
 }
 
