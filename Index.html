@@ -387,12 +387,10 @@ Join Swap Space today and start your journey toward budget-friendly travel, home
         </div>
       </div>
      
-      <div class="hero-img-carousel" aria-label="Featured SwapSpace homes">
-        <div class="hero-img-track">
-          <img class="hero-img" src="assets/hero-image 1.png" alt="Bright living room showcasing SwapSpace home">
-          <img class="hero-img" src="assets/hero-image 2.png" alt="Modern SwapSpace kitchen and dining area">
-          <img class="hero-img" src="assets/hero-image 3.png" alt="Cozy bedroom available for SwapSpace members">
-        </div>
+      <div class="hero-img-strip" aria-label="Featured SwapSpace homes">
+        <img class="hero-img" src="assets/hero-image 2.png" alt="Bright living room showcasing SwapSpace home" />
+        <img class="hero-img" src="assets/hero-image 1.png" alt="Modern SwapSpace kitchen and dining area" />
+        <img class="hero-img" src="assets/hero-image 3.png" alt="Cozy bedroom available for SwapSpace members" />
       </div>
     </section>
 
@@ -785,6 +783,109 @@ Join Swap Space today and start your journey toward budget-friendly travel, home
          ============================================ -->
     <script>
       document.addEventListener('DOMContentLoaded', function() {
+        // Hero carousel drag + smooth scrolling experience
+        const heroStrip = document.querySelector('.hero-img-strip');
+        if (heroStrip) {
+          const heroImages = Array.from(heroStrip.querySelectorAll('.hero-img'));
+          let isDragging = false;
+          let startX = 0;
+          let scrollStart = 0;
+          let wheelSnapTimer;
+
+          const getCenterTarget = (image) => {
+            return image.offsetLeft - (heroStrip.clientWidth - image.offsetWidth) / 2;
+          };
+
+          const centerOnImage = (index, behavior = 'auto') => {
+            const image = heroImages[index];
+            if (!image) return;
+            heroStrip.scrollTo({ left: getCenterTarget(image), behavior });
+          };
+
+          const centerNearestImage = (behavior = 'smooth') => {
+            if (heroImages.length === 0) return;
+            const stripCenter = heroStrip.scrollLeft + heroStrip.clientWidth / 2;
+            let closestIndex = 0;
+            let smallestDistance = Infinity;
+
+            heroImages.forEach((image, index) => {
+              const imageCenter = image.offsetLeft + image.offsetWidth / 2;
+              const distance = Math.abs(stripCenter - imageCenter);
+              if (distance < smallestDistance) {
+                smallestDistance = distance;
+                closestIndex = index;
+              }
+            });
+
+            centerOnImage(closestIndex, behavior);
+          };
+
+          const endDrag = () => {
+            isDragging = false;
+            heroStrip.classList.remove('is-dragging');
+            centerNearestImage();
+          };
+
+          heroStrip.addEventListener('mousedown', (event) => {
+            isDragging = true;
+            heroStrip.classList.add('is-dragging');
+            startX = event.pageX - heroStrip.getBoundingClientRect().left;
+            scrollStart = heroStrip.scrollLeft;
+          });
+
+          heroStrip.addEventListener('mouseleave', endDrag);
+          heroStrip.addEventListener('mouseup', endDrag);
+
+          heroStrip.addEventListener('mousemove', (event) => {
+            if (!isDragging) return;
+            event.preventDefault();
+            const x = event.pageX - heroStrip.getBoundingClientRect().left;
+            const walk = (x - startX);
+            heroStrip.scrollLeft = scrollStart - walk;
+          });
+
+          heroStrip.addEventListener('wheel', (event) => {
+            const delta = Math.abs(event.deltaY) > Math.abs(event.deltaX) ? event.deltaY : event.deltaX;
+            heroStrip.scrollBy({ left: delta, behavior: 'smooth' });
+            event.preventDefault();
+            clearTimeout(wheelSnapTimer);
+            wheelSnapTimer = setTimeout(() => centerNearestImage(), 180);
+          }, { passive: false });
+
+          const waitForImages = () => Promise.all(
+            heroImages.map(img => img.complete ? Promise.resolve() : new Promise(resolve => img.addEventListener('load', resolve, { once: true })))
+          );
+
+          const initCenter = () => {
+            if (heroImages.length === 0) return;
+            const middleIndex = Math.floor(heroImages.length / 2);
+            centerOnImage(middleIndex, 'auto');
+          };
+
+          const centerWithRaf = (index) => {
+            requestAnimationFrame(() => centerOnImage(index, 'auto'));
+          };
+
+          waitForImages().then(() => {
+            const middleIndex = Math.floor(heroImages.length / 2);
+            if (document.readyState === 'complete') {
+              centerWithRaf(middleIndex);
+            } else {
+              window.addEventListener('load', () => centerWithRaf(middleIndex), { once: true });
+            }
+            setTimeout(() => centerWithRaf(middleIndex), 300);
+          });
+
+          let resizeTimer;
+          window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+              const middleIndex = Math.floor(heroImages.length / 2);
+              centerOnImage(middleIndex, 'auto');
+            }, 200);
+          });
+        }
+
         const formOverlay = document.getElementById('formOverlay');
         const closeFormBtn = document.getElementById('closeForm');
 
