@@ -2,9 +2,9 @@
   "name": "swapspace-marketing-site",
   "version": "1.0.0",
   "description": "Swap Space Marketing Website",
-  "main": "Index.html",
+  "main": "index.html",
   "scripts": {
-    "dev": "live-server --port=3000 --open=/Index.html --watch=.",
+    "dev": "live-server --port=3000 --open=/index.html --watch=.",
     "start": "live-server --port=3000 --watch=.",
     "serve": "python3 -m http.server 3000",
     "clean": "rm -rf dist && mkdir -p dist",
