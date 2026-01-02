@@ -801,31 +801,6 @@ Join Swap Space today and start your journey toward budget-friendly travel, home
          JAVASCRIPT SECTIONS
          ============================================ -->
 
-    <!-- Fillout Form Embed -->
-    <div id="formOverlay" style="display:none; position:fixed; top:0px; left:0px; right:0px; bottom:0px; z-index:9999; background-color:rgba(0,0,0,0.5);">
-      <div data-fillout-id="rnUDrrVmztus" data-fillout-embed-type="fullscreen" style="width:100%;height:100%;" data-fillout-inherit-parameters></div>
-      <button id="closeForm" style="position:absolute; top:20px; right:20px; z-index:10000; background:#fff; border:none; padding:10px 20px; border-radius:5px; cursor:pointer; font-size:16px;">Close</button>
-      <script src="https://server.fillout.com/embed/v1/"></script>
-
-      <script>
-  let leadFired = false;
-
-  window.addEventListener('message', function (event) {
-    if (!event.data) return;
-
-    // Fillout successful submission event
-    if (event.data.type === 'fillout:submit' && !leadFired) {
-      leadFired = true;
-
-      if (typeof fbq === 'function') {
-        fbq('track', 'Lead');
-        console.log('Meta Lead fired from Fillout submit');
-      }
-    }
-  });
-</script>
-    </div>
-
     <!-- ============================================
          MAIN JAVASCRIPT FUNCTIONALITY
          ============================================ -->
@@ -934,27 +909,14 @@ Join Swap Space today and start your journey toward budget-friendly travel, home
           });
         }
 
-        const formOverlay = document.getElementById('formOverlay');
-        const closeFormBtn = document.getElementById('closeForm');
-
         // Use event delegation to handle clicks on any button with class 'button-primary'
-        // This works for buttons anywhere on the page, even if added dynamically
+        // Navigate to the application form page
         document.addEventListener('click', function(e) {
           if (e.target && e.target.classList.contains('button-primary')) {
-            formOverlay.style.display = 'block';
+            window.location.href = 'application.html';
           }
         });
 
-        closeFormBtn.addEventListener('click', function() {
-          formOverlay.style.display = 'none';
-        });
-
-        // Close form when clicking outside the form area
-        formOverlay.addEventListener('click', function(e) {
-          if (e.target === formOverlay) {
-            formOverlay.style.display = 'none';
-          }
-        });
 
         // Price comparison toggle functionality
         const toggleButtons = document.querySelectorAll('.toggle-btn');
