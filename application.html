@@ -160,21 +160,23 @@
   </style>
 </head>
 <body class="min-h-screen bg-white">
+  <!-- Masthead -->
+  <div class="masthead">
+    <a href="index.html">
+      <img class="logo" src="assets/Swapspace wordmark.svg" alt="Swap-space-logo">
+    </a>
+    <!-- Close button: positioned in masthead on mobile, fixed over image on desktop -->
+    <a href="index.html" class="secondary-button lg:fixed lg:top-6 lg:right-6 lg:z-50" style="display: flex; align-items: center; gap: 8px;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 6L6 18M6 6l12 12"/>
+      </svg>
+      Close
+    </a>
+  </div>
+
   <div class="flex min-h-screen">
     <!-- Left Side: Form -->
     <div class="w-full lg:w-1/2 flex flex-col pl-8 pr-8 md:pl-16 md:pr-16 lg:pl-24 lg:pr-20 py-8">
-      
-      <!-- Header with Logo and Close Button -->
-      <div class="flex items-center justify-between mb-8">
-        <a href="index.html" class="flex items-center">
-          <img src="assets/Swapspace-Logo-Primary-Rgb_1_VjSw6R2piRZ0oV5VmNJOs.svg" alt="SwapSpace" class="h-8 md:h-10" />
-        </a>
-        <a href="index.html" class="text-gray-400 hover:text-gray-600 p-2 rounded-full hover:bg-gray-100 transition-colors" aria-label="Close">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M18 6L6 18M6 6l12 12"/>
-          </svg>
-        </a>
-      </div>
 
       <div class="max-w-lg flex-1 flex flex-col justify-center">
         
@@ -393,8 +395,8 @@
       </div>
     </div>
     
-    <!-- Right Side: Image -->
-    <div class="hidden lg:block lg:w-1/2 bg-gray-100">
+    <!-- Right Side: Image (full height) -->
+    <div class="hidden lg:block lg:w-1/2 bg-gray-100 h-screen sticky top-0">
       <img 
         src="assets/close up 2.png" 
         alt="Cozy living room" 
