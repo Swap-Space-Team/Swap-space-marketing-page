@@ -94,7 +94,8 @@
     }
     .step { display: none; padding-left: 0; padding-right: 0; }
     .step.active { display: flex; flex-direction: column; gap: 4px;
-    padding-left: 16px; padding-right: 16px;margin-left: 24px;}
+    padding-left: 16px; padding-right: 16px; margin-left: 24px; width: 100%;
+    }
     .step h1 { margin-bottom: 8px; }
     
     .phone-input-wrapper {
@@ -174,7 +175,7 @@
     <!-- Left Side: Form -->
     <div class="w-full lg:w-1/2 flex flex-col pl-8 pr-8 md:pl-16 md:pr-16 lg:pl-24 lg:pr-20 py-8">
 
-      <div class="max-w-lg flex-1 flex flex-col justify-center">
+      <div class="max-w-[80%] flex-1 flex flex-col justify-center">
         
         <!-- Step 1: Introduction -->
         <div class="step active " data-step="1">
@@ -182,11 +183,11 @@
           <h1 class="text-3xl md:text-4xl font-semibold text-gray-900" style="font-family: 'General Sans', sans-serif; letter-spacing: -0.5px; ">
             Turn your home into your ticket to travel
           </h1>
-          <p class="text-[16px] text-gray-500" style="margin-bottom: 24px;"> Check if your home is a fit for SwapSpace.</p>
+          <p class="text-[16px] text-gray-500" style="margin-bottom: 24px; width: 100%;"> Check if your home is a fit for SwapSpace.</p>
           <p class="text-gray-600 mb-4 mt-8 font-medium" style="font-family: 'General Sans', sans-serif; line-height: 1.6;">
             Thanks for your interest in joining SwapSpace. We're building a trusted, members-only home swapping community for people who want to travel more without paying for accommodation.
           </p>
-          <p class="text-gray-600 mb-8 font-medium" style="font-family: 'General Sans', sans-serif; line-height: 1.6;">
+          <p class="text-gray-600 mb-8 font-medium" style="font-family: 'General Sans', sans-serif; line-height: 1.6; width: 100%;">
             Answer a few questions about your home to see if it's a fit. This short form helps us keep the community trusted and high quality. There's no need for anything to be perfect, We're looking for real, lived in homes from people who want to travel more meaningfully and affordably. 
           </p>
           <button type="button" class="btn-primary" onclick="nextStep()">
