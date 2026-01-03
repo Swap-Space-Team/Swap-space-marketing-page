@@ -66,15 +66,16 @@
       margin-top: 4px;
     }
     .required-asterisk {
-      color: #079455;
+      color: red;
       margin-left: 2px;
     }
     .btn-primary {
       display: inline-flex;
       align-items: center;
+      width: fit-content;
       gap: 8px;
       margin-top: 24px;
-      padding: 14px 24px;
+      padding: 12px 24px;
       background-color: #079455;
       color: #fff;
       font-size: 16px;
@@ -92,9 +93,9 @@
       transform: scale(0.98);
     }
     .step { display: none; padding-left: 0; padding-right: 0; }
-    .step.active { display: block;
-    padding-left: 16px; padding-right: 16px;}
-    .step h1 { margin-bottom: 24px; }
+    .step.active { display: flex; flex-direction: column; gap: 4px;
+    padding-left: 16px; padding-right: 16px;margin-left: 24px;}
+    .step h1 { margin-bottom: 8px; }
     
     .phone-input-wrapper {
       display: flex;
@@ -165,13 +166,8 @@
     <a href="index.html">
       <img class="logo" src="assets/Swapspace wordmark.svg" alt="Swap-space-logo">
     </a>
-    <!-- Close button: positioned in masthead on mobile, fixed over image on desktop -->
-    <a href="index.html" class="secondary-button lg:fixed lg:top-6 lg:right-6 lg:z-50" style="display: flex; align-items: center; gap: 8px;">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M18 6L6 18M6 6l12 12"/>
-      </svg>
-      Close
-    </a>
+
+    
   </div>
 
   <div class="flex min-h-screen">
@@ -182,14 +178,16 @@
         
         <!-- Step 1: Introduction -->
         <div class="step active " data-step="1">
-          <h1 class="text-3xl md:text-4xl font-semibold text-gray-900 mb-6" style="font-family: 'General Sans', sans-serif; letter-spacing: -0.5px; ">
-            Is my home a fit?
+
+          <h1 class="text-3xl md:text-4xl font-semibold text-gray-900" style="font-family: 'General Sans', sans-serif; letter-spacing: -0.5px; ">
+            Turn your home into your ticket to travel
           </h1>
-          <p class="text-gray-600 mb-4" style="font-family: 'General Sans', sans-serif; line-height: 1.6;">
-            Thanks for your interest in joining SwapSpace. We're creating a trusted network of homes for people who believe travel should and can be more personal, affordable and built on connection.
+          <p class="text-[16px] text-gray-500" style="margin-bottom: 24px;"> Check if your home is a fit for SwapSpace.</p>
+          <p class="text-gray-600 mb-4 mt-8 font-medium" style="font-family: 'General Sans', sans-serif; line-height: 1.6;">
+            Thanks for your interest in joining SwapSpace. We're building a trusted, members-only home swapping community for people who want to travel more without paying for accommodation.
           </p>
-          <p class="text-gray-600 mb-8" style="font-family: 'General Sans', sans-serif; line-height: 1.6;">
-            Tell us a bit about your home so we can see if it's a good fit for the community. Don't worry about perfection. We want real homes, lived in and full of character.
+          <p class="text-gray-600 mb-8 font-medium" style="font-family: 'General Sans', sans-serif; line-height: 1.6;">
+            Answer a few questions about your home to see if it's a fit. This short form helps us keep the community trusted and high quality. There's no need for anything to be perfect, We're looking for real, lived in homes from people who want to travel more meaningfully and affordably. 
           </p>
           <button type="button" class="btn-primary" onclick="nextStep()">
             Next <span>→</span>
@@ -395,8 +393,8 @@
       </div>
     </div>
     
-    <!-- Right Side: Image (full height) -->
-    <div class="hidden lg:block lg:w-1/2 bg-gray-100 h-screen sticky top-0">
+    <!-- Right Side: Image (fixed full height on desktop) -->
+    <div class="hidden lg:fixed lg:block lg:right-0 lg:top-0 lg:w-1/2 lg:h-screen bg-gray-100">
       <img 
         src="assets/close up 2.png" 
         alt="Cozy living room" 
