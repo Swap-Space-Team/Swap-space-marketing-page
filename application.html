@@ -159,6 +159,37 @@
     .input-with-icon {
       padding-left: 44px;
     }
+    /* Progress Bar Styles */
+    .progress-container {
+      width: calc(100% - 48px);
+      margin: 24px;
+    }
+    .progress-bar-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .progress-bar {
+      flex: 1;
+      height: 8px;
+      background-color: #e5e7eb;
+      border-radius: 100px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #079455, #0fb266);
+      border-radius: 100px;
+      transition: width 0.4s ease-out;
+      width: 0%;
+    }
+    .progress-text {
+      font-size: 14px;
+      font-weight: 500;
+      color: #697586;
+      white-space: nowrap;
+      font-family: 'General Sans', sans-serif;
+    }
   </style>
 </head>
 <body class="min-h-screen bg-white">
@@ -174,6 +205,16 @@
   <div class="flex min-h-screen">
     <!-- Left Side: Form -->
     <div class="w-full lg:w-1/2 flex flex-col pl-8 pr-8 md:pl-16 md:pr-16 lg:pl-24 lg:pr-20 py-8">
+
+      <!-- Progress Bar -->
+      <div class="progress-container" id="progressContainer">
+        <div class="progress-bar-wrapper">
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+          <span class="progress-text" id="progressText">Step 1 of 7</span>
+        </div>
+      </div>
 
       <div class="max-w-[80%] flex-1 flex flex-col justify-center">
         
@@ -473,7 +514,29 @@
       document.querySelector(`[data-step="${step}"]`).classList.add('active');
       currentStep = step;
       saveFormData(); // Save step progress
+      updateProgressBar(); // Update progress bar
       window.scrollTo(0, 0);
+    }
+
+    function updateProgressBar() {
+      const progressFill = document.getElementById('progressFill');
+      const progressText = document.getElementById('progressText');
+      const progressContainer = document.getElementById('progressContainer');
+      
+      const formSteps = 7; // Total form steps (excluding thank you step)
+      
+      // Hide progress bar on thank you step
+      if (currentStep === 8) {
+        progressContainer.style.display = 'none';
+        return;
+      } else {
+        progressContainer.style.display = 'block';
+      }
+      
+      // Calculate progress percentage
+      const progress = (currentStep / formSteps) * 100;
+      progressFill.style.width = `${progress}%`;
+      progressText.textContent = `Step ${currentStep} of ${formSteps}`;
     }
 
     function nextStep() {
@@ -754,6 +817,7 @@
     document.addEventListener('DOMContentLoaded', function() {
       setupAutoSave();
       restoreFormData();
+      updateProgressBar(); // Initialize progress bar
     });
   </script>
 </body>
