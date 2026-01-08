@@ -14,6 +14,15 @@
     posthog.init('phc_qPlxJ84Q6HCS1E6ULdUhGn5frh9TaC4s6ZWXlwMxj7N',{api_host:'https://eu.i.posthog.com',person_profiles:'identified_only'});
   </script>
 
+  <!-- Anti-flickering script -->
+<script>
+var  timeout = 3000; // Timeout value to remove the flicker (in milliseconds)
+!function(h,i,d,e){var  t,n=h.createElement("style");n.id=e,n.innerHTML="body{opacity:0}",h.head.appendChild(n),t=d,i.rmfk=function(){var  t=h.getElementById(e);t&&t.parentNode.removeChild(t)},setTimeout(i.rmfk,t)}(document,window,timeout,"abhide");
+</script>
+
+<!-- Mida A/B Testing Script (Place in <HEAD> for speed & no flicker) -->
+<script type="text/javascript" async src="https://cdn.mida.so/js/optimize.js?key=Wpw95KNXBpAV0dEVgMJvAm"></script>
+
   <!-- Meta Pixel Code -->
   <script>
     !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
