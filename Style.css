@@ -1731,3 +1731,227 @@ padding: 40px;
     margin-top: 24px;
   }
 }
+
+/* ============================================
+   SCROLL & MOTION ANIMATION SYSTEM
+   ============================================ */
+
+/* Base state for scroll-triggered animations */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.animate-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Staggered delay classes */
+.animate-delay-1 { transition-delay: 0.1s; }
+.animate-delay-2 { transition-delay: 0.2s; }
+.animate-delay-3 { transition-delay: 0.3s; }
+.animate-delay-4 { transition-delay: 0.4s; }
+.animate-delay-5 { transition-delay: 0.5s; }
+
+/* Scale-in animation variant */
+.animate-scale {
+  opacity: 0;
+  transform: scale(0.95) translateY(20px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.animate-scale.is-visible {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+/* Hero-specific animations (load immediately, not scroll-triggered) */
+.hero-animate {
+  opacity: 0;
+  transform: translateY(40px);
+  animation: heroFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.hero-animate-delay-1 { animation-delay: 0.1s; }
+.hero-animate-delay-2 { animation-delay: 0.2s; }
+.hero-animate-delay-3 { animation-delay: 0.3s; }
+.hero-animate-delay-4 { animation-delay: 0.4s; }
+.hero-animate-delay-5 { animation-delay: 0.5s; }
+
+@keyframes heroFadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hero image strip slide-in */
+.hero-img-strip {
+  opacity: 0;
+  transform: translateY(60px);
+  animation: heroSlideUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
+}
+
+@keyframes heroSlideUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   MICRO-INTERACTIONS & HOVER EFFECTS
+   ============================================ */
+
+/* Button hover enhancements */
+.button-primary {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.3s ease,
+              background-color 0.2s ease;
+}
+
+.button-primary:hover {
+  transform: scale(1.03);
+  box-shadow: 0 8px 25px rgba(7, 148, 85, 0.25);
+}
+
+.button-primary:active {
+  transform: scale(0.98);
+}
+
+/* Secondary button hover */
+.secondary-button {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+              border-color 0.3s ease,
+              box-shadow 0.3s ease;
+}
+
+.secondary-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(7, 148, 85, 0.15);
+}
+
+/* Card hover effects */
+.column {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.4s ease;
+}
+
+.column:hover {
+  transform: translateY(-6px);
+}
+
+.column:hover .col-img-3 {
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.col-img-3 {
+  transition: box-shadow 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* FAQ item hover */
+.faq-item {
+  transition: background-color 0.3s ease;
+}
+
+.faq-item:hover {
+  background-color: rgba(7, 148, 85, 0.03);
+}
+
+/* Footer link hover underline effect */
+.footer-link {
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.footer-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background-color: currentColor;
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.footer-link:hover::after {
+  width: 100%;
+}
+
+/* Logo subtle hover */
+.logo {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.3s ease;
+}
+
+.logo:hover {
+  transform: scale(1.02);
+  opacity: 0.9;
+}
+
+/* Hero images hover effect */
+.hero-img {
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.5s ease;
+}
+
+.hero-img:hover {
+  transform: scale(1.02);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2);
+}
+
+/* Carousel images hover */
+.carousel-img {
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.5s ease;
+  border-radius: 12px;
+}
+
+.carousel-img:hover {
+  transform: scale(1.03);
+}
+
+/* ============================================
+   REDUCED MOTION - ACCESSIBILITY
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  .animate-on-scroll,
+  .animate-scale,
+  .hero-animate {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    animation: none;
+  }
+  
+  .hero-img-strip {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+  
+  .button-primary,
+  .secondary-button,
+  .column,
+  .col-img-3,
+  .faq-item,
+  .footer-link,
+  .logo,
+  .hero-img,
+  .carousel-img {
+    transition: none;
+  }
+  
+  .button-primary:hover,
+  .secondary-button:hover,
+  .column:hover,
+  .hero-img:hover,
+  .carousel-img:hover {
+    transform: none;
+  }
+}
