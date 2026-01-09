@@ -101,6 +101,36 @@ var  timeout = 3000; // Timeout value to remove the flicker (in milliseconds)
     .btn-primary:active {
       transform: scale(0.98);
     }
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      gap: 8px;
+      margin-top: 24px;
+      padding: 12px 24px;
+      background-color: transparent;
+      color: #364152;
+      font-size: 16px;
+      font-weight: 600;
+      font-family: 'General Sans', sans-serif;
+      border: 1px solid #d5d9eb;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+    }
+    .btn-secondary:hover {
+      background-color: #f9fafb;
+      border-color: #9aa4b2;
+    }
+    .btn-secondary:active {
+      transform: scale(0.98);
+    }
+    .btn-group {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
     .step { display: none; padding-left: 0; padding-right: 0; }
     .step.active { display: flex; flex-direction: column; gap: 4px;
     padding-left: 16px; padding-right: 16px; margin-left: 24px; width: 100%;
@@ -280,9 +310,14 @@ var  timeout = 3000; // Timeout value to remove the flicker (in milliseconds)
             </div>
           </div>
           
-          <button type="button" class="btn-primary mt-8" onclick="nextStep()">
-            Next <span>→</span>
-          </button>
+          <div class="btn-group mt-8">
+            <button type="button" class="btn-secondary" onclick="prevStep()">
+              <span>←</span> Previous
+            </button>
+            <button type="button" class="btn-primary" onclick="nextStep()">
+              Next <span>→</span>
+            </button>
+          </div>
         </div>
 
         <!-- Step 3: Location -->
@@ -321,9 +356,14 @@ var  timeout = 3000; // Timeout value to remove the flicker (in milliseconds)
             </div>
           </div>
           
-          <button type="button" class="btn-primary mt-8" onclick="nextStep()">
-            Continue
-          </button>
+          <div class="btn-group mt-8">
+            <button type="button" class="btn-secondary" onclick="prevStep()">
+              <span>←</span> Previous
+            </button>
+            <button type="button" class="btn-primary" onclick="nextStep()">
+              Continue
+            </button>
+          </div>
         </div>
 
         <!-- Step 4: Home Type -->
@@ -343,9 +383,14 @@ var  timeout = 3000; // Timeout value to remove the flicker (in milliseconds)
             </select>
           </div>
           
-          <button type="button" class="btn-primary mt-8" onclick="nextStep()">
-            Continue
-          </button>
+          <div class="btn-group mt-8">
+            <button type="button" class="btn-secondary" onclick="prevStep()">
+              <span>←</span> Previous
+            </button>
+            <button type="button" class="btn-primary" onclick="nextStep()">
+              Continue
+            </button>
+          </div>
         </div>
 
         <!-- Step 5: Bedrooms -->
@@ -365,9 +410,14 @@ var  timeout = 3000; // Timeout value to remove the flicker (in milliseconds)
             </select>
           </div>
           
-          <button type="button" class="btn-primary mt-8" onclick="nextStep()">
-            Continue
-          </button>
+          <div class="btn-group mt-8">
+            <button type="button" class="btn-secondary" onclick="prevStep()">
+              <span>←</span> Previous
+            </button>
+            <button type="button" class="btn-primary" onclick="nextStep()">
+              Continue
+            </button>
+          </div>
         </div>
 
         <!-- Step 6: Guest Capacity -->
@@ -387,9 +437,14 @@ var  timeout = 3000; // Timeout value to remove the flicker (in milliseconds)
             </select>
           </div>
           
-          <button type="button" class="btn-primary mt-8" onclick="nextStep()">
-            Continue
-          </button>
+          <div class="btn-group mt-8">
+            <button type="button" class="btn-secondary" onclick="prevStep()">
+              <span>←</span> Previous
+            </button>
+            <button type="button" class="btn-primary" onclick="nextStep()">
+              Continue
+            </button>
+          </div>
         </div>
 
         <!-- Step 7: Photo Upload -->
@@ -419,9 +474,14 @@ var  timeout = 3000; // Timeout value to remove the flicker (in milliseconds)
           
           <div id="fileList" class="mt-6 space-y-3"></div>
           
-          <button type="button" class="btn-primary mt-8" onclick="submitForm()">
-            Submit
-          </button>
+          <div class="btn-group mt-8">
+            <button type="button" class="btn-secondary" onclick="prevStep()">
+              <span>←</span> Previous
+            </button>
+            <button type="button" class="btn-primary" onclick="submitForm()">
+              Submit
+            </button>
+          </div>
         </div>
 
         <!-- Step 8: Thank You -->
