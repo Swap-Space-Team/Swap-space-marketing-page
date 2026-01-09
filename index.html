@@ -426,11 +426,9 @@ Join Swap Space today and start your journey toward budget-friendly travel, home
         </div>
       </div>
      
-      <!-- Hero Background Video -->
+      <!-- Hero Background Image -->
       <div class="hero-video-container">
-        <video class="hero-video" autoplay muted loop playsinline>
-          <source src="assets/hero-video.mp4" type="video/mp4">
-        </video>
+        <img class="hero-video" src="assets/Hero-image enhanced.png" alt="SwapSpace hero background">
         <div class="hero-video-overlay"></div>
       </div>
     </section>
@@ -774,7 +772,7 @@ Join Swap Space today and start your journey toward budget-friendly travel, home
       <div class="footer-content animate-on-scroll">
         <div class="footer-brand">
           <img 
-            src="assets/Swapspace-Logo-White-Rgb_pSTDRhuGj7Xdi02ZWgiHn.svg" 
+            src="assets/Swapspace logo in white .svg" 
             alt="Swap Space Logo" 
             class="footer-logo"
           />
@@ -1568,6 +1566,93 @@ Join Swap Space today and start your journey toward budget-friendly travel, home
         document.addEventListener('DOMContentLoaded', () => {
           const animatedElements = document.querySelectorAll('.animate-on-scroll, .animate-scale');
           animatedElements.forEach(el => observer.observe(el));
+        });
+      })();
+    </script>
+
+    <!-- ============================================
+         PARALLAX SCROLLING CONTROLLER
+         ============================================ -->
+    <script>
+      (function() {
+        // Respect reduced motion preference
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (prefersReducedMotion) return;
+
+        // Elements for parallax
+        const heroSection = document.querySelector('.hero');
+        const heroBackground = document.querySelector('.hero-video-container');
+        const sections = document.querySelectorAll('section');
+        
+        // Smooth scroll with Lenis-like behavior
+        let scrollY = 0;
+        let currentY = 0;
+        const ease = 0.1;
+        
+        // Parallax speeds for different elements
+        const heroBackgroundSpeed = 0.5;
+        
+        function lerp(start, end, factor) {
+          return start + (end - start) * factor;
+        }
+        
+        function updateParallax() {
+          currentY = lerp(currentY, scrollY, ease);
+          
+          // Hero background parallax - moves slower than scroll
+          if (heroBackground && heroSection) {
+            const heroRect = heroSection.getBoundingClientRect();
+            const heroVisible = heroRect.bottom > 0;
+            
+            if (heroVisible) {
+              const parallaxOffset = currentY * heroBackgroundSpeed;
+              heroBackground.style.transform = `translate3d(0, ${parallaxOffset}px, 0)`;
+            }
+          }
+          
+          // Section parallax - subtle lift effect as sections enter view
+          sections.forEach((section, index) => {
+            if (section.classList.contains('hero')) return; // Skip hero
+            
+            const rect = section.getBoundingClientRect();
+            const windowHeight = window.innerHeight;
+            
+            // Calculate how far into viewport the section is
+            const viewportProgress = (windowHeight - rect.top) / (windowHeight + rect.height);
+            
+            if (viewportProgress > 0 && viewportProgress < 1) {
+              // Subtle upward movement as section enters (no opacity change)
+              const translateY = Math.max(0, (1 - viewportProgress) * 30);
+              section.style.transform = `translate3d(0, ${translateY}px, 0)`;
+            } else if (viewportProgress >= 1) {
+              section.style.transform = 'translate3d(0, 0, 0)';
+            }
+          });
+          
+          requestAnimationFrame(updateParallax);
+        }
+        
+        // Track scroll position
+        window.addEventListener('scroll', () => {
+          scrollY = window.pageYOffset || document.documentElement.scrollTop;
+        }, { passive: true });
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+          scrollY = window.pageYOffset || document.documentElement.scrollTop;
+          currentY = scrollY;
+          
+          // Add will-change for performance
+          if (heroBackground) {
+            heroBackground.style.willChange = 'transform';
+          }
+          sections.forEach(section => {
+            if (!section.classList.contains('hero')) {
+              section.style.willChange = 'transform';
+            }
+          });
+          
+          updateParallax();
         });
       })();
     </script>
