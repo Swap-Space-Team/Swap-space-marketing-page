@@ -765,6 +765,26 @@ var  timeout = 3000; // Timeout value to remove the flicker (in milliseconds)
         }
       }
 
+      // Photo upload validation for step 7
+      if (currentStep === 7) {
+        if (uploadedImageUrls.length === 0) {
+          isValid = false;
+          // Show error message below upload zone
+          const uploadZone = document.getElementById('uploadZone');
+          const existingError = currentStepEl.querySelector('.upload-error-message');
+          if (!existingError) {
+            const errorEl = document.createElement('p');
+            errorEl.className = 'upload-error-message';
+            errorEl.style.color = '#ef4444';
+            errorEl.style.fontSize = '14px';
+            errorEl.style.marginTop = '12px';
+            errorEl.style.textAlign = 'center';
+            errorEl.textContent = 'Please upload at least one photo of your home';
+            uploadZone.insertAdjacentElement('afterend', errorEl);
+          }
+        }
+      }
+
       if (!isValid) {
         // Focus on first invalid field
         const firstInvalid = currentStepEl.querySelector('.error-message')?.previousElementSibling?.querySelector('input, select') 
@@ -941,6 +961,10 @@ var  timeout = 3000; // Timeout value to remove the flicker (in milliseconds)
 
           const data = await response.json();
           uploadedImageUrls.push(data.secure_url);
+
+          // Clear any upload error message
+          const uploadError = document.querySelector('.upload-error-message');
+          if (uploadError) uploadError.remove();
 
           // Update UI to show success
           fileItem.dataset.uploading = 'false';
