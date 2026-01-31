@@ -628,6 +628,31 @@ var  timeout = 3000; // Timeout value to remove the flicker (in milliseconds)
     const totalSteps = 8;
     const STORAGE_KEY = 'swapspace_application_form';
 
+    // PostHog Experiment: "Reduce application form length"
+    // Control: All 7 steps | Test: Skip steps 4 (Home Type) and 6 (Guest Capacity)
+    let experimentVariant = 'control'; // Default to control
+    const SKIPPED_STEPS_TEST = [4, 6]; // Steps to skip in test variant
+    
+    // Get the steps to skip based on variant
+    function getSkippedSteps() {
+      return experimentVariant === 'test' ? SKIPPED_STEPS_TEST : [];
+    }
+    
+    // Get total form steps (excluding thank you) based on variant
+    function getTotalFormSteps() {
+      return 7 - getSkippedSteps().length;
+    }
+    
+    // Get the current step number for display (accounting for skipped steps)
+    function getDisplayStepNumber(actualStep) {
+      const skipped = getSkippedSteps();
+      let displayStep = actualStep;
+      for (const skip of skipped) {
+        if (skip < actualStep) displayStep--;
+      }
+      return displayStep;
+    }
+
     // Form fields to persist
     const formFields = ['name', 'email', 'phone', 'address', 'city', 'country', 'homeType', 'bedrooms', 'guests'];
 
@@ -701,7 +726,7 @@ var  timeout = 3000; // Timeout value to remove the flicker (in milliseconds)
       const progressText = document.getElementById('progressText');
       const progressContainer = document.getElementById('progressContainer');
       
-      const formSteps = 7; // Total form steps (excluding thank you step)
+      const formSteps = getTotalFormSteps(); // Use dynamic step count based on variant
       
       // Hide progress bar on thank you step
       if (currentStep === 8) {
@@ -711,23 +736,40 @@ var  timeout = 3000; // Timeout value to remove the flicker (in milliseconds)
         progressContainer.style.display = 'block';
       }
       
-      // Calculate progress percentage
-      const progress = (currentStep / formSteps) * 100;
+      // Calculate progress percentage using display step number
+      const displayStep = getDisplayStepNumber(currentStep);
+      const progress = (displayStep / formSteps) * 100;
       progressFill.style.width = `${progress}%`;
-      progressText.textContent = `Step ${currentStep} of ${formSteps}`;
+      progressText.textContent = `Step ${displayStep} of ${formSteps}`;
     }
 
     function nextStep() {
       if (validateCurrentStep()) {
-        if (currentStep < totalSteps) {
-          showStep(currentStep + 1);
+        let nextStepNum = currentStep + 1;
+        const skipped = getSkippedSteps();
+        
+        // Skip over any skipped steps
+        while (skipped.includes(nextStepNum) && nextStepNum < totalSteps) {
+          nextStepNum++;
+        }
+        
+        if (nextStepNum <= totalSteps) {
+          showStep(nextStepNum);
         }
       }
     }
 
     function prevStep() {
       if (currentStep > 1) {
-        showStep(currentStep - 1);
+        let prevStepNum = currentStep - 1;
+        const skipped = getSkippedSteps();
+        
+        // Skip over any skipped steps going backwards
+        while (skipped.includes(prevStepNum) && prevStepNum > 1) {
+          prevStepNum--;
+        }
+        
+        showStep(prevStepNum);
       }
     }
 
@@ -1095,6 +1137,22 @@ var  timeout = 3000; // Timeout value to remove the flicker (in milliseconds)
       setupAutoSave();
       restoreFormData();
       updateProgressBar(); // Initialize progress bar
+      
+      // PostHog experiment: detect variant and update UI
+      if (typeof posthog !== 'undefined' && posthog.onFeatureFlags) {
+        posthog.onFeatureFlags(function() {
+          const variant = posthog.getFeatureFlag('reduce-application-form-length');
+          if (variant === 'test') {
+            experimentVariant = 'test';
+            console.log('PostHog Experiment: User is in TEST variant (shorter form)');
+          } else {
+            experimentVariant = 'control';
+            console.log('PostHog Experiment: User is in CONTROL variant (full form)');
+          }
+          // Update progress bar to reflect correct step count
+          updateProgressBar();
+        });
+      }
     });
   </script>
 </body>
