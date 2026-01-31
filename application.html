@@ -1142,6 +1142,13 @@ var  timeout = 3000; // Timeout value to remove the flicker (in milliseconds)
       if (typeof posthog !== 'undefined' && posthog.onFeatureFlags) {
         posthog.onFeatureFlags(function() {
           const variant = posthog.getFeatureFlag('reduce-application-form-length');
+          
+          // Explicitly capture the feature flag exposure for experiment tracking
+          posthog.capture('$feature_flag_called', {
+            $feature_flag: 'reduce-application-form-length',
+            $feature_flag_response: variant
+          });
+          
           if (variant === 'test') {
             experimentVariant = 'test';
             console.log('PostHog Experiment: User is in TEST variant (shorter form)');
