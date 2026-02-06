@@ -57,7 +57,7 @@ export default async function handler(req, res) {
             from: 'SwapSpace <hello@notifications.swap-space.com>',
             reply_to: 'hello@swap-space.com',
             to: fields.Email,
-            subject: 'SwapSpace | Your application is complete!',
+            subject: 'SwapSpace | Your application is under review!',
             html: `
               <!DOCTYPE html>
               <html>
@@ -67,29 +67,23 @@ export default async function handler(req, res) {
               </head>
               <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.7; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
                 
-                <p style="font-size: 16px;">Hello ${fields.Name || 'there'},</p>
+                <p style="font-size: 16px;">Hi ${fields.Name || 'there'},</p>
                 
-                <p>Thanks for sending over your photos, we've received everything, and your application is now fully submitted.</p>
+                <p>Thank you for applying to join SwapSpace.</p>
                 
-                <h2 style="color: #079455; font-size: 18px; margin-top: 30px; margin-bottom: 15px;">What's next</h2>
+                <p>We've received your application successfully. To complete the review process, we just need a few photos of your home. Between 1 and 5 photos is sufficient, and they do not need to be professionally taken.</p>
                 
-                <p>You don't need to take any action right now. We'll review your home shortly and notify you once it's been accepted. Reviews are done on a rolling basis, focusing first on locations where member interest is highest. This helps us make sure every new member has a great experience when they join.</p>
+                <p>Once these have been shared, our team will be able to complete the review.</p>
                 
-                <h2 style="color: #079455; font-size: 18px; margin-top: 30px; margin-bottom: 15px;">Once your application is approved:</h2>
+                <p><strong>You can respond to this email with a few photos of your home and our team will take a look.</strong></p>
                 
-                <p>SwapSpace is a members-only community, so all members list their homes, even if they plan to travel before hosting.</p>
-                
-                <p>To keep the community safe, identity verification is required before your home can go live. Once completed, you'll see a verified ID badge on your profile.</p>
+                <p>We are excited to see the rest of your home. Please let us know if you have any questions!</p>
                 
                 <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee;">
-                  <p style="margin-bottom: 5px;">Thank you for sharing your home with us!</p>
-                  <p style="margin-top: 0; font-weight: 500;">We cannot wait to welcome you.</p>
+                  <p style="margin-bottom: 5px;">Warmly,</p>
+                  <p style="margin-top: 0; font-weight: 500;">The SwapSpace Team</p>
                 </div>
-                
-                <p style="margin-top: 30px;">
-                  Warmly,<br>
-                  <strong>The SwapSpace Team</strong>
-                </p>
+
                 
                 <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
                 
