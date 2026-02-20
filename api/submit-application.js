@@ -49,8 +49,8 @@ export default async function handler(req, res) {
 
     if (!airtableResponse.ok) {
       console.error('Airtable error:', data);
-      return res.status(airtableResponse.status).json({ 
-        error: data.error?.message || 'Failed to submit to Airtable' 
+      return res.status(airtableResponse.status).json({
+        error: data.error?.message || 'Failed to submit to Airtable'
       });
     }
 
@@ -77,24 +77,17 @@ export default async function handler(req, res) {
               </head>
               <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.7; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
                 
-                <p style="font-size: 16px;">Hello ${fields.Name || 'there'},</p>
+                <p style="font-size: 16px;">Hi ${fields.Name || 'there'},</p>
                 
-                <p>Thanks for sending over your photos, we've received everything, and your application is now fully submitted.</p>
-                
-                <h2 style="color: #079455; font-size: 18px; margin-top: 30px; margin-bottom: 15px;">What's next</h2>
-                
-                <p>You don't need to take any action right now. We'll review your home shortly and notify you once it's been accepted. Reviews are done on a rolling basis, focusing first on locations where member interest is highest. This helps us make sure every new member has a great experience when they join.</p>
-                
-                <h2 style="color: #079455; font-size: 18px; margin-top: 30px; margin-bottom: 15px;">Once your application is approved:</h2>
-                
-                <p>SwapSpace is a members-only community, so all members list their homes, even if they plan to travel before hosting.</p>
-                
-                <p>To keep the community safe, identity verification is required before your home can go live. Once completed, you'll see a verified ID badge on your profile.</p>
-                
-                <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee;">
-                  <p style="margin-bottom: 5px;">Thank you for sharing your home with us!</p>
-                  <p style="margin-top: 0; font-weight: 500;">We cannot wait to welcome you.</p>
-                </div>
+                <p>Thank you for applying to join SwapSpace.</p>
+
+                <p>We've received your application successfully. To complete the review process, we just need a few photos of your home. Between 1 and 5 photos is sufficient, and they do not need to be professionally taken.</p>
+
+                <p>Once these have been shared, our team will be able to complete the review.</p>
+
+                <p>You can respond to this email with a few photos of your home and our team will take a look.</p>
+
+                <p>We are excited to see the rest of your home. Please let us know if you have any questions!</p>
                 
                 <p style="margin-top: 30px;">
                   Warmly,<br>
