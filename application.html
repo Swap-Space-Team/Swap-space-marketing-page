@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Apply to SwapSpace | Is my home a fit?</title>
+  <meta name="description"
+    content="Apply to join the SwapSpace home exchange community. Tell us about your home and see if it qualifies." />
+  <link rel="stylesheet" href="output.css" />
+  <link rel="icon" href="assets/Swap-space_favicon_g6hAj61Zg_Rij2PQiQbR6.svg" />
+
+  <!-- PostHog Analytics -->
+  <script>
+    !function (t, e) { var o, n, p, r; e.__SV || ((window.posthog = e), (e._i = []), (e.init = function (i, s, a) { function g(t, e) { var o = e.split("."); 2 == o.length && ((t = t[o[0]]), (e = o[1])), (t[e] = function () { t.push([e].concat(Array.prototype.slice.call(arguments, 0))); }); } ((p = t.createElement("script")).type = "text/javascript"), (p.crossOrigin = "anonymous"), (p.async = !0), (p.src = s.api_host.replace(".i.posthog.com", "-assets.i.posthog.com") + "/static/array.js"), (r = t.getElementsByTagName("script")[0]).parentNode.insertBefore(p, r); var u = e; for (void 0 !== a ? (u = e[a] = []) : (a = "posthog"), u.people = u.people || [], u.toString = function (t) { var e = "posthog"; return "posthog" !== a && (e += "." + a), t || (e += " (stub)"), e }, u.people.toString = function () { return u.toString(1) + ".people (stub)" }, o = "init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey canRenderSurveyAsync identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug getPageViewId captureTraceFeedback captureTraceMetric".split(" "), n = 0; n < o.length; n++)g(u, o[n]); e._i.push([i, s, a]) }), (e.__SV = 1)) }(document, window.posthog || []);
+    posthog.init('phc_qPlxJ84Q6HCS1E6ULdUhGn5frh9TaC4s6ZWXlwMxj7N', { api_host: 'https://eu.i.posthog.com', person_profiles: 'identified_only' });
+  </script>
+
+  <!-- Anti-flickering script -->
+  <script>
+    var timeout = 3000; // Timeout value to remove the flicker (in milliseconds)
+    !function (h, i, d, e) { var t, n = h.createElement("style"); n.id = e, n.innerHTML = "body{opacity:0}", h.head.appendChild(n), t = d, i.rmfk = function () { var t = h.getElementById(e); t && t.parentNode.removeChild(t) }, setTimeout(i.rmfk, t) }(document, window, timeout, "abhide");
+  </script>
+
+  <!-- Mida A/B Testing Script (Place in <HEAD> for speed & no flicker) -->
+  <script type="text/javascript" async src="https://cdn.mida.so/js/optimize.js?key=Wpw95KNXBpAV0dEVgMJvAm"></script>
+
+  <!-- Meta Pixel Code -->
+  <script>
+    !function (f, b, e, v, n, t, s) { if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments) }; if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = []; t = b.createElement(e); t.async = !0; t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s) }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '2324029631392103');
+    fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=2324029631392103&ev=PageView&noscript=1" /></noscript>
+  <!-- End Meta Pixel Code -->
+  <style>
+    /* Custom styles for form elements */
+    .form-input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid #d5d9eb;
+      border-radius: 8px;
+      font-size: 16px;
+      font-family: 'General Sans', sans-serif;
+      color: #364152;
+      background-color: #fff;
+      margin-top: 4px;
+      margin-bottom: 8px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #079455;
+      box-shadow: 0 0 0 3px rgba(7, 148, 85, 0.1);
+    }
+
+    .form-input::placeholder {
+      color: #9aa4b2;
+    }
+
+    .form-select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%239aa4b2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 40px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 16px;
+      font-weight: 500;
+      color: #202939;
+      margin-bottom: 4px;
+      margin-top: 8px;
+    }
+
+    .form-helper {
+      font-size: 14px;
+      color: #697586;
+      margin-top: 4px;
+    }
+
+    .required-asterisk {
+      color: red;
+      margin-left: 2px;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      gap: 8px;
+      margin-top: 24px;
+      padding: 12px 24px;
+      background-color: #000;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 600;
+      font-family: 'General Sans', sans-serif;
+      border: none;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.1s ease;
+    }
+
+    .btn-primary:hover {
+      background-color: #333;
+    }
+
+    .btn-primary:active {
+      transform: scale(0.98);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      gap: 8px;
+      margin-top: 24px;
+      padding: 12px 24px;
+      background-color: transparent;
+      color: #364152;
+      font-size: 16px;
+      font-weight: 600;
+      font-family: 'General Sans', sans-serif;
+      border: 1px solid #d5d9eb;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+    }
+
+    .btn-secondary:hover {
+      background-color: #f9fafb;
+      border-color: #9aa4b2;
+    }
+
+    .btn-secondary:active {
+      transform: scale(0.98);
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .step {
+      display: none;
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .step.active {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding-left: 16px;
+      padding-right: 16px;
+      margin-left: 24px;
+      width: 100%;
+    }
+
+    .step h1 {
+      margin-bottom: 8px;
+    }
+
+    .phone-input-wrapper {
+      display: flex;
+      gap: 0;
+    }
+
+    .country-select {
+      width: 80px;
+      border-radius: 8px 0 0 8px;
+      border-right: none;
+      padding: 14px 12px;
+      font-size: 20px;
+    }
+
+    .phone-input {
+      border-radius: 0 8px 8px 0;
+      flex: 1;
+    }
+
+    .upload-zone {
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 32px 24px;
+      text-align: center;
+      cursor: pointer;
+      margin-top: 16px;
+      background-color: #f9fafb;
+      transition: border-color 0.2s ease, background-color 0.2s ease;
+    }
+
+    .upload-zone:hover {
+      border-color: #079455;
+      background-color: #f3f4f6;
+    }
+
+    .upload-zone.dragover {
+      border-color: #079455;
+      background-color: #ecfdf5;
+    }
+
+    .upload-icon-container {
+      width: 48px;
+      height: 48px;
+      background-color: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+    }
+
+    .upload-icon-container svg {
+      width: 24px;
+      height: 24px;
+      color: #697586;
+    }
+
+    .upload-text {
+      font-size: 14px;
+      color: #697586;
+      font-family: 'General Sans', sans-serif;
+    }
+
+    .upload-text .click-upload {
+      font-weight: 600;
+      color: #079455;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .upload-text .take-photo {
+      font-weight: 500;
+      color: #079455;
+      cursor: pointer;
+    }
+
+    .upload-text .take-photo:hover {
+      text-decoration: underline;
+    }
+
+    .upload-subtext {
+      font-size: 12px;
+      color: #9aa4b2;
+      margin-top: 4px;
+      font-family: 'General Sans', sans-serif;
+    }
+
+    .camera-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 1000;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .camera-modal.active {
+      display: flex;
+    }
+
+    .camera-modal video {
+      max-width: 100%;
+      max-height: 70vh;
+      border-radius: 12px;
+    }
+
+    .camera-controls {
+      display: flex;
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .camera-btn {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: 4px solid #fff;
+      background: transparent;
+      cursor: pointer;
+      transition: transform 0.1s ease;
+    }
+
+    .camera-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .camera-btn.capture {
+      background: #fff;
+    }
+
+    .camera-btn.close {
+      width: 48px;
+      height: 48px;
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .success-icon {
+      width: 64px;
+      height: 64px;
+      background-color: rgba(7, 148, 85, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+    }
+
+    .success-icon svg {
+      width: 32px;
+      height: 32px;
+      color: #079455;
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #9aa4b2;
+      pointer-events: none;
+    }
+
+    .input-with-icon {
+      padding-left: 44px;
+    }
+
+    /* Progress Bar Styles */
+    .progress-container {
+      width: calc(100% - 48px);
+      margin: 24px;
+    }
+
+    .progress-bar-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .progress-bar {
+      flex: 1;
+      height: 8px;
+      background-color: #e5e7eb;
+      border-radius: 100px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #000, #333);
+      border-radius: 100px;
+      transition: width 0.4s ease-out;
+      width: 0%;
+    }
+
+    .progress-text {
+      font-size: 14px;
+      font-weight: 500;
+      color: #697586;
+      white-space: nowrap;
+      font-family: 'General Sans', sans-serif;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen bg-white">
+  <!-- Masthead -->
+  <div class="masthead">
+    <a href="index.html">
+      <img class="logo" src="assets/Swapspace wordmark.svg" alt="Swap-space-logo">
+    </a>
+
+
+  </div>
+
+  <div class="flex min-h-screen">
+    <!-- Left Side: Form -->
+    <div class="w-full lg:w-1/2 flex flex-col pl-8 pr-8 md:pl-16 md:pr-16 lg:pl-24 lg:pr-20 py-8">
+
+      <!-- Progress Bar -->
+      <div class="progress-container" id="progressContainer">
+        <div class="progress-bar-wrapper">
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+          <span class="progress-text" id="progressText">Step 1 of 7</span>
+        </div>
+      </div>
+
+      <div class="max-w-[80%] flex-1 flex flex-col justify-center">
+
+        <!-- Step 1: Introduction -->
+        <div class="step active " data-step="1">
+
+          <h1 class="text-3xl md:text-4xl font-semibold text-gray-900"
+            style="font-family: 'General Sans', sans-serif; letter-spacing: -0.5px; ">
+            Turn your home into your ticket to travel
+          </h1>
+          <p class="text-[16px] text-gray-500" style="margin-bottom: 24px; width: 100%;"> Check if your home is a fit
+            for SwapSpace.</p>
+          <p class="text-gray-600 mb-4 mt-8 font-medium"
+            style="font-family: 'General Sans', sans-serif; line-height: 1.6;">
+            Thanks for your interest in joining SwapSpace. We're building a trusted, members-only home swapping
+            community for people who want to travel more without paying for accommodation.
+          </p>
+          <p class="text-gray-600 mb-8 font-medium"
+            style="font-family: 'General Sans', sans-serif; line-height: 1.6; width: 100%;">
+            Answer a few questions about your home to see if it's a fit. This short form helps us keep the community
+            trusted and high quality. There's no need for anything to be perfect, We're looking for real, lived in homes
+            from people who want to travel more meaningfully and affordably.
+          </p>
+          <button type="button" class="btn-primary" onclick="nextStep()">
+            Next <span>→</span>
+          </button>
+        </div>
+
+        <!-- Step 2: Personal Info -->
+        <div class="step" data-step="2">
+          <h1 class="text-3xl md:text-4xl font-semibold text-gray-900 mb-8"
+            style="font-family: 'General Sans', sans-serif; letter-spacing: -0.5px;">
+            Let's get to know you?
+          </h1>
+
+          <div class="space-y-6">
+            <div>
+              <label class="form-label">What should we call you?<span class="required-asterisk">*</span></label>
+              <input type="text" class="form-input" id="name" required />
+            </div>
+
+            <div>
+              <label class="form-label">Email address<span class="required-asterisk">*</span></label>
+              <div class="input-wrapper">
+                <span class="input-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="4" width="20" height="16" rx="2" />
+                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                  </svg>
+                </span>
+                <input type="email" class="form-input input-with-icon" id="email" required />
+              </div>
+            </div>
+
+            <div>
+              <label class="form-label">Phone number<span class="required-asterisk">*</span></label>
+              <p class="form-helper mb-2">Enter your phone number with country code (e.g., +44 7123 456789)</p>
+              <div class="input-wrapper">
+                <span class="input-icon" style="left: 12px;">+</span>
+                <input type="tel" class="form-input" style="padding-left: 28px;" id="phone" placeholder="44 7123 456789"
+                  required />
+              </div>
+            </div>
+          </div>
+
+          <div class="btn-group mt-8">
+            <button type="button" class="btn-secondary" onclick="prevStep()">
+              <span>←</span> Previous
+            </button>
+            <button type="button" class="btn-primary" onclick="nextStep()">
+              Next <span>→</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 3: Location -->
+        <div class="step" data-step="3">
+          <h1 class="text-3xl md:text-4xl font-semibold text-gray-900 mb-8"
+            style="font-family: 'General Sans', sans-serif; letter-spacing: -0.5px;">
+            Is my home a fit?
+          </h1>
+
+          <div class="field-group">
+            <label class="form-label">What city and country is your home in?<span
+                class="required-asterisk">*</span></label>
+            <p class="form-helper mb-4">Enter your city and country only</p>
+
+            <div class="space-y-4">
+              <div>
+                <label class="text-sm font-medium text-gray-700 mb-1 block">Address</label>
+                <div class="input-wrapper">
+                  <span class="input-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                      <circle cx="12" cy="10" r="3" />
+                    </svg>
+                  </span>
+                  <input type="text" class="form-input input-with-icon" id="address" />
+                </div>
+              </div>
+
+              <div>
+                <label class="text-sm font-medium text-gray-700 mb-1 block">City</label>
+                <input type="text" class="form-input" id="city" placeholder="e.g., London" required />
+              </div>
+
+              <div>
+                <label class="text-sm font-medium text-gray-700 mb-1 block">Country</label>
+                <input type="text" class="form-input" id="country" placeholder="e.g., United Kingdom" required />
+              </div>
+            </div>
+          </div>
+
+          <div class="btn-group mt-8">
+            <button type="button" class="btn-secondary" onclick="prevStep()">
+              <span>←</span> Previous
+            </button>
+            <button type="button" class="btn-primary" onclick="nextStep()">
+              Continue
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 4: Home Type -->
+        <div class="step" data-step="4">
+          <h1 class="text-3xl md:text-4xl font-semibold text-gray-900 mb-8"
+            style="font-family: 'General Sans', sans-serif; letter-spacing: -0.5px;">
+            What type of home do you have?
+          </h1>
+
+          <div class="field-group">
+            <label class="form-label">Choose one option<span class="required-asterisk">*</span></label>
+            <select class="form-input form-select" id="homeType" required>
+              <option value="">Select home type</option>
+              <option value="apartment">Apartment/Flat</option>
+              <option value="house">House</option>
+              <option value="studio">Studio</option>
+              <option value="cottage">Cottage</option>
+            </select>
+          </div>
+
+          <div class="btn-group mt-8">
+            <button type="button" class="btn-secondary" onclick="prevStep()">
+              <span>←</span> Previous
+            </button>
+            <button type="button" class="btn-primary" onclick="nextStep()">
+              Continue
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 5: Bedrooms -->
+        <div class="step" data-step="5">
+          <h1 class="text-3xl md:text-4xl font-semibold text-gray-900 mb-8"
+            style="font-family: 'General Sans', sans-serif; letter-spacing: -0.5px;">
+            How many bedrooms does it have?
+          </h1>
+
+          <div class="field-group">
+            <label class="form-label">Choose one option<span class="required-asterisk">*</span></label>
+            <select class="form-input form-select" id="bedrooms" required>
+              <option value="">Select number of bedrooms</option>
+              <option value="1">1 bedroom</option>
+              <option value="2">2 bedrooms</option>
+              <option value="3">3 bedrooms</option>
+              <option value="4+">4+ bedrooms</option>
+            </select>
+          </div>
+
+          <div class="btn-group mt-8">
+            <button type="button" class="btn-secondary" onclick="prevStep()">
+              <span>←</span> Previous
+            </button>
+            <button type="button" class="btn-primary" onclick="nextStep()">
+              Continue
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 6: Guest Capacity -->
+        <div class="step" data-step="6">
+          <h1 class="text-3xl md:text-4xl font-semibold text-gray-900 mb-8"
+            style="font-family: 'General Sans', sans-serif; letter-spacing: -0.5px;">
+            How many people can your home comfortably accommodate?
+          </h1>
+
+          <div class="field-group">
+            <label class="form-label">Choose one option<span class="required-asterisk">*</span></label>
+            <select class="form-input form-select" id="guests" required>
+              <option value="">Select guest capacity</option>
+              <option value="1">1 guest</option>
+              <option value="2">2 guests</option>
+              <option value="3">3 guests</option>
+              <option value="4+">4+ guests</option>
+            </select>
+          </div>
+
+          <div class="btn-group mt-8">
+            <button type="button" class="btn-secondary" onclick="prevStep()">
+              <span>←</span> Previous
+            </button>
+            <button type="button" class="btn-primary" onclick="submitForm()">
+              Submit
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 7: Thank You -->
+        <div class="step" data-step="7">
+          <div class="field-group text-center py-8">
+            <div class="success-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4"
+              style="font-family: 'General Sans', sans-serif; letter-spacing: -0.5px;">
+              Thank you for sharing your home
+            </h1>
+            <p class="text-gray-600" style="font-family: 'General Sans', sans-serif; line-height: 1.6;">
+              We'll take a look at your home and be in touch soon with the next steps to welcome you into the community!
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Right Side: Image (fixed full height on desktop) -->
+    <div class="hidden lg:fixed lg:block lg:right-0 lg:top-0 lg:w-1/2 lg:h-screen bg-gray-100">
+      <img src="assets/close-up-2.webp" alt="Cozy living room" class="w-full h-full object-cover" />
+    </div>
+  </div>
+
+  <script>
+    let currentStep = 1;
+    const totalSteps = 7;
+    const STORAGE_KEY = 'swapspace_application_form';
+
+    // PostHog Experiment: "Reduce application form length"
+    // Control: All 7 steps | Test: Skip steps 4 (Home Type) and 6 (Guest Capacity)
+    let experimentVariant = 'control'; // Default to control
+    const SKIPPED_STEPS_TEST = [4, 6]; // Steps to skip in test variant
+
+    // Get the steps to skip based on variant
+    function getSkippedSteps() {
+      return experimentVariant === 'test' ? SKIPPED_STEPS_TEST : [];
+    }
+
+    // Get total form steps (excluding thank you) based on variant
+    function getTotalFormSteps() {
+      return 7 - getSkippedSteps().length;
+    }
+
+    // Get the current step number for display (accounting for skipped steps)
+    function getDisplayStepNumber(actualStep) {
+      const skipped = getSkippedSteps();
+      let displayStep = actualStep;
+      for (const skip of skipped) {
+        if (skip < actualStep) displayStep--;
+      }
+      return displayStep;
+    }
+
+    // Form fields to persist
+    const formFields = ['name', 'email', 'phone', 'address', 'city', 'country', 'homeType', 'bedrooms', 'guests'];
+
+    // Save form data to localStorage
+    function saveFormData() {
+      const data = {
+        step: currentStep,
+        fields: {}
+      };
+      formFields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field) {
+          data.fields[fieldId] = field.value;
+        }
+      });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+
+    // Restore form data from localStorage
+    function restoreFormData() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        try {
+          const data = JSON.parse(saved);
+          // Restore field values
+          if (data.fields) {
+            Object.keys(data.fields).forEach(fieldId => {
+              const field = document.getElementById(fieldId);
+              if (field && data.fields[fieldId]) {
+                field.value = data.fields[fieldId];
+              }
+            });
+          }
+          // Restore step (but not if they completed the form)
+          if (data.step && data.step > 1 && data.step < 7) {
+            showStep(data.step);
+          }
+        } catch (e) {
+          console.error('Error restoring form data:', e);
+        }
+      }
+    }
+
+    // Clear form data from localStorage
+    function clearFormData() {
+      localStorage.removeItem(STORAGE_KEY);
+    }
+
+    // Add event listeners to save form data on change
+    function setupAutoSave() {
+      formFields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field) {
+          field.addEventListener('input', saveFormData);
+          field.addEventListener('change', saveFormData);
+        }
+      });
+    }
+
+    function showStep(step) {
+      document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+      document.querySelector(`[data-step="${step}"]`).classList.add('active');
+      currentStep = step;
+      saveFormData(); // Save step progress
+      updateProgressBar(); // Update progress bar
+      window.scrollTo(0, 0);
+    }
+
+    function updateProgressBar() {
+      const progressFill = document.getElementById('progressFill');
+      const progressText = document.getElementById('progressText');
+      const progressContainer = document.getElementById('progressContainer');
+
+      const formSteps = getTotalFormSteps(); // Use dynamic step count based on variant
+
+      // Hide progress bar on thank you step
+      if (currentStep === 7) {
+        progressContainer.style.display = 'none';
+        return;
+      } else {
+        progressContainer.style.display = 'block';
+      }
+
+      // Calculate progress percentage using display step number
+      const displayStep = getDisplayStepNumber(currentStep);
+      const progress = (displayStep / formSteps) * 100;
+      progressFill.style.width = `${progress}%`;
+      progressText.textContent = `Step ${displayStep} of ${formSteps}`;
+    }
+
+    function nextStep() {
+      if (validateCurrentStep()) {
+        let nextStepNum = currentStep + 1;
+        const skipped = getSkippedSteps();
+
+        // Skip over any skipped steps
+        while (skipped.includes(nextStepNum) && nextStepNum < totalSteps) {
+          nextStepNum++;
+        }
+
+        if (nextStepNum <= totalSteps) {
+          showStep(nextStepNum);
+        }
+      }
+    }
+
+    function prevStep() {
+      if (currentStep > 1) {
+        let prevStepNum = currentStep - 1;
+        const skipped = getSkippedSteps();
+
+        // Skip over any skipped steps going backwards
+        while (skipped.includes(prevStepNum) && prevStepNum > 1) {
+          prevStepNum--;
+        }
+
+        showStep(prevStepNum);
+      }
+    }
+
+    function validateCurrentStep() {
+      const currentStepEl = document.querySelector(`[data-step="${currentStep}"]`);
+      const requiredFields = currentStepEl.querySelectorAll('[required]');
+      let isValid = true;
+
+      // Remove all previous error messages
+      currentStepEl.querySelectorAll('.error-message').forEach(el => el.remove());
+
+      requiredFields.forEach(field => {
+        // Remove previous error styling
+        field.style.borderColor = '';
+
+        if (!field.value.trim()) {
+          showFieldError(field, 'This field is required');
+          isValid = false;
+        }
+      });
+
+      // Email validation for step 2
+      if (currentStep === 2) {
+        const emailField = document.getElementById('email');
+        if (emailField && emailField.value && !isValidEmail(emailField.value)) {
+          showFieldError(emailField, 'Please enter a valid email address');
+          isValid = false;
+        }
+
+        // Phone validation
+        const phoneField = document.getElementById('phone');
+        if (phoneField && phoneField.value && !/^\d{8,15}$/.test(phoneField.value.replace(/\s/g, ''))) {
+          showFieldError(phoneField, 'Please enter a valid phone number with country code');
+          isValid = false;
+        }
+      }
+
+
+
+      if (!isValid) {
+        // Focus on first invalid field
+        const firstInvalid = currentStepEl.querySelector('.error-message')?.previousElementSibling?.querySelector('input, select')
+          || currentStepEl.querySelector('[style*="border-color"]');
+        if (firstInvalid) firstInvalid.focus();
+      }
+
+      return isValid;
+    }
+
+    function showFieldError(field, message) {
+      field.style.borderColor = '#ef4444';
+
+      // Find the input-wrapper or immediate parent
+      let inputWrapper = field.closest('.input-wrapper');
+      let container = inputWrapper ? inputWrapper.parentElement : field.closest('div');
+
+      if (container && !container.querySelector('.error-message')) {
+        const errorEl = document.createElement('p');
+        errorEl.className = 'error-message';
+        errorEl.style.color = '#ef4444';
+        errorEl.style.fontSize = '14px';
+        errorEl.style.marginTop = '4px';
+        errorEl.textContent = message;
+
+        // Insert after input-wrapper if it exists, otherwise append to container
+        if (inputWrapper) {
+          inputWrapper.insertAdjacentElement('afterend', errorEl);
+        } else {
+          container.appendChild(errorEl);
+        }
+      }
+    }
+
+    function isValidEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    async function submitForm() {
+      if (!validateCurrentStep()) return;
+
+      // Disable submit button and show loading
+      const submitBtn = document.querySelector('[data-step="6"] .btn-primary');
+      const originalText = submitBtn.innerHTML;
+      submitBtn.innerHTML = 'Submitting...';
+      submitBtn.disabled = true;
+
+      // Collect form data
+      const formData = {
+        Name: document.getElementById('name').value,
+        Email: document.getElementById('email').value,
+        Phone: '+' + document.getElementById('phone').value,
+        Address: document.getElementById('address').value,
+        City: document.getElementById('city').value,
+        Country: document.getElementById('country').value,
+        'Home Type': document.getElementById('homeType').value,
+        Bedrooms: document.getElementById('bedrooms').value,
+        'Guest Capacity': document.getElementById('guests').value,
+        // Add submission date
+        'Submission Date': new Date().toISOString()
+      };
+      // Submit to Vercel serverless function (which proxies to Airtable)
+      try {
+        const response = await fetch('/api/submit-application', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            fields: formData
+          })
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Failed to submit form');
+        }
+
+        console.log('Form submitted successfully');
+
+        // Fire Meta Pixel Lead conversion event
+        if (typeof fbq === 'function') {
+          fbq('track', 'Lead');
+          console.log('Meta Pixel Lead event fired');
+        }
+
+        // Clear saved form data after successful submission
+        clearFormData();
+
+        // Show thank you step
+        showStep(7);
+      } catch (error) {
+        console.error('Submission error:', error);
+        alert('There was an error submitting your application. Please try again.');
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+      }
+    }
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+      setupAutoSave();
+      restoreFormData();
+      updateProgressBar(); // Initialize progress bar
+
+      // PostHog experiment: detect variant and update UI
+      if (typeof posthog !== 'undefined' && posthog.onFeatureFlags) {
+        posthog.onFeatureFlags(function () {
+          const variant = posthog.getFeatureFlag('reduce-application-form-length');
+
+          // Explicitly capture the feature flag exposure for experiment tracking
+          posthog.capture('$feature_flag_called', {
+            $feature_flag: 'reduce-application-form-length',
+            $feature_flag_response: variant
+          });
+
+          if (variant === 'test') {
+            experimentVariant = 'test';
+            console.log('PostHog Experiment: User is in TEST variant (shorter form)');
+          } else {
+            experimentVariant = 'control';
+            console.log('PostHog Experiment: User is in CONTROL variant (full form)');
+          }
+          // Update progress bar to reflect correct step count
+          updateProgressBar();
+        });
+      }
+    });
+  </script>
+</body>
+
+</html>

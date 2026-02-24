@@ -11,6 +11,40 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-0G5XEDEJH7"></script>
+
+  <!-- Anti-flickering script -->
+  <script>
+  var  timeout = 3000; // Timeout value to remove the flicker (in milliseconds)
+  !function(h,i,d,e){var  t,n=h.createElement("style");n.id=e,n.innerHTML="body{opacity:0}",h.head.appendChild(n),t=d,i.rmfk=function(){var  t=h.getElementById(e);t&&t.parentNode.removeChild(t)},setTimeout(i.rmfk,t)}(document,window,timeout,"abhide");
+  </script>
+
+  <!-- Mida A/B Testing Script (Place in <HEAD> for speed & no flicker) -->
+  <script type="text/javascript" async src="https://cdn.mida.so/js/optimize.js?key=Wpw95KNXBpAV0dEVgMJvAm"></script>
+
+  <!-- Meta Pixel Code -->
+  <script>
+    !(function (f, b, e, v, n, t, s) {
+      if (f.fbq) return;
+      n = f.fbq = function () {
+        n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+      };
+      if (!f._fbq) f._fbq = n;
+      n.push = n;
+      n.loaded = !0;
+      n.version = "2.0";
+      n.queue = [];
+      t = b.createElement(e);
+      t.async = !0;
+      t.src = v;
+      s = b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t, s);
+    })(window, document, "script", "https://connect.facebook.net/en_US/fbevents.js");
+    fbq("init", "2324029631392103");
+    fbq("track", "PageView");
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=2324029631392103&ev=PageView&noscript=1" /></noscript>
+  <!-- End Meta Pixel Code -->
   <meta property="og:url" content="https://url/" />
   <title>
     Guides | Swap Space - Home Swapping Platform
@@ -60,7 +94,7 @@
       <article class="guide-card guide-card-featured">
         <a href="/guides-pages/Swapspace-101" class="guide-card-link" aria-label="Open the SwapSpace 101 guide">
           <div class="guide-card-image">
-            <img src="assets/pexels-roman-odintsovjpg.jpg" alt="Person opening curtains to a bright room">
+            <img src="assets/pexels-roman-odintsov.webp" alt="Person opening curtains to a bright room">
           </div>
           <div class="guide-card-content">
             <h3 class="guide-card-title">SwapSpace 101</h3>
@@ -81,7 +115,7 @@
       <!-- Guide Card 2: Photo Guidelines -->
       <article class="guide-card">
         <div class="guide-card-image">
-          <img src="assets/kitchen and room.jpg" alt="Modern kitchen opening into a bedroom">
+          <img src="assets/kitchen-and-room.webp" alt="Modern kitchen opening into a bedroom">
         </div>
         <div class="guide-card-content">
           <h3 class="guide-card-title">SwapSpace photo guidelines</h3>
@@ -102,7 +136,7 @@
       <!-- Guide Card 3: Hosting for the first time -->
       <article class="guide-card">
         <div class="guide-card-image">
-          <img src="assets/Green-house.jpg" alt="Green exterior of a house surrounded by plants">
+          <img src="assets/green-house.webp" alt="Green exterior of a house surrounded by plants">
         </div>
         <div class="guide-card-content">
           <h3 class="guide-card-title">Hosting for the first time</h3>
