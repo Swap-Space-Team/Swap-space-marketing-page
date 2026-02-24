@@ -1,14 +1,14 @@
-const multiparty = require('multiparty');
-const fs = require('fs');
+import multiparty from 'multiparty';
+import fs from 'fs';
 
 // No bodyParser config needed — multiparty handles raw request body on Vercel too
-const config = {
+export const config = {
     api: {
         bodyParser: false,
     },
 };
 
-const handler = async function (req, res) {
+export default async function handler(req, res) {
     // CORS headers
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -131,5 +131,4 @@ const handler = async function (req, res) {
     }
 };
 
-module.exports = handler;
-module.exports.config = config;
+
