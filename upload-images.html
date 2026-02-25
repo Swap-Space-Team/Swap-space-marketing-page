@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Upload Photos | SwapSpace</title>
+  <meta name="description" content="Upload photos of your home to complete your SwapSpace application." />
+  <link rel="stylesheet" href="output.css" />
+  <link rel="icon" href="assets/Swap-space_favicon_g6hAj61Zg_Rij2PQiQbR6.svg" />
+
+  <!-- PostHog Analytics -->
+  <script>
+    !function (t, e) { var o, n, p, r; e.__SV || ((window.posthog = e), (e._i = []), (e.init = function (i, s, a) { function g(t, e) { var o = e.split("."); 2 == o.length && ((t = t[o[0]]), (e = o[1])), (t[e] = function () { t.push([e].concat(Array.prototype.slice.call(arguments, 0))); }); } ((p = t.createElement("script")).type = "text/javascript"), (p.crossOrigin = "anonymous"), (p.async = !0), (p.src = s.api_host.replace(".i.posthog.com", "-assets.i.posthog.com") + "/static/array.js"), (r = t.getElementsByTagName("script")[0]).parentNode.insertBefore(p, r); var u = e; for (void 0 !== a ? (u = e[a] = []) : (a = "posthog"), u.people = u.people || [], u.toString = function (t) { var e = "posthog"; return "posthog" !== a && (e += "." + a), t || (e += " (stub)"), e }, u.people.toString = function () { return u.toString(1) + ".people (stub)" }, o = "init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey canRenderSurveyAsync identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug getPageViewId captureTraceFeedback captureTraceMetric".split(" "), n = 0; n < o.length; n++)g(u, o[n]); e._i.push([i, s, a]) }), (e.__SV = 1)) }(document, window.posthog || []);
+    posthog.init('phc_qPlxJ84Q6HCS1E6ULdUhGn5frh9TaC4s6ZWXlwMxj7N', { api_host: 'https://eu.i.posthog.com', person_profiles: 'identified_only' });
+  </script>
+
+  <!-- Anti-flickering script -->
+  <script>
+    var timeout = 3000; // Timeout value to remove the flicker (in milliseconds)
+    !function (h, i, d, e) { var t, n = h.createElement("style"); n.id = e, n.innerHTML = "body{opacity:0}", h.head.appendChild(n), t = d, i.rmfk = function () { var t = h.getElementById(e); t && t.parentNode.removeChild(t) }, setTimeout(i.rmfk, t) }(document, window, timeout, "abhide");
+  </script>
+
+  <style>
+    /* Custom styles for form elements */
+    .form-input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid #d5d9eb;
+      border-radius: 8px;
+      font-size: 16px;
+      font-family: 'General Sans', sans-serif;
+      color: #364152;
+      background-color: #fff;
+      margin-top: 4px;
+      margin-bottom: 8px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #079455;
+      box-shadow: 0 0 0 3px rgba(7, 148, 85, 0.1);
+    }
+
+    .form-input::placeholder {
+      color: #9aa4b2;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 16px;
+      font-weight: 500;
+      color: #202939;
+      margin-bottom: 4px;
+      margin-top: 8px;
+    }
+
+    .form-helper {
+      font-size: 14px;
+      color: #697586;
+      margin-top: 4px;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      gap: 8px;
+      margin-top: 24px;
+      padding: 12px 24px;
+      background-color: #000;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 600;
+      font-family: 'General Sans', sans-serif;
+      border: none;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.1s ease;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background-color: #333;
+    }
+
+    .btn-primary:active:not(:disabled) {
+      transform: scale(0.98);
+    }
+
+    .btn-primary:disabled {
+      background-color: #9ca3af;
+      cursor: not-allowed;
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      gap: 8px;
+      margin-top: 24px;
+      padding: 12px 24px;
+      background-color: transparent;
+      color: #364152;
+      font-size: 16px;
+      font-weight: 600;
+      font-family: 'General Sans', sans-serif;
+      border: 1px solid #d5d9eb;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background-color: #f9fafb;
+      border-color: #9aa4b2;
+    }
+
+    .btn-secondary:active:not(:disabled) {
+      transform: scale(0.98);
+    }
+
+    .btn-secondary:disabled {
+      color: #9ca3af;
+      border-color: #e5e7eb;
+      cursor: not-allowed;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .step {
+      display: none;
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .step.active {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding-left: 16px;
+      padding-right: 16px;
+      margin-left: 24px;
+      width: 100%;
+    }
+
+    .step h1 {
+      margin-bottom: 8px;
+    }
+
+    /* Upload Zone Styles */
+    .upload-zone {
+      border: 2px dashed #e5e7eb;
+      border-radius: 12px;
+      padding: 48px 24px;
+      text-align: center;
+      cursor: pointer;
+      margin-top: 16px;
+      background-color: #f9fafb;
+      transition: all 0.2s ease;
+    }
+
+    .upload-zone:hover {
+      border-color: #079455;
+      background-color: #f3f4f6;
+    }
+
+    .upload-zone.dragover {
+      border-color: #079455;
+      background-color: #ecfdf5;
+      transform: scale(1.02);
+    }
+
+    .upload-icon-container {
+      width: 64px;
+      height: 64px;
+      background-color: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    .upload-icon-container svg {
+      width: 32px;
+      height: 32px;
+      color: #697586;
+    }
+
+    .upload-text {
+      font-size: 16px;
+      color: #364152;
+      font-family: 'General Sans', sans-serif;
+      margin-bottom: 4px;
+    }
+
+    .upload-text .click-upload {
+      font-weight: 600;
+      color: #079455;
+    }
+
+    .upload-subtext {
+      font-size: 14px;
+      color: #697586;
+      font-family: 'General Sans', sans-serif;
+    }
+
+    /* Image Preview Grid */
+    .preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .preview-item {
+      position: relative;
+      aspect-ratio: 1;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #e5e7eb;
+    }
+
+    .preview-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .remove-btn {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 24px;
+      height: 24px;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 50%;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border: none;
+      padding: 0;
+      transition: background 0.2s;
+    }
+
+    .remove-btn:hover {
+      background: rgba(239, 68, 68, 0.9);
+    }
+
+    .remove-btn svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .success-icon {
+      width: 64px;
+      height: 64px;
+      background-color: rgba(7, 148, 85, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+    }
+
+    .success-icon svg {
+      width: 32px;
+      height: 32px;
+      color: #079455;
+    }
+
+    .error-icon {
+      width: 64px;
+      height: 64px;
+      background-color: rgba(239, 68, 68, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+    }
+
+    .error-icon svg {
+      width: 32px;
+      height: 32px;
+      color: #ef4444;
+    }
+
+    #error-message {
+      color: #ef4444;
+      margin-top: 16px;
+      font-weight: 500;
+      display: none;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen bg-white">
+  <!-- Masthead -->
+  <div class="masthead">
+    <a href="index.html">
+      <img class="logo" src="assets/Swapspace wordmark.svg" alt="Swap-space-logo">
+    </a>
+  </div>
+
+  <div class="flex min-h-screen">
+    <!-- Left Side: Form -->
+    <div class="w-full lg:w-1/2 flex flex-col pl-8 pr-8 md:pl-16 md:pr-16 lg:pl-24 lg:pr-20 py-8">
+
+      <div class="max-w-[80%] flex-1 flex flex-col justify-center mt-12">
+
+        <!-- Step 1: Upload Photos -->
+        <div class="step active" id="upload-step">
+          <h1 class="text-3xl md:text-4xl font-semibold text-gray-900"
+            style="font-family: 'General Sans', sans-serif; letter-spacing: -0.5px;">
+            Share photos of your home
+          </h1>
+          <p class="text-[16px] text-gray-500 mb-6">
+            To complete your application, we just need a few photos of your home. One to five photos is absolutely fine.
+          </p>
+          <p class="text-gray-600 mb-6 font-medium" style="font-family: 'General Sans', sans-serif; line-height: 1.6;">
+          No need to tidy up or stage anything. We’re simply looking to get a genuine sense of your space. Once we've got this, we'll be able to fully review your application.
+          </p>
+
+          <div class="field-group">
+            <input type="file" id="file-input" multiple accept="image/jpeg,image/png,image/webp,image/heic"
+              style="display: none;" />
+
+            <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()">
+              <div class="upload-icon-container">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="17 8 12 3 7 8" />
+                  <line x1="12" y1="3" x2="12" y2="15" />
+                </svg>
+              </div>
+              <div class="upload-text">
+                <span class="click-upload">Click to upload</span> or drag and drop
+              </div>
+              <div class="upload-subtext">
+                JPG, PNG, WEBP or HEIC (max. 5MB each)
+              </div>
+            </div>
+
+            <div class="preview-grid" id="preview-grid"></div>
+
+            <p id="error-message"></p>
+          </div>
+
+          <div class="btn-group mt-8">
+            <button type="button" class="btn-primary" id="submit-btn" onclick="submitPhotos()" disabled>
+              Submit Photos <span>→</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 2: Success -->
+        <div class="step" id="success-step">
+          <div class="field-group text-center py-8">
+            <div class="success-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4"
+              style="font-family: 'General Sans', sans-serif; letter-spacing: -0.5px;">
+              Photos received!
+            </h1>
+            <p class="text-gray-600" style="font-family: 'General Sans', sans-serif; line-height: 1.6;">
+              Thank you for sharing photos of your home. Your application is now complete. We'll be in touch soon!
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 3: Error (Invalid Link) -->
+        <div class="step" id="error-step">
+          <div class="field-group text-center py-8">
+            <div class="error-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4"
+              style="font-family: 'General Sans', sans-serif; letter-spacing: -0.5px;">
+              Invalid Link
+            </h1>
+            <p class="text-gray-600" style="font-family: 'General Sans', sans-serif; line-height: 1.6;">
+              Sorry, this link appears to be invalid or missing your application ID. Please use the exact link provided
+              in your email.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Right Side: Image -->
+    <div class="hidden lg:fixed lg:block lg:right-0 lg:top-0 lg:w-1/2 lg:h-screen bg-gray-100">
+      <img src="assets/close-up-2.webp" alt="Cozy living room" class="w-full h-full object-cover" />
+    </div>
+  </div>
+
+  <script>
+    const fileInput = document.getElementById('file-input');
+    const uploadZone = document.getElementById('upload-zone');
+    const previewGrid = document.getElementById('preview-grid');
+    const submitBtn = document.getElementById('submit-btn');
+    const errorMessage = document.getElementById('error-message');
+
+    let selectedFiles = [];
+    let recordId = null;
+
+    // Check URL parameters on load
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      recordId = urlParams.get('recordId');
+
+      if (!recordId) {
+        document.getElementById('upload-step').classList.remove('active');
+        document.getElementById('error-step').classList.add('active');
+      }
+    });
+
+    // Handle drag and drop
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+      uploadZone.addEventListener(eventName, preventDefaults, false);
+      document.body.addEventListener(eventName, preventDefaults, false);
+    });
+
+    function preventDefaults(e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+      uploadZone.addEventListener(eventName, () => {
+        uploadZone.classList.add('dragover');
+      }, false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      uploadZone.addEventListener(eventName, () => {
+        uploadZone.classList.remove('dragover');
+      }, false);
+    });
+
+    uploadZone.addEventListener('drop', (e) => {
+      const dt = e.dataTransfer;
+      const files = dt.files;
+      handleFiles(files);
+    });
+
+    fileInput.addEventListener('change', function () {
+      handleFiles(this.files);
+    });
+
+    function handleFiles(files) {
+      const newFiles = Array.from(files).filter(file => file.type.startsWith('image/'));
+
+      // Limit to 5 images max total
+      if (selectedFiles.length + newFiles.length > 5) {
+        showError('You can upload a maximum of 5 photos.');
+        return;
+      }
+
+      hideError();
+
+      newFiles.forEach(file => {
+        // Validate file size (5MB — Airtable's direct upload limit)
+        if (file.size > 5 * 1024 * 1024) {
+          showError(`File ${file.name} is too large. Max size is 5MB.`);
+          return;
+        }
+
+        selectedFiles.push(file);
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const preview = document.createElement('div');
+          preview.className = 'preview-item';
+
+          const img = document.createElement('img');
+          img.src = e.target.result;
+
+          const removeBtn = document.createElement('button');
+          removeBtn.className = 'remove-btn';
+          removeBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
+          removeBtn.onclick = (event) => {
+            event.stopPropagation();
+            removeFile(file, preview);
+          };
+
+          preview.appendChild(img);
+          preview.appendChild(removeBtn);
+          previewGrid.appendChild(preview);
+        };
+        reader.readAsDataURL(file);
+      });
+
+      updateSubmitButton();
+    }
+
+    function removeFile(fileToRemove, previewElement) {
+      selectedFiles = selectedFiles.filter(file => file !== fileToRemove);
+      previewElement.remove();
+      updateSubmitButton();
+      hideError();
+    }
+
+    function updateSubmitButton() {
+      submitBtn.disabled = selectedFiles.length === 0;
+    }
+
+    function showError(msg) {
+      errorMessage.textContent = msg;
+      errorMessage.style.display = 'block';
+    }
+
+    function hideError() {
+      errorMessage.style.display = 'none';
+      errorMessage.textContent = '';
+    }
+
+    async function submitPhotos() {
+      if (selectedFiles.length === 0 || !recordId) return;
+
+      const originalText = submitBtn.innerHTML;
+      submitBtn.innerHTML = 'Uploading...';
+      submitBtn.disabled = true;
+      hideError();
+
+      const formData = new FormData();
+      formData.append('recordId', recordId);
+      selectedFiles.forEach((file) => {
+        formData.append('images', file);
+      });
+
+      try {
+        const response = await fetch('/api/upload-images', {
+          method: 'POST',
+          body: formData
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Failed to upload photos');
+        }
+
+        // Show success step
+        document.getElementById('upload-step').classList.remove('active');
+        document.getElementById('success-step').classList.add('active');
+
+      } catch (error) {
+        console.error('Upload error:', error);
+        showError(error.message || 'There was an error uploading your photos. Please try again.');
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+      }
+    }
+  </script>
+</body>
+
+</html>
