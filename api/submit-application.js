@@ -85,7 +85,28 @@ export default async function handler(req, res) {
 
                 <p>Once these have been shared, our team will be able to complete the review.</p>
 
-                <p>You can respond to this email with a few photos of your home and our team will take a look.</p>
+                <a
+  href="https://www.swap-space.com/upload-images.html?recordId=${data.id}"
+  style="
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    gap: 6px;
+    margin-top: 12px;
+    padding: 12px 24px;
+    background-color: #079455;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 400;
+    font-family: 'General Sans', sans-serif;
+    text-decoration: none;
+    border-radius: 40px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+  "
+>
+  Submit images
+</a>
 
                 <p>We are excited to see the rest of your home. Please let us know if you have any questions!</p>
                 
@@ -105,6 +126,34 @@ export default async function handler(req, res) {
           })
         });
         console.log('Confirmation email sent to:', fields.Email);
+
+        // Update Application Status in Airtable
+        try {
+          const updateResponse = await fetch(
+            `https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}/${data.id}`,
+            {
+              method: 'PATCH',
+              headers: {
+                'Authorization': `Bearer ${AIRTABLE_TOKEN}`,
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                fields: {
+                  'Application Status': 'Photos Requested'
+                }
+              })
+            }
+          );
+          if (!updateResponse.ok) {
+            const updateErr = await updateResponse.json();
+            console.error('Failed to update Application Status:', updateErr);
+          } else {
+            console.log('Application Status updated to Photos Requested for:', data.id);
+          }
+        } catch (updateError) {
+          console.error('Error updating Application Status:', updateError);
+        }
+
       } catch (emailError) {
         // Don't fail the whole request if email fails
         console.error('Email error:', emailError);
