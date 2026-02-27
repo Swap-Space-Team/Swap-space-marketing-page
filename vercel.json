@@ -34,5 +34,11 @@
       "image/webp",
       "image/avif"
     ]
-  }
+  },
+  "crons": [
+    {
+      "path": "/api/cron/check-approvals",
+      "schedule": "*/30 * * * *"
+    }
+  ]
 }
