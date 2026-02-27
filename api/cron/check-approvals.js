@@ -28,7 +28,7 @@ export default async function handler(req, res) {
     try {
         // 2. Fetch approved applications without welcome email
         // Formula checks for Status="Approved" and Email Sent checkbox being empty/false
-        const formula = "AND({Application Status} = 'Approved', NOT({Approval Email Sent}))";
+        const formula = "AND(TRIM({Application Status}) = 'Approved', NOT({Approval Email Sent}))";
         const url = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}?filterByFormula=${encodeURIComponent(formula)}`;
 
         const airtableResponse = await fetch(url, {
