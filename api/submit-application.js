@@ -67,7 +67,7 @@ export default async function handler(req, res) {
             from: 'SwapSpace <hello@notifications.swap-space.com>',
             reply_to: 'hello@swap-space.com',
             to: fields.Email,
-            subject: 'SwapSpace | Your application is complete!',
+            subject: 'Share photos of your home to complete your SwapSpace application',
             html: `
               <!DOCTYPE html>
               <html>
