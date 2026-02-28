@@ -353,6 +353,181 @@
       margin: 24px;
     }
 
+    /* Timeline Styles */
+    .status-timeline {
+      margin-top: 24px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .status-item {
+      display: flex;
+      gap: 16px;
+      position: relative;
+      padding-bottom: 28px;
+    }
+
+    .status-item:last-child {
+      padding-bottom: 0;
+    }
+
+    /* Connector line between dots */
+    .status-item:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 12px;
+      top: 28px;
+      bottom: 0;
+      width: 1.5px;
+      background-color: #d5d9eb;
+    }
+
+    .status-item:first-child::after {
+      background-color: #079455;
+    }
+
+    .status-icon-wrapper {
+      display: flex;
+      align-items: flex-start;
+      flex-shrink: 0;
+      width: 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .status-dot {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+    }
+
+    .status-dot.completed {
+      background-color: #079455;
+      color: white;
+    }
+
+    .status-dot.current {
+      background-color: #fff;
+      border: 6px solid #079455;
+      box-shadow: 0 0 0 1px #e5e7eb;
+      animation: pulse-current 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-current {
+
+      0%,
+      100% {
+        box-shadow: 0 0 0 0px rgba(7, 148, 85, 0.15);
+      }
+
+      50% {
+        box-shadow: 0 0 0 8px rgba(7, 148, 85, 0.08);
+      }
+    }
+
+    .status-dot.pending {
+      background-color: #f3f4f6;
+      border: 1px solid #e5e7eb;
+    }
+
+    .status-content {
+      padding-top: 2px;
+    }
+
+    .status-title-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .status-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #101828;
+      font-family: 'General Sans', sans-serif;
+    }
+
+    .status-badge {
+      font-size: 12px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-family: 'General Sans', sans-serif;
+    }
+
+    .status-badge.required {
+      background-color: #FEFBE8;
+      color: #CA8504;
+    }
+
+    .status-badge.not-started {
+      background-color: #f3f4f6;
+      color: #4b5563;
+    }
+
+    .status-description {
+      font-size: 14px;
+      color: #667085;
+      line-height: 1.5;
+      font-family: 'General Sans', sans-serif;
+    }
+
+    .btn-success {
+      background-color: #079455;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-family: 'General Sans', sans-serif;
+      border: none;
+      cursor: pointer;
+      margin-top: 32px;
+      width: fit-content;
+      transition: background-color 0.2s;
+    }
+
+    .btn-success:hover {
+      background-color: #067647;
+    }
+
+    @media (max-width: 768px) {
+
+      /* Expand the container to full width on mobile for all steps */
+      #stepsContainer {
+        max-width: 100%;
+      }
+
+      /* Equal padding on all steps, no left margin offset */
+      .step.active {
+        margin-left: 0;
+        padding-left: 16px;
+        padding-right: 16px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      [data-step="7"] h1 {
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      [data-step="7"]>.field-group>p {
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      [data-step="7"] .btn-success {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+
     .progress-bar-wrapper {
       display: flex;
       align-items: center;
@@ -409,7 +584,7 @@
         </div>
       </div>
 
-      <div class="max-w-[80%] flex-1 flex flex-col justify-center">
+      <div id="stepsContainer" class="max-w-[80%] flex-1 flex flex-col justify-center">
 
         <!-- Step 1: Introduction -->
         <div class="step active " data-step="1">
@@ -617,19 +792,82 @@
 
         <!-- Step 7: Thank You -->
         <div class="step" data-step="7">
-          <div class="field-group text-center py-8">
-            <div class="success-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
-            </div>
+          <div class="field-group py-4">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4"
-              style="font-family: 'General Sans', sans-serif; letter-spacing: -0.5px;">
-              Thank you for sharing your home
+              style="font-family: 'General Sans', sans-serif; letter-spacing: -0.8px; line-height: 1.15;">
+              One final step before we review your application
             </h1>
-            <p class="text-gray-600" style="font-family: 'General Sans', sans-serif; line-height: 1.6;">
-              We'll take a look at your home and be in touch soon with the next steps to welcome you into the community!
+            <p class="text-gray-500 mb-8"
+              style="font-family: 'General Sans', sans-serif; line-height: 1.5; font-size: 15px;">
+              Thanks for submitting your application. Upload your photo using the link in your email so we can begin
+              reviewing it.
             </p>
+
+            <div>
+              <p class="text-[14px] font-semibold text-gray-900"
+                style="font-family: 'General Sans', sans-serif; margin-top: 16px; margin-bottom: 12px;">
+                Application status</p>
+
+              <div class="status-timeline">
+                <!-- Step 1: Completed -->
+                <div class="status-item">
+                  <div class="status-icon-wrapper">
+                    <div class="status-dot completed">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                    </div>
+
+                  </div>
+                  <div class="status-content">
+                    <div class="status-title-row">
+                      <span class="status-title">Application received</span>
+                    </div>
+                    <p class="status-description">Details submitted.</p>
+                  </div>
+                </div>
+
+                <!-- Step 2: Current -->
+                <div class="status-item">
+                  <div class="status-icon-wrapper">
+                    <div class="status-dot current"></div>
+
+                  </div>
+                  <div class="status-content">
+                    <div class="status-title-row">
+                      <span class="status-title">Add photos of your home</span>
+                      <span class="status-badge required">Required</span>
+                    </div>
+                    <p class="status-description">Upload at least one photo to complete your application. No need to
+                      tidy up or take professional photos. We just want to get a sense of your home.</p>
+                  </div>
+                </div>
+
+                <!-- Step 3: Pending -->
+                <div class="status-item">
+                  <div class="status-icon-wrapper">
+                    <div class="status-dot pending"></div>
+
+
+                  </div>
+                  <div class="status-content">
+                    <div class="status-title-row">
+                      <span class="status-title">Application review</span>
+                      <span class="status-badge not-started">Not started</span>
+                    </div>
+                    <p class="status-description">Review begins once your photos are uploaded. We'll get back to you
+                      within 1–2 days.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <a href="mailto:" class="btn-success">
+                  Check email to upload photo
+                </a>
+              </div>
+            </div>
           </div>
         </div>
 
