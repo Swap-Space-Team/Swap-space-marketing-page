@@ -1013,6 +1013,14 @@
         }
 
         if (nextStepNum <= totalSteps) {
+          // Track step completion in PostHog
+          if (typeof posthog !== 'undefined') {
+            posthog.capture('application_step_completed', {
+              step: currentStep,
+              step_name: document.querySelector(`[data-step="${currentStep}"] h1`)?.textContent?.trim(),
+              experiment_variant: experimentVariant
+            });
+          }
           showStep(nextStepNum);
         }
       }
@@ -1147,6 +1155,27 @@
         }
 
         console.log('Form submitted successfully');
+
+        // Identify user in PostHog and capture submission event
+        if (typeof posthog !== 'undefined') {
+          posthog.identify(formData.Email, {
+            name: formData.Name,
+            email: formData.Email,
+            phone: formData.Phone,
+            city: formData.City,
+            country: formData.Country
+          });
+          posthog.capture('application_submitted', {
+            name: formData.Name,
+            email: formData.Email,
+            city: formData.City,
+            country: formData.Country,
+            home_type: formData['Home Type'],
+            bedrooms: formData.Bedrooms,
+            guest_capacity: formData['Guest Capacity'],
+            experiment_variant: experimentVariant
+          });
+        }
 
         // Fire Meta Pixel Lead conversion event
         if (typeof fbq === 'function') {
