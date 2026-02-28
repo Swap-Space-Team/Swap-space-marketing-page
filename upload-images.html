@@ -329,7 +329,7 @@
             Share photos of your home
           </h1>
           <p class="text-[16px] text-gray-500 mb-6">
-            To complete your application, we just need a few photos of your home. One to five photos is absolutely fine.
+            To complete your application, we just need a few photos of your home. One to four photos is absolutely fine.
           </p>
           <p class="text-gray-600 mb-6 font-medium" style="font-family: 'General Sans', sans-serif; line-height: 1.6;">
             No need to tidy up or stage anything. We’re simply looking to get a genuine sense of your space. Once we've
@@ -353,7 +353,7 @@
                 <span class="click-upload">Click to upload</span> or drag and drop
               </div>
               <div class="upload-subtext">
-                JPG, PNG, WEBP or HEIC (max. 10MB each — auto-compressed before upload)
+                JPG, PNG, WEBP or HEIC (max. 10MB each)
               </div>
             </div>
 
@@ -475,8 +475,8 @@
       const newFiles = Array.from(files).filter(file => file.type.startsWith('image/'));
 
       // Limit to 5 images max total
-      if (selectedFiles.length + newFiles.length > 5) {
-        showError('You can upload a maximum of 5 photos.');
+      if (selectedFiles.length + newFiles.length > 4) {
+        showError('You can upload a maximum of 4 photos.');
         return;
       }
 
@@ -497,7 +497,7 @@
         }
 
         // Show compressing state
-        submitBtn.innerHTML = 'Compressing photos...';
+        submitBtn.innerHTML = 'Submitting...';
         submitBtn.disabled = true;
 
         try {
