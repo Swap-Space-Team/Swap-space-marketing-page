@@ -9,6 +9,9 @@
   <link rel="stylesheet" href="output.css" />
   <link rel="icon" href="assets/Swap-space_favicon_g6hAj61Zg_Rij2PQiQbR6.svg" />
 
+  <!-- Client-side image compression -->
+  <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/dist/browser-image-compression.js"></script>
+
   <!-- PostHog Analytics -->
   <script>
     !function (t, e) { var o, n, p, r; e.__SV || ((window.posthog = e), (e._i = []), (e.init = function (i, s, a) { function g(t, e) { var o = e.split("."); 2 == o.length && ((t = t[o[0]]), (e = o[1])), (t[e] = function () { t.push([e].concat(Array.prototype.slice.call(arguments, 0))); }); } ((p = t.createElement("script")).type = "text/javascript"), (p.crossOrigin = "anonymous"), (p.async = !0), (p.src = s.api_host.replace(".i.posthog.com", "-assets.i.posthog.com") + "/static/array.js"), (r = t.getElementsByTagName("script")[0]).parentNode.insertBefore(p, r); var u = e; for (void 0 !== a ? (u = e[a] = []) : (a = "posthog"), u.people = u.people || [], u.toString = function (t) { var e = "posthog"; return "posthog" !== a && (e += "." + a), t || (e += " (stub)"), e }, u.people.toString = function () { return u.toString(1) + ".people (stub)" }, o = "init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey canRenderSurveyAsync identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug getPageViewId captureTraceFeedback captureTraceMetric".split(" "), n = 0; n < o.length; n++)g(u, o[n]); e._i.push([i, s, a]) }), (e.__SV = 1)) }(document, window.posthog || []);
@@ -326,10 +329,11 @@
             Share photos of your home
           </h1>
           <p class="text-[16px] text-gray-500 mb-6">
-            To complete your application, we just need a few photos of your home. One to five photos is absolutely fine.
+            To complete your application, we just need a few photos of your home. One to four photos is absolutely fine.
           </p>
           <p class="text-gray-600 mb-6 font-medium" style="font-family: 'General Sans', sans-serif; line-height: 1.6;">
-          No need to tidy up or stage anything. We’re simply looking to get a genuine sense of your space. Once we've got this, we'll be able to fully review your application.
+            No need to tidy up or stage anything. We’re simply looking to get a genuine sense of your space. Once we've
+            got this, we'll be able to fully review your application.
           </p>
 
           <div class="field-group">
@@ -349,7 +353,7 @@
                 <span class="click-upload">Click to upload</span> or drag and drop
               </div>
               <div class="upload-subtext">
-                JPG, PNG, WEBP or HEIC (max. 5MB each)
+                JPG, PNG, WEBP or HEIC (max. 10MB each)
               </div>
             </div>
 
@@ -467,49 +471,69 @@
       handleFiles(this.files);
     });
 
-    function handleFiles(files) {
+    async function handleFiles(files) {
       const newFiles = Array.from(files).filter(file => file.type.startsWith('image/'));
 
       // Limit to 5 images max total
-      if (selectedFiles.length + newFiles.length > 5) {
-        showError('You can upload a maximum of 5 photos.');
+      if (selectedFiles.length + newFiles.length > 4) {
+        showError('You can upload a maximum of 4 photos.');
         return;
       }
 
       hideError();
 
-      newFiles.forEach(file => {
-        // Validate file size (5MB — Airtable's direct upload limit)
-        if (file.size > 5 * 1024 * 1024) {
-          showError(`File ${file.name} is too large. Max size is 5MB.`);
-          return;
+      // Compression options
+      const compressionOptions = {
+        maxSizeMB: 1,            // Compress to ~1MB per image
+        maxWidthOrHeight: 1920,  // Resize if larger than 1920px
+        useWebWorker: true,
+      };
+
+      for (const file of newFiles) {
+        // Validate file size (10MB limit before compression)
+        if (file.size > 10 * 1024 * 1024) {
+          showError(`File ${file.name} is too large. Max size is 10MB.`);
+          continue;
         }
 
-        selectedFiles.push(file);
+        // Show compressing state
+        submitBtn.innerHTML = 'Compressing photos...';
+        submitBtn.disabled = true;
 
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const preview = document.createElement('div');
-          preview.className = 'preview-item';
+        try {
+          // Compress the image client-side
+          const compressedFile = await imageCompression(file, compressionOptions);
+          selectedFiles.push(compressedFile);
 
-          const img = document.createElement('img');
-          img.src = e.target.result;
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const preview = document.createElement('div');
+            preview.className = 'preview-item';
 
-          const removeBtn = document.createElement('button');
-          removeBtn.className = 'remove-btn';
-          removeBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
-          removeBtn.onclick = (event) => {
-            event.stopPropagation();
-            removeFile(file, preview);
+            const img = document.createElement('img');
+            img.src = e.target.result;
+
+            const removeBtn = document.createElement('button');
+            removeBtn.className = 'remove-btn';
+            removeBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
+            removeBtn.onclick = (event) => {
+              event.stopPropagation();
+              removeFile(compressedFile, preview);
+            };
+
+            preview.appendChild(img);
+            preview.appendChild(removeBtn);
+            previewGrid.appendChild(preview);
           };
+          reader.readAsDataURL(compressedFile);
+        } catch (err) {
+          console.error('Compression error:', err);
+          showError(`Failed to process ${file.name}. Please try a different image.`);
+        }
+      }
 
-          preview.appendChild(img);
-          preview.appendChild(removeBtn);
-          previewGrid.appendChild(preview);
-        };
-        reader.readAsDataURL(file);
-      });
-
+      // Reset button text
+      submitBtn.innerHTML = 'Submit Photos <span>→</span>';
       updateSubmitButton();
     }
 
