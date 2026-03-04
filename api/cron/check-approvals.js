@@ -190,7 +190,167 @@ export default async function handler(req, res) {
             }
         }
 
-        return res.status(200).json({ message: 'Cron job completed', results });
+        // ── Phase 2: Resend Photo Request Emails ──────────────────────────
+        const photoResults = {
+            attempted: 0,
+            successes: 0,
+            failures: 0
+        };
+
+        try {
+            const photoFormula = "AND({Resend Photo Request}, {Email})";
+            const photoUrl = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}?filterByFormula=${encodeURIComponent(photoFormula)}`;
+
+            const photoResponse = await fetch(photoUrl, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${AIRTABLE_TOKEN}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!photoResponse.ok) {
+                const photoErr = await photoResponse.json();
+                console.error('Airtable photo request fetch error:', photoErr);
+            } else {
+                const { records: photoRecords } = await photoResponse.json();
+
+                if (photoRecords && photoRecords.length > 0) {
+                    photoResults.attempted = photoRecords.length;
+
+                    for (const record of photoRecords) {
+                        const email = record.fields.Email;
+                        const name = record.fields.Name || 'there';
+
+                        if (!email) {
+                            console.warn(`Photo request record ${record.id} has no email. Skipping.`);
+                            photoResults.failures++;
+                            continue;
+                        }
+
+                        try {
+                            const photoEmailHtml = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.7; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+  
+  <p style="font-size: 16px;">Hi ${name},</p>
+  
+  <p>Thank you for applying to join SwapSpace.</p>
+
+  <p>We've received your application successfully. To complete the review process, we just need a few photos of your home. Between 1 and 5 photos is sufficient, and they do not need to be professionally taken.</p>
+
+  <p>Once these have been shared, our team will be able to complete the review.</p>
+
+  <a
+    href="https://www.swap-space.com/upload-images.html?recordId=${record.id}"
+    style="
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      gap: 6px;
+      margin-top: 12px;
+      padding: 12px 24px;
+      background-color: #079455;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 400;
+      font-family: 'General Sans', sans-serif;
+      text-decoration: none;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.1s ease;
+    "
+  >
+    Submit images
+  </a>
+
+  <p>We are excited to see the rest of your home. Please let us know if you have any questions!</p>
+  
+  <p style="margin-top: 30px;">
+    Warmly,<br>
+    <strong>The SwapSpace Team</strong>
+  </p>
+  
+  <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
+  
+  <p style="font-size: 12px; color: #888; text-align: center;">
+    SwapSpace Europe LTD<br>
+    82a James Carter Road Mildenhall IP28 7DE, United Kingdom<br>
+    ©${new Date().getFullYear()} SwapSpace. All rights reserved.
+  </p>
+</body>
+</html>
+                            `;
+
+                            const emailResponse = await fetch('https://api.resend.com/emails', {
+                                method: 'POST',
+                                headers: {
+                                    'Authorization': `Bearer ${RESEND_API_KEY}`,
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    from: 'SwapSpace <hello@notifications.swap-space.com>',
+                                    reply_to: 'hello@swap-space.com',
+                                    to: email,
+                                    subject: 'Share photos of your home to complete your SwapSpace application',
+                                    html: photoEmailHtml
+                                })
+                            });
+
+                            if (!emailResponse.ok) {
+                                const emailErr = await emailResponse.json();
+                                console.error(`Resend photo request error for ${email}:`, emailErr);
+                                photoResults.failures++;
+                                continue;
+                            }
+
+                            console.log(`Successfully sent photo request email to ${email}`);
+
+                            // Uncheck the "Resend Photo Request" field
+                            const updateResponse = await fetch(
+                                `https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}/${record.id}`,
+                                {
+                                    method: 'PATCH',
+                                    headers: {
+                                        'Authorization': `Bearer ${AIRTABLE_TOKEN}`,
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({
+                                        fields: {
+                                            'Resend Photo Request': false
+                                        }
+                                    })
+                                }
+                            );
+
+                            if (!updateResponse.ok) {
+                                const updateErr = await updateResponse.json();
+                                console.error(`Failed to uncheck Resend Photo Request for ${record.id}:`, updateErr);
+                                photoResults.failures++;
+                            } else {
+                                photoResults.successes++;
+                            }
+                        } catch (err) {
+                            console.error(`Error processing photo request for ${record.id}:`, err);
+                            photoResults.failures++;
+                        }
+                    }
+                }
+            }
+        } catch (photoError) {
+            console.error('Photo request phase error:', photoError);
+        }
+
+        return res.status(200).json({
+            message: 'Cron job completed',
+            results,
+            photoRequestResults: photoResults
+        });
 
     } catch (error) {
         console.error('Cron job error:', error);
