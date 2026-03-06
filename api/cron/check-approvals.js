@@ -46,30 +46,29 @@ export default async function handler(req, res) {
 
         const { records } = await airtableResponse.json();
 
-        if (!records || records.length === 0) {
-            return res.status(200).json({ message: 'No new approved applications found.', results: { attempted: 0 } });
-        }
-
         const results = {
-            attempted: records.length,
+            attempted: 0,
             successes: 0,
             failures: 0
         };
 
-        // 3. Process each record
-        for (const record of records) {
-            const email = record.fields.Email;
-            const name = record.fields.Name || 'there';
+        if (records && records.length > 0) {
+            results.attempted = records.length;
 
-            if (!email) {
-                console.warn(`Record ${record.id} has no email address. Skipping.`);
-                results.failures++;
-                continue;
-            }
+            // 3. Process each record
+            for (const record of records) {
+                const email = record.fields.Email;
+                const name = record.fields.Name || 'there';
 
-            try {
-                // 4. Send Email via Resend
-                const emailHtml = `
+                if (!email) {
+                    console.warn(`Record ${record.id} has no email address. Skipping.`);
+                    results.failures++;
+                    continue;
+                }
+
+                try {
+                    // 4. Send Email via Resend
+                    const emailHtml = `
 <!DOCTYPE html>
 <html>
 <head>
@@ -139,54 +138,55 @@ export default async function handler(req, res) {
 </html>
         `;
 
-                const emailResponse = await fetch('https://api.resend.com/emails', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${RESEND_API_KEY}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        from: 'SwapSpace <hello@notifications.swap-space.com>',
-                        reply_to: 'hello@swap-space.com',
-                        to: email,
-                        subject: 'Update on your application | Welcome to SwapSpace',
-                        html: emailHtml
-                    })
-                });
+                    const emailResponse = await fetch('https://api.resend.com/emails', {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${RESEND_API_KEY}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            from: 'SwapSpace <hello@notifications.swap-space.com>',
+                            reply_to: 'hello@swap-space.com',
+                            to: email,
+                            subject: 'Update on your application | Welcome to SwapSpace',
+                            html: emailHtml
+                        })
+                    });
 
-                if (!emailResponse.ok) {
-                    const emailErr = await emailResponse.json();
-                    console.error(`Resend error for ${email}:`, emailErr);
+                    if (!emailResponse.ok) {
+                        const emailErr = await emailResponse.json();
+                        console.error(`Resend error for ${email}:`, emailErr);
+                        results.failures++;
+                        continue; // skip updating Airtable if email fails to send
+                    }
+
+                    console.log(`Successfully sent approval email to ${email}`);
+
+                    // 5. Update Airtable to mark as sent
+                    const updateResponse = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}/${record.id}`, {
+                        method: 'PATCH',
+                        headers: {
+                            'Authorization': `Bearer ${AIRTABLE_TOKEN}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            fields: {
+                                "Approval Email Sent": true
+                            }
+                        })
+                    });
+
+                    if (!updateResponse.ok) {
+                        const updateErr = await updateResponse.json();
+                        console.error(`Airtable update error for ${record.id}:`, updateErr);
+                        results.failures++;
+                    } else {
+                        results.successes++;
+                    }
+                } catch (err) {
+                    console.error(`Error processing record ${record.id}:`, err);
                     results.failures++;
-                    continue; // skip updating Airtable if email fails to send
                 }
-
-                console.log(`Successfully sent approval email to ${email}`);
-
-                // 5. Update Airtable to mark as sent
-                const updateResponse = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}/${record.id}`, {
-                    method: 'PATCH',
-                    headers: {
-                        'Authorization': `Bearer ${AIRTABLE_TOKEN}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        fields: {
-                            "Approval Email Sent": true
-                        }
-                    })
-                });
-
-                if (!updateResponse.ok) {
-                    const updateErr = await updateResponse.json();
-                    console.error(`Airtable update error for ${record.id}:`, updateErr);
-                    results.failures++;
-                } else {
-                    results.successes++;
-                }
-            } catch (err) {
-                console.error(`Error processing record ${record.id}:`, err);
-                results.failures++;
             }
         }
 
