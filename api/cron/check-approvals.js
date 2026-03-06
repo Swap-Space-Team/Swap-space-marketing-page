@@ -1,3 +1,5 @@
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 export default async function handler(req, res) {
     // Only allow GET requests for the cron job
     if (req.method !== 'GET') {
@@ -161,6 +163,7 @@ export default async function handler(req, res) {
                     }
 
                     console.log(`Successfully sent approval email to ${email}`);
+                    await sleep(1000); // Rate limit: max 2 requests/sec to Resend
 
                     // 5. Update Airtable to mark as sent
                     const updateResponse = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}/${record.id}`, {
@@ -310,6 +313,7 @@ export default async function handler(req, res) {
                             }
 
                             console.log(`Successfully sent photo request email to ${email}`);
+                            await sleep(1000); // Rate limit: max 2 requests/sec to Resend
 
                             // Uncheck the "Resend Photo Request" field
                             const updateResponse = await fetch(
