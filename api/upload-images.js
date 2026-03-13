@@ -45,18 +45,16 @@ export default async function handler(req, res) {
         });
 
         const recordId = data.fields.recordId ? data.fields.recordId[0] : null;
+        const updateStatus = data.fields.updateStatus ? data.fields.updateStatus[0] : null;
         const images = data.files.images || [];
 
         if (!recordId) {
             return res.status(400).json({ error: 'Missing recordId' });
         }
 
-        if (images.length === 0) {
-            return res.status(400).json({ error: 'No images uploaded' });
-        }
-
-        // 1. Upload all images in parallel to Airtable's Attachment Upload API
-        const uploadPromises = images.map(async (file) => {
+        // Mode 1: Upload a single image to Airtable
+        if (images.length > 0) {
+            const file = images[0]; // Handle one image per request
             const fileBuffer = await fs.promises.readFile(file.path);
             const contentType = file.headers['content-type'] || 'image/jpeg';
             const filename = file.originalFilename || `photo-${Date.now()}.jpg`;
@@ -86,50 +84,51 @@ export default async function handler(req, res) {
                 const errMsg = typeof errData.error === 'string'
                     ? errData.error
                     : errData.error?.message || errData.error?.type || JSON.stringify(errData.error) || `Airtable returned ${uploadRes.status}`;
-                throw new Error(errMsg);
+                return res.status(uploadRes.status).json({ error: errMsg });
             }
 
             console.log(`[upload-images] Successfully uploaded "${filename}"`);
-        });
+            return res.status(200).json({ success: true, uploaded: filename });
+        }
 
-        await Promise.all(uploadPromises);
-
-        // 2. Update the "Application Status" field to "Photos Received" via the standard REST API
-        const updateResponse = await fetch(
-            `https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}/${recordId}`,
-            {
-                method: 'PATCH',
-                headers: {
-                    'Authorization': `Bearer ${AIRTABLE_TOKEN}`,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    fields: {
-                        'Application Status': 'Photos Received',
+        // Mode 2: Update the "Application Status" to "Photos Received" (no image in this request)
+        if (updateStatus === 'true') {
+            const updateResponse = await fetch(
+                `https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}/${recordId}`,
+                {
+                    method: 'PATCH',
+                    headers: {
+                        'Authorization': `Bearer ${AIRTABLE_TOKEN}`,
+                        'Content-Type': 'application/json',
                     },
-                }),
+                    body: JSON.stringify({
+                        fields: {
+                            'Application Status': 'Photos Received',
+                        },
+                    }),
+                }
+            );
+
+            const updateData = await updateResponse.json();
+
+            if (!updateResponse.ok) {
+                console.error('Airtable status update error:', updateData);
+                return res.status(updateResponse.status).json({
+                    error: updateData.error?.message || 'Failed to update Application Status',
+                });
             }
-        );
 
-        const updateData = await updateResponse.json();
-
-        if (!updateResponse.ok) {
-            console.error('Airtable status update error:', updateData);
-            return res.status(updateResponse.status).json({
-                error: updateData.error?.message || 'Failed to update Application Status',
+            console.log(`[upload-images] Application Status updated to "Photos Received" for ${recordId}`);
+            return res.status(200).json({
+                success: true,
+                recordId: updateData.id,
             });
         }
 
-        return res.status(200).json({
-            success: true,
-            recordId: updateData.id,
-            uploadedPhotos: images.length,
-        });
+        return res.status(400).json({ error: 'No image or updateStatus provided' });
 
     } catch (error) {
         console.error('Server error processing image upload:', error);
         return res.status(500).json({ error: 'Internal server error processing upload' });
     }
 };
-
-
