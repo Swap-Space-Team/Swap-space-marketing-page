@@ -470,8 +470,73 @@
       handleFiles(this.files);
     });
 
-    function handleFiles(files) {
-      const newFiles = Array.from(files).filter(file => file.type.startsWith('image/'));
+    // Resize image using native Canvas API (hardware-accelerated, no external library)
+    function resizeImage(file, maxDimension = 1920) {
+      return new Promise((resolve) => {
+        // If file is already small enough, skip resize
+        if (file.size <= 1.5 * 1024 * 1024) {
+          return resolve(file);
+        }
+
+        const img = new Image();
+        const url = URL.createObjectURL(file);
+
+        img.onload = () => {
+          URL.revokeObjectURL(url);
+
+          let { width, height } = img;
+
+          // Only resize if larger than maxDimension
+          if (width <= maxDimension && height <= maxDimension) {
+            return resolve(file);
+          }
+
+          // Calculate new dimensions maintaining aspect ratio
+          if (width > height) {
+            height = Math.round((height / width) * maxDimension);
+            width = maxDimension;
+          } else {
+            width = Math.round((width / height) * maxDimension);
+            height = maxDimension;
+          }
+
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+
+          canvas.toBlob(
+            (blob) => {
+              const resizedFile = new File([blob], file.name, {
+                type: 'image/jpeg',
+                lastModified: Date.now(),
+              });
+              console.log(`[resize] ${file.name}: ${(file.size / 1024 / 1024).toFixed(2)}MB → ${(resizedFile.size / 1024 / 1024).toFixed(2)}MB (${width}×${height})`);
+              resolve(resizedFile);
+            },
+            'image/jpeg',
+            0.92 // High quality JPEG
+          );
+        };
+
+        // Fallback for unsupported formats (e.g., HEIC on Chrome) — use original file
+        img.onerror = () => {
+          URL.revokeObjectURL(url);
+          console.log(`[resize] ${file.name}: format not supported by Canvas, using original file`);
+          resolve(file);
+        };
+
+        img.src = url;
+      });
+    }
+
+    async function handleFiles(files) {
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif'];
+      const newFiles = Array.from(files).filter(file =>
+        file.type.startsWith('image/') || allowedTypes.includes(file.type) || file.name.toLowerCase().endsWith('.heic') || file.name.toLowerCase().endsWith('.heif')
+      );
 
       // Limit to 4 images max total
       if (selectedFiles.length + newFiles.length > 4) {
@@ -488,7 +553,9 @@
           continue;
         }
 
-        selectedFiles.push(file);
+        // Resize large images using Canvas API (near-instant, GPU-accelerated)
+        const processedFile = await resizeImage(file, 1920);
+        selectedFiles.push(processedFile);
 
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -503,14 +570,14 @@
           removeBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
           removeBtn.onclick = (event) => {
             event.stopPropagation();
-            removeFile(file, preview);
+            removeFile(processedFile, preview);
           };
 
           preview.appendChild(img);
           preview.appendChild(removeBtn);
           previewGrid.appendChild(preview);
         };
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(processedFile);
       }
 
       updateSubmitButton();
