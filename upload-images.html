@@ -9,8 +9,7 @@
   <link rel="stylesheet" href="output.css" />
   <link rel="icon" href="assets/Swap-space_favicon_g6hAj61Zg_Rij2PQiQbR6.svg" />
 
-  <!-- Client-side image compression -->
-  <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/dist/browser-image-compression.js"></script>
+
 
   <!-- PostHog Analytics -->
   <script>
@@ -471,10 +470,10 @@
       handleFiles(this.files);
     });
 
-    async function handleFiles(files) {
+    function handleFiles(files) {
       const newFiles = Array.from(files).filter(file => file.type.startsWith('image/'));
 
-      // Limit to 5 images max total
+      // Limit to 4 images max total
       if (selectedFiles.length + newFiles.length > 4) {
         showError('You can upload a maximum of 4 photos.');
         return;
@@ -482,58 +481,38 @@
 
       hideError();
 
-      // Compression options
-      const compressionOptions = {
-        maxSizeMB: 1,            // Compress to ~1MB per image
-        maxWidthOrHeight: 1920,  // Resize if larger than 1920px
-        useWebWorker: true,
-      };
-
       for (const file of newFiles) {
-        // Validate file size (10MB limit before compression)
+        // Validate file size (10MB limit)
         if (file.size > 10 * 1024 * 1024) {
           showError(`File ${file.name} is too large. Max size is 10MB.`);
           continue;
         }
 
-        // Show compressing state
-        submitBtn.innerHTML = 'Compressing photos...';
-        submitBtn.disabled = true;
+        selectedFiles.push(file);
 
-        try {
-          // Compress the image client-side
-          const compressedFile = await imageCompression(file, compressionOptions);
-          selectedFiles.push(compressedFile);
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const preview = document.createElement('div');
+          preview.className = 'preview-item';
 
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            const preview = document.createElement('div');
-            preview.className = 'preview-item';
+          const img = document.createElement('img');
+          img.src = e.target.result;
 
-            const img = document.createElement('img');
-            img.src = e.target.result;
-
-            const removeBtn = document.createElement('button');
-            removeBtn.className = 'remove-btn';
-            removeBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
-            removeBtn.onclick = (event) => {
-              event.stopPropagation();
-              removeFile(compressedFile, preview);
-            };
-
-            preview.appendChild(img);
-            preview.appendChild(removeBtn);
-            previewGrid.appendChild(preview);
+          const removeBtn = document.createElement('button');
+          removeBtn.className = 'remove-btn';
+          removeBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
+          removeBtn.onclick = (event) => {
+            event.stopPropagation();
+            removeFile(file, preview);
           };
-          reader.readAsDataURL(compressedFile);
-        } catch (err) {
-          console.error('Compression error:', err);
-          showError(`Failed to process ${file.name}. Please try a different image.`);
-        }
+
+          preview.appendChild(img);
+          preview.appendChild(removeBtn);
+          previewGrid.appendChild(preview);
+        };
+        reader.readAsDataURL(file);
       }
 
-      // Reset button text
-      submitBtn.innerHTML = 'Submit Photos <span>→</span>';
       updateSubmitButton();
     }
 
