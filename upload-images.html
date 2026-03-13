@@ -545,22 +545,40 @@
       submitBtn.disabled = true;
       hideError();
 
-      const formData = new FormData();
-      formData.append('recordId', recordId);
-      selectedFiles.forEach((file) => {
-        formData.append('images', file);
-      });
-
       try {
-        const response = await fetch('/api/upload-images', {
-          method: 'POST',
-          body: formData
+        // Upload each image in a separate parallel request (stays under Vercel's 4.5MB body limit)
+        const uploadPromises = selectedFiles.map(async (file) => {
+          const formData = new FormData();
+          formData.append('recordId', recordId);
+          formData.append('images', file);
+
+          const response = await fetch('/api/upload-images', {
+            method: 'POST',
+            body: formData,
+          });
+
+          const data = await response.json();
+          if (!response.ok) {
+            throw new Error(data.error || `Failed to upload ${file.name}`);
+          }
+          return data;
         });
 
-        const data = await response.json();
+        await Promise.all(uploadPromises);
 
-        if (!response.ok) {
-          throw new Error(data.error || 'Failed to upload photos');
+        // After all images uploaded, update the Application Status
+        const statusForm = new FormData();
+        statusForm.append('recordId', recordId);
+        statusForm.append('updateStatus', 'true');
+
+        const statusRes = await fetch('/api/upload-images', {
+          method: 'POST',
+          body: statusForm,
+        });
+
+        const statusData = await statusRes.json();
+        if (!statusRes.ok) {
+          throw new Error(statusData.error || 'Failed to update application status');
         }
 
         // Show success step
