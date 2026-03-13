@@ -9,8 +9,7 @@
   <link rel="stylesheet" href="output.css" />
   <link rel="icon" href="assets/Swap-space_favicon_g6hAj61Zg_Rij2PQiQbR6.svg" />
 
-  <!-- Client-side image compression -->
-  <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/dist/browser-image-compression.js"></script>
+
 
   <!-- PostHog Analytics -->
   <script>
@@ -337,7 +336,7 @@
           </p>
 
           <div class="field-group">
-            <input type="file" id="file-input" multiple accept="image/jpeg,image/png,image/webp,image/heic"
+            <input type="file" id="file-input" multiple accept="image/jpeg,image/png,image/webp"
               style="display: none;" />
 
             <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()">
@@ -353,7 +352,7 @@
                 <span class="click-upload">Click to upload</span> or drag and drop
               </div>
               <div class="upload-subtext">
-                JPG, PNG, WEBP or HEIC (max. 10MB each)
+                JPG, PNG or WEBP (max. 10MB each)
               </div>
             </div>
 
@@ -471,10 +470,75 @@
       handleFiles(this.files);
     });
 
-    async function handleFiles(files) {
-      const newFiles = Array.from(files).filter(file => file.type.startsWith('image/'));
+    // Resize image using native Canvas API (hardware-accelerated, no external library)
+    function resizeImage(file, maxDimension = 1920) {
+      return new Promise((resolve) => {
+        // If file is already small enough, skip resize
+        if (file.size <= 1.5 * 1024 * 1024) {
+          return resolve(file);
+        }
 
-      // Limit to 5 images max total
+        const img = new Image();
+        const url = URL.createObjectURL(file);
+
+        img.onload = () => {
+          URL.revokeObjectURL(url);
+
+          let { width, height } = img;
+
+          // Only resize if larger than maxDimension
+          if (width <= maxDimension && height <= maxDimension) {
+            return resolve(file);
+          }
+
+          // Calculate new dimensions maintaining aspect ratio
+          if (width > height) {
+            height = Math.round((height / width) * maxDimension);
+            width = maxDimension;
+          } else {
+            width = Math.round((width / height) * maxDimension);
+            height = maxDimension;
+          }
+
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+
+          canvas.toBlob(
+            (blob) => {
+              const resizedFile = new File([blob], file.name, {
+                type: 'image/jpeg',
+                lastModified: Date.now(),
+              });
+              console.log(`[resize] ${file.name}: ${(file.size / 1024 / 1024).toFixed(2)}MB → ${(resizedFile.size / 1024 / 1024).toFixed(2)}MB (${width}×${height})`);
+              resolve(resizedFile);
+            },
+            'image/jpeg',
+            0.92 // High quality JPEG
+          );
+        };
+
+        // Fallback for unsupported formats (e.g., HEIC on Chrome) — use original file
+        img.onerror = () => {
+          URL.revokeObjectURL(url);
+          console.log(`[resize] ${file.name}: format not supported by Canvas, using original file`);
+          resolve(file);
+        };
+
+        img.src = url;
+      });
+    }
+
+    async function handleFiles(files) {
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+      const newFiles = Array.from(files).filter(file =>
+        file.type.startsWith('image/') || allowedTypes.includes(file.type)
+      );
+
+      // Limit to 4 images max total
       if (selectedFiles.length + newFiles.length > 4) {
         showError('You can upload a maximum of 4 photos.');
         return;
@@ -482,58 +546,40 @@
 
       hideError();
 
-      // Compression options
-      const compressionOptions = {
-        maxSizeMB: 1,            // Compress to ~1MB per image
-        maxWidthOrHeight: 1920,  // Resize if larger than 1920px
-        useWebWorker: true,
-      };
-
       for (const file of newFiles) {
-        // Validate file size (10MB limit before compression)
+        // Validate file size (10MB limit)
         if (file.size > 10 * 1024 * 1024) {
           showError(`File ${file.name} is too large. Max size is 10MB.`);
           continue;
         }
 
-        // Show compressing state
-        submitBtn.innerHTML = 'Compressing photos...';
-        submitBtn.disabled = true;
+        // Resize large images using Canvas API (near-instant, GPU-accelerated)
+        const processedFile = await resizeImage(file, 1920);
+        selectedFiles.push(processedFile);
 
-        try {
-          // Compress the image client-side
-          const compressedFile = await imageCompression(file, compressionOptions);
-          selectedFiles.push(compressedFile);
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const preview = document.createElement('div');
+          preview.className = 'preview-item';
 
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            const preview = document.createElement('div');
-            preview.className = 'preview-item';
+          const img = document.createElement('img');
+          img.src = e.target.result;
 
-            const img = document.createElement('img');
-            img.src = e.target.result;
-
-            const removeBtn = document.createElement('button');
-            removeBtn.className = 'remove-btn';
-            removeBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
-            removeBtn.onclick = (event) => {
-              event.stopPropagation();
-              removeFile(compressedFile, preview);
-            };
-
-            preview.appendChild(img);
-            preview.appendChild(removeBtn);
-            previewGrid.appendChild(preview);
+          const removeBtn = document.createElement('button');
+          removeBtn.className = 'remove-btn';
+          removeBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
+          removeBtn.onclick = (event) => {
+            event.stopPropagation();
+            removeFile(processedFile, preview);
           };
-          reader.readAsDataURL(compressedFile);
-        } catch (err) {
-          console.error('Compression error:', err);
-          showError(`Failed to process ${file.name}. Please try a different image.`);
-        }
+
+          preview.appendChild(img);
+          preview.appendChild(removeBtn);
+          previewGrid.appendChild(preview);
+        };
+        reader.readAsDataURL(processedFile);
       }
 
-      // Reset button text
-      submitBtn.innerHTML = 'Submit Photos <span>→</span>';
       updateSubmitButton();
     }
 
@@ -566,22 +612,40 @@
       submitBtn.disabled = true;
       hideError();
 
-      const formData = new FormData();
-      formData.append('recordId', recordId);
-      selectedFiles.forEach((file) => {
-        formData.append('images', file);
-      });
-
       try {
-        const response = await fetch('/api/upload-images', {
-          method: 'POST',
-          body: formData
+        // Upload each image in a separate parallel request (stays under Vercel's 4.5MB body limit)
+        const uploadPromises = selectedFiles.map(async (file) => {
+          const formData = new FormData();
+          formData.append('recordId', recordId);
+          formData.append('images', file);
+
+          const response = await fetch('/api/upload-images', {
+            method: 'POST',
+            body: formData,
+          });
+
+          const data = await response.json();
+          if (!response.ok) {
+            throw new Error(data.error || `Failed to upload ${file.name}`);
+          }
+          return data;
         });
 
-        const data = await response.json();
+        await Promise.all(uploadPromises);
 
-        if (!response.ok) {
-          throw new Error(data.error || 'Failed to upload photos');
+        // After all images uploaded, update the Application Status
+        const statusForm = new FormData();
+        statusForm.append('recordId', recordId);
+        statusForm.append('updateStatus', 'true');
+
+        const statusRes = await fetch('/api/upload-images', {
+          method: 'POST',
+          body: statusForm,
+        });
+
+        const statusData = await statusRes.json();
+        if (!statusRes.ok) {
+          throw new Error(statusData.error || 'Failed to update application status');
         }
 
         // Show success step

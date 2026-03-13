@@ -2,6 +2,11 @@
   "buildCommand": "",
   "outputDirectory": ".",
   "cleanUrls": true,
+  "functions": {
+    "api/upload-images.js": {
+      "maxDuration": 60
+    }
+  },
   "rewrites": [
     {
       "source": "/",
@@ -38,7 +43,7 @@
   "crons": [
     {
       "path": "/api/cron/check-approvals",
-      "schedule": "0 21 * * *"
+      "schedule": "*/30 * * * *"
     }
   ]
 }
