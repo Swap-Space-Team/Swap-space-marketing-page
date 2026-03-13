@@ -55,16 +55,15 @@ export default async function handler(req, res) {
             return res.status(400).json({ error: 'No images uploaded' });
         }
 
-        // 1. Upload each image directly to Airtable's Attachment Upload API
-        //    The uploadAttachment endpoint expects JSON with base64-encoded file bytes.
-        for (const file of images) {
-            const fileBuffer = fs.readFileSync(file.path);
+        // 1. Upload all images in parallel to Airtable's Attachment Upload API
+        const uploadPromises = images.map(async (file) => {
+            const fileBuffer = await fs.promises.readFile(file.path);
             const contentType = file.headers['content-type'] || 'image/jpeg';
             const filename = file.originalFilename || `photo-${Date.now()}.jpg`;
             const base64Content = fileBuffer.toString('base64');
 
             const uploadUrl = `https://content.airtable.com/v0/${BASE_ID}/${recordId}/Photos/uploadAttachment`;
-            console.log(`[upload-images] Uploading "${filename}" (${contentType}) to: ${uploadUrl}`);
+            console.log(`[upload-images] Uploading "${filename}" (${contentType}, ${(fileBuffer.length / 1024 / 1024).toFixed(2)}MB)`);
 
             const uploadRes = await fetch(uploadUrl, {
                 method: 'POST',
@@ -81,17 +80,19 @@ export default async function handler(req, res) {
 
             if (!uploadRes.ok) {
                 const rawText = await uploadRes.text();
-                console.error(`[upload-images] FAILED (${uploadRes.status}): ${rawText}`);
+                console.error(`[upload-images] FAILED "${filename}" (${uploadRes.status}): ${rawText}`);
                 let errData = {};
                 try { errData = JSON.parse(rawText); } catch (e) { }
                 const errMsg = typeof errData.error === 'string'
                     ? errData.error
                     : errData.error?.message || errData.error?.type || JSON.stringify(errData.error) || `Airtable returned ${uploadRes.status}`;
-                return res.status(uploadRes.status).json({ error: errMsg });
+                throw new Error(errMsg);
             }
 
             console.log(`[upload-images] Successfully uploaded "${filename}"`);
-        }
+        });
+
+        await Promise.all(uploadPromises);
 
         // 2. Update the "Application Status" field to "Photos Received" via the standard REST API
         const updateResponse = await fetch(
