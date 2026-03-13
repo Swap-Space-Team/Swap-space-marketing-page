@@ -336,7 +336,7 @@
           </p>
 
           <div class="field-group">
-            <input type="file" id="file-input" multiple accept="image/jpeg,image/png,image/webp,image/heic"
+            <input type="file" id="file-input" multiple accept="image/jpeg,image/png,image/webp"
               style="display: none;" />
 
             <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()">
@@ -352,7 +352,7 @@
                 <span class="click-upload">Click to upload</span> or drag and drop
               </div>
               <div class="upload-subtext">
-                JPG, PNG, WEBP or HEIC (max. 10MB each)
+                JPG, PNG or WEBP (max. 10MB each)
               </div>
             </div>
 
@@ -533,9 +533,9 @@
     }
 
     async function handleFiles(files) {
-      const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif'];
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
       const newFiles = Array.from(files).filter(file =>
-        file.type.startsWith('image/') || allowedTypes.includes(file.type) || file.name.toLowerCase().endsWith('.heic') || file.name.toLowerCase().endsWith('.heif')
+        file.type.startsWith('image/') || allowedTypes.includes(file.type)
       );
 
       // Limit to 4 images max total
