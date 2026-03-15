@@ -572,6 +572,23 @@
 
     gtag('config', 'AW-18015994151');
   </script>
+  <!-- Event snippet for Swapspace application submitted conversion -->
+  <script>
+  function gtag_report_conversion(url) {
+    var callback = function () {
+      if (typeof(url) != 'undefined') {
+        window.location = url;
+      }
+    };
+    gtag('event', 'conversion', {
+        'send_to': 'AW-18015994151/d8-MCPK0pIkcEKeC2Y5D',
+        'value': 1.0,
+        'currency': 'GBP',
+        'event_callback': callback
+    });
+    return false;
+  }
+  </script>
 </head>
 
 <body class="min-h-screen bg-white">
@@ -1201,8 +1218,8 @@
         }
 
         // Fire Google Ads conversion event
-        if (typeof gtag === 'function') {
-          gtag('event', 'conversion', {'send_to': 'AW-18015994151/JUZnCNbpm4kcEKeC2Y5D'});
+        if (typeof gtag_report_conversion === 'function') {
+          gtag_report_conversion();
           console.log('Google Ads conversion event fired');
         }
 
