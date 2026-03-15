@@ -1200,6 +1200,12 @@
           console.log('Meta Pixel Lead & CompleteRegistration events fired', eventIdObj);
         }
 
+        // Fire Google Ads conversion event
+        if (typeof gtag === 'function') {
+          gtag('event', 'conversion', {'send_to': 'AW-18015994151/JUZnCNbpm4kcEKeC2Y5D'});
+          console.log('Google Ads conversion event fired');
+        }
+
         // Clear saved form data after successful submission
         clearFormData();
 
