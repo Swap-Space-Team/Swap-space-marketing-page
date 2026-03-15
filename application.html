@@ -1186,10 +1186,11 @@
           });
         }
 
-        // Fire Meta Pixel Lead conversion event
+        // Fire Meta Pixel conversion events
         if (typeof fbq === 'function') {
           fbq('track', 'Lead');
-          console.log('Meta Pixel Lead event fired');
+          fbq('track', 'CompleteRegistration');
+          console.log('Meta Pixel Lead & CompleteRegistration events fired');
         }
 
         // Clear saved form data after successful submission
