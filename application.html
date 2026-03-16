@@ -12,8 +12,11 @@
 
   <!-- PostHog Analytics -->
   <script>
-    !function (t, e) { var o, n, p, r; e.__SV || ((window.posthog = e), (e._i = []), (e.init = function (i, s, a) { function g(t, e) { var o = e.split("."); 2 == o.length && ((t = t[o[0]]), (e = o[1])), (t[e] = function () { t.push([e].concat(Array.prototype.slice.call(arguments, 0))); }); } ((p = t.createElement("script")).type = "text/javascript"), (p.crossOrigin = "anonymous"), (p.async = !0), (p.src = s.api_host.replace(".i.posthog.com", "-assets.i.posthog.com") + "/static/array.js"), (r = t.getElementsByTagName("script")[0]).parentNode.insertBefore(p, r); var u = e; for (void 0 !== a ? (u = e[a] = []) : (a = "posthog"), u.people = u.people || [], u.toString = function (t) { var e = "posthog"; return "posthog" !== a && (e += "." + a), t || (e += " (stub)"), e }, u.people.toString = function () { return u.toString(1) + ".people (stub)" }, o = "init capture register register_once register_for_session unregister unregister_for_session getFeatureFlag getFeatureFlagPayload isFeatureEnabled reloadFeatureFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey canRenderSurveyAsync identify setPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException loadToolbar get_property getSessionProperty createPersonProfile opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing clear_opt_in_out_capturing debug getPageViewId captureTraceFeedback captureTraceMetric".split(" "), n = 0; n < o.length; n++)g(u, o[n]); e._i.push([i, s, a]) }), (e.__SV = 1)) }(document, window.posthog || []);
-    posthog.init('phc_qPlxJ84Q6HCS1E6ULdUhGn5frh9TaC4s6ZWXlwMxj7N', { api_host: 'https://eu.i.posthog.com', person_profiles: 'identified_only' });
+    !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once register_for_session unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group identify setPersonProperties setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags resetGroups onFeatureFlags addFeatureFlagsHandler onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey getNextSurveyStep".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+    posthog.init('phc_qPlxJ84Q6HCS1E6ULdUhGn5frh9TaC4s6ZWXlwMxj7N', {
+        api_host: 'https://events.swap-space.com',
+        defaults: '2026-01-30'
+    })
   </script>
 
   <!-- Anti-flickering script -->
@@ -560,6 +563,32 @@
       font-family: 'General Sans', sans-serif;
     }
   </style>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18015994151"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'AW-18015994151');
+  </script>
+  <!-- Event snippet for Swapspace application submitted conversion -->
+  <script>
+  function gtag_report_conversion(url) {
+    var callback = function () {
+      if (typeof(url) != 'undefined') {
+        window.location = url;
+      }
+    };
+    gtag('event', 'conversion', {
+        'send_to': 'AW-18015994151/d8-MCPK0pIkcEKeC2Y5D',
+        'value': 1.0,
+        'currency': 'GBP',
+        'event_callback': callback
+    });
+    return false;
+  }
+  </script>
 </head>
 
 <body class="min-h-screen bg-white">
@@ -639,13 +668,13 @@
               </div>
             </div>
 
-            <div>
+            <!-- Phone number field (hidden for now) -->
+            <div style="display: none;">
               <label class="form-label">Phone number<span class="required-asterisk">*</span></label>
               <p class="form-helper mb-2">Enter your phone number with country code (e.g., +44 7123 456789)</p>
               <div class="input-wrapper">
                 <span class="input-icon" style="left: 12px;">+</span>
-                <input type="tel" class="form-input" style="padding-left: 28px;" id="phone" placeholder="44 7123 456789"
-                  required />
+                <input type="tel" class="form-input" style="padding-left: 28px;" id="phone" placeholder="44 7123 456789" />
               </div>
             </div>
           </div>
@@ -913,7 +942,7 @@
     }
 
     // Form fields to persist
-    const formFields = ['name', 'email', 'phone', 'address', 'city', 'country', 'homeType', 'bedrooms', 'guests'];
+    const formFields = ['name', 'email', 'address', 'city', 'country', 'homeType', 'bedrooms', 'guests'];
 
     // Save form data to localStorage
     function saveFormData() {
@@ -1066,12 +1095,12 @@
           isValid = false;
         }
 
-        // Phone validation
-        const phoneField = document.getElementById('phone');
-        if (phoneField && phoneField.value && !/^\d{8,15}$/.test(phoneField.value.replace(/\s/g, ''))) {
-          showFieldError(phoneField, 'Please enter a valid phone number with country code');
-          isValid = false;
-        }
+        // Phone validation (disabled - phone field is hidden)
+        // const phoneField = document.getElementById('phone');
+        // if (phoneField && phoneField.value && !/^\d{8,15}$/.test(phoneField.value.replace(/\s/g, ''))) {
+        //   showFieldError(phoneField, 'Please enter a valid phone number with country code');
+        //   isValid = false;
+        // }
       }
 
 
@@ -1127,7 +1156,7 @@
       const formData = {
         Name: document.getElementById('name').value,
         Email: document.getElementById('email').value,
-        Phone: '+' + document.getElementById('phone').value,
+        // Phone: '+' + document.getElementById('phone').value, // hidden for now
         Address: document.getElementById('address').value,
         City: document.getElementById('city').value,
         Country: document.getElementById('country').value,
@@ -1154,14 +1183,15 @@
           throw new Error(errorData.error || 'Failed to submit form');
         }
 
-        console.log('Form submitted successfully');
+        const successData = await response.json();
+        console.log('Form submitted successfully', successData);
 
         // Identify user in PostHog and capture submission event
         if (typeof posthog !== 'undefined') {
           posthog.identify(formData.Email, {
             name: formData.Name,
             email: formData.Email,
-            phone: formData.Phone,
+            // phone: formData.Phone, // hidden for now
             city: formData.City,
             country: formData.Country
           });
@@ -1177,10 +1207,20 @@
           });
         }
 
-        // Fire Meta Pixel Lead conversion event
+        // Fire Meta Pixel conversion events
         if (typeof fbq === 'function') {
-          fbq('track', 'Lead');
-          console.log('Meta Pixel Lead event fired');
+          // Pass the eventId returned by our server for deduplication
+          const eventIdObj = successData.eventId ? { eventID: successData.eventId } : undefined;
+          
+          fbq('track', 'Lead', {}, eventIdObj);
+          fbq('track', 'CompleteRegistration', {}, eventIdObj);
+          console.log('Meta Pixel Lead & CompleteRegistration events fired', eventIdObj);
+        }
+
+        // Fire Google Ads conversion event
+        if (typeof gtag_report_conversion === 'function') {
+          gtag_report_conversion();
+          console.log('Google Ads conversion event fired');
         }
 
         // Clear saved form data after successful submission

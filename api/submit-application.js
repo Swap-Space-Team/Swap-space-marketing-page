@@ -1,3 +1,5 @@
+import crypto from 'crypto';
+
 export default async function handler(req, res) {
   // CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -19,6 +21,8 @@ export default async function handler(req, res) {
   const BASE_ID = process.env.AIRTABLE_BASE_ID;
   const TABLE_ID = process.env.AIRTABLE_TABLE_ID;
   const RESEND_API_KEY = process.env.RESEND_API_KEY;
+  const META_PIXEL_ID = process.env.META_PIXEL_ID;
+  const META_ACCESS_TOKEN = process.env.META_ACCESS_TOKEN;
 
   if (!AIRTABLE_TOKEN || !BASE_ID || !TABLE_ID) {
     console.error('Missing Airtable environment variables');
@@ -160,7 +164,76 @@ export default async function handler(req, res) {
       }
     }
 
-    return res.status(200).json({ success: true, id: data.id });
+    // Fire Meta Conversions API (CAPI) Lead Event
+    // Generate a unique event_id for deduplication
+    const eventId = `lead_${data.id}_${Date.now()}`;
+
+    if (META_PIXEL_ID && META_ACCESS_TOKEN) {
+      try {
+        const hashData = (dataStr) => {
+          if (!dataStr) return '';
+          return crypto
+            .createHash('sha256')
+            .update(dataStr.trim().toLowerCase())
+            .digest('hex');
+        };
+
+        const userData = {
+          client_ip_address: req.headers['x-forwarded-for'] || req.socket.remoteAddress,
+          client_user_agent: req.headers['user-agent'],
+        };
+
+        if (fields.Email) userData.em = [hashData(fields.Email)];
+        if (fields.Phone) {
+          // Meta expects phone numbers to contain only digits (and country code)
+          const cleanPhone = fields.Phone.replace(/\\D/g, '');
+          userData.ph = [hashData(cleanPhone)];
+        }
+        if (fields.City) userData.ct = [hashData(fields.City)];
+        if (fields.Country) userData.country = [hashData(fields.Country)]; // Should technically be 2-letter ISO, but hashing what we have
+
+        const capiPayload = {
+          data: [
+            {
+              event_name: 'Lead',
+              event_time: Math.floor(Date.now() / 1000),
+              action_source: 'website',
+              event_id: eventId,
+              user_data: userData,
+              custom_data: {
+                home_type: fields['Home Type'],
+                bedrooms: fields.Bedrooms,
+                guest_capacity: fields['Guest Capacity']
+              }
+            }
+          ]
+        };
+
+        const capiResponse = await fetch(
+          `https://graph.facebook.com/v19.0/${META_PIXEL_ID}/events?access_token=${META_ACCESS_TOKEN}`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(capiPayload)
+          }
+        );
+
+        if (!capiResponse.ok) {
+          const capiErr = await capiResponse.json();
+          console.error('Meta CAPI error:', capiErr);
+        } else {
+          console.log('Meta CAPI Lead event fired successfully with event_id:', eventId);
+        }
+      } catch (capiError) {
+        console.error('Error sending Meta CAPI event:', capiError);
+      }
+    } else {
+      console.log('Skipping Meta CAPI: META_PIXEL_ID or META_ACCESS_TOKEN missing');
+    }
+
+    return res.status(200).json({ success: true, id: data.id, eventId });
   } catch (error) {
     console.error('Server error:', error);
     return res.status(500).json({ error: 'Internal server error' });
