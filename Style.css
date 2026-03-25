@@ -11,6 +11,7 @@
   src: url('assets/Geist-Thin_oY14u_1p12rXOA48CjRJJ.ttf') format('truetype');
   font-weight: 100;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -18,6 +19,7 @@
   src: url('assets/Geist-ExtraLight_wBuq_ep6mbm56E0GOC-Jq.ttf') format('truetype');
   font-weight: 200;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -25,6 +27,7 @@
   src: url('assets/Geist-Light_SWddobz4bLmb9RV33OAh1.ttf') format('truetype');
   font-weight: 300;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -32,6 +35,7 @@
   src: url('assets/Geist-Regular_mbVT_SmsTvyJMAw1fxROp.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -39,6 +43,7 @@
   src: url('assets/Geist-Medium_Jg6B-stEFhOflMHleox4D.ttf') format('truetype');
   font-weight: 500;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -46,6 +51,7 @@
   src: url('assets/Geist-SemiBold_hwscF-kRHXo8XSftNHkjB.ttf') format('truetype');
   font-weight: 600;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -53,6 +59,7 @@
   src: url('assets/Geist-Bold_nVi4kiOs_3Bb_EFbLMflT.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -60,6 +67,7 @@
   src: url('assets/Geist-ExtraBold_s7FMi-vuQMrtsm6yMTBP-.ttf') format('truetype');
   font-weight: 800;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -67,6 +75,7 @@
   src: url('assets/Geist-Black_Ju3LHzNLOEQQeaZpqzH5F.ttf') format('truetype');
   font-weight: 900;
   font-style: normal;
+  font-display: swap;
 }
 
 /* General Sans Font Family */
@@ -75,6 +84,7 @@
   src: url('assets/GeneralSans-Extralight_XOIvXDMVjrQjA2RJVmMfx.woff2') format('woff2');
   font-weight: 200;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -82,6 +92,7 @@
   src: url('assets/GeneralSans-Light_I5QWbbDGbbHN0PzYPlpfb.woff') format('woff');
   font-weight: 300;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -89,6 +100,7 @@
   src: url('assets/GeneralSans-Regular_PSNyf7gAjf1bllr78ibII.woff') format('woff');
   font-weight: 400;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -96,6 +108,7 @@
   src: url('assets/GeneralSans-Medium_p939H1O492_KUD6MiOoG_.ttf') format('truetype');
   font-weight: 500;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -103,6 +116,7 @@
   src: url('assets/GeneralSans-Semibold_jhF6NrZUTupUeNRpF44RX.ttf') format('truetype');
   font-weight: 600;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -110,6 +124,7 @@
   src: url('assets/GeneralSans-Bold_0YcVelds450z2DBAMW2_j.woff') format('woff');
   font-weight: 700;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -117,6 +132,7 @@
   src: url('assets/GeneralSans-ExtralightItalic_hMVP9oJnwkL7eFCvgfzb5.woff2') format('woff2');
   font-weight: 200;
   font-style: italic;
+  font-display: swap;
 }
 
 @font-face {
@@ -124,6 +140,7 @@
   src: url('assets/GeneralSans-LightItalic_rHDzE1RL8WOyGbVGpNHik.woff2') format('woff2');
   font-weight: 300;
   font-style: italic;
+  font-display: swap;
 }
 
 @font-face {
@@ -131,6 +148,7 @@
   src: url('assets/GeneralSans-Italic_LLFjOImMyg0Qfo-ZhH4CX.woff') format('woff');
   font-weight: 400;
   font-style: italic;
+  font-display: swap;
 }
 
 @font-face {
@@ -138,6 +156,7 @@
   src: url('assets/GeneralSans-MediumItalic_KyzCNJQ54GPJzY9WGIej5.ttf') format('truetype');
   font-weight: 500;
   font-style: italic;
+  font-display: swap;
 }
 
 @font-face {
@@ -145,6 +164,7 @@
   src: url('assets/GeneralSans-SemiboldItalic_g_njuSBCTWR2C_ce1utxz.woff2') format('woff2');
   font-weight: 600;
   font-style: italic;
+  font-display: swap;
 }
 
 @font-face {
@@ -152,6 +172,7 @@
   src: url('assets/GeneralSans-BoldItalic_mgrti70hvRT4Ze0APMgCF.woff') format('woff');
   font-weight: 700;
   font-style: italic;
+  font-display: swap;
 }
 
 /* ============================================
