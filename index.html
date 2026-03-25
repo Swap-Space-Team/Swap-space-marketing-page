@@ -71,15 +71,14 @@
       });
     </script>
 
-    <!-- -->
+    <!-- Google Analytics config deferred -->
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
-
-      gtag("config", "G-0G5XEDEJH7");
+      window.addEventListener('load', function() {
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag("js", new Date());
+        gtag("config", "G-0G5XEDEJH7");
+      });
     </script>
 
     <!-- Meta Pixel + Google Ads deferred until after page is interactive -->
@@ -820,6 +819,7 @@
             avatar.className = 'listing-host-avatar';
             avatar.src = listing.host.avatar || '';
             avatar.alt = 'Member avatar';
+            avatar.loading = 'lazy';
             avatar.onerror = function() { 
               this.style.display = 'none';
             };
@@ -872,6 +872,7 @@
               const img = document.createElement('img');
               img.src = imageUrl;
               img.alt = `${listing.title || 'Home'} - Image ${index + 1}`;
+              img.loading = 'lazy';
               img.onerror = function() {
                 this.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="432" height="254"%3E%3Crect fill="%23E5E7EB" width="432" height="254"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" fill="%236B7280" font-family="Arial" font-size="16"%3EImage%3C/text%3E%3C/svg%3E';
               };
