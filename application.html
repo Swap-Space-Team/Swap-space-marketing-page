@@ -580,6 +580,78 @@
       white-space: nowrap;
       font-family: 'General Sans', sans-serif;
     }
+
+    /* Preview grid for inline photo upload */
+    .preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .preview-item {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      aspect-ratio: 1;
+    }
+
+    .preview-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .remove-btn {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.6);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      transition: background 0.2s ease;
+    }
+
+    .remove-btn:hover {
+      background: rgba(0, 0, 0, 0.85);
+    }
+
+    .remove-btn svg {
+      width: 14px;
+      height: 14px;
+      color: #fff;
+    }
+
+    .inline-upload-zone {
+      border: 2px dashed #d5d9eb;
+      padding: 40px 24px;
+    }
+
+    .inline-upload-zone.dragover {
+      border-color: #079455;
+      background-color: #ecfdf5;
+      transform: scale(1.01);
+    }
+
+    #inline-error-message {
+      color: #ef4444;
+      font-size: 14px;
+      margin-top: 8px;
+      display: none;
+      font-family: 'General Sans', sans-serif;
+    }
+
+    #step7-thankyou-panel .status-item:not(:last-child)::after {
+      background-color: #079455;
+    }
   </style>
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18015994151"></script>
@@ -839,85 +911,127 @@
           </div>
         </div>
 
-        <!-- Step 7: Thank You -->
+        <!-- Step 7: Upload Photos → Thank You -->
         <div class="step" data-step="7">
-          <div class="field-group py-4">
-            <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4"
-              style="font-family: 'General Sans', sans-serif; letter-spacing: -0.8px; line-height: 1.15;">
-              One final step before we review your application
+
+          <!-- Upload panel (shown first) -->
+          <div id="step7-upload-panel">
+            <h1 class="text-3xl md:text-4xl font-semibold text-gray-900"
+              style="font-family: 'General Sans', sans-serif; letter-spacing: -0.5px;">
+              Share photos of your home
             </h1>
-            <p class="text-gray-500 mb-8"
-              style="font-family: 'General Sans', sans-serif; line-height: 1.5; font-size: 15px;">
-              Thanks for submitting your application. Upload your photo using the link in your email so we can begin
-              reviewing it.
+            <p class="text-[16px] text-gray-500 mb-4">
+              To complete your application, we need a few photos of your home. 1–4 photos is fine.
+            </p>
+            <p class="text-gray-600 mb-6 font-medium"
+              style="font-family: 'General Sans', sans-serif; line-height: 1.6;">
+              No need to tidy up or stage anything. We're simply looking to get a genuine sense of your space.
             </p>
 
-            <div>
-              <p class="text-[14px] font-semibold text-gray-900"
-                style="font-family: 'General Sans', sans-serif; margin-top: 16px; margin-bottom: 12px;">
-                Application status</p>
+            <input type="file" id="inline-file-input" multiple accept="image/jpeg,image/png,image/webp"
+              style="display: none;" />
 
-              <div class="status-timeline">
-                <!-- Step 1: Completed -->
-                <div class="status-item">
-                  <div class="status-icon-wrapper">
-                    <div class="status-dot completed">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                      </svg>
-                    </div>
-
-                  </div>
-                  <div class="status-content">
-                    <div class="status-title-row">
-                      <span class="status-title">Application received</span>
-                    </div>
-                    <p class="status-description">Details submitted.</p>
-                  </div>
-                </div>
-
-                <!-- Step 2: Current -->
-                <div class="status-item">
-                  <div class="status-icon-wrapper">
-                    <div class="status-dot current"></div>
-
-                  </div>
-                  <div class="status-content">
-                    <div class="status-title-row">
-                      <span class="status-title">Add photos of your home</span>
-                      <span class="status-badge required">Required</span>
-                    </div>
-                    <p class="status-description">Upload at least one photo to complete your application. No need to
-                      tidy up or take professional photos. We just want to get a sense of your home.</p>
-                  </div>
-                </div>
-
-                <!-- Step 3: Pending -->
-                <div class="status-item">
-                  <div class="status-icon-wrapper">
-                    <div class="status-dot pending"></div>
-
-
-                  </div>
-                  <div class="status-content">
-                    <div class="status-title-row">
-                      <span class="status-title">Application review</span>
-                      <span class="status-badge not-started">Not started</span>
-                    </div>
-                    <p class="status-description">Review begins once your photos are uploaded. We'll get back to you
-                      within 1–2 days.</p>
-                  </div>
-                </div>
+            <div class="upload-zone inline-upload-zone" id="inline-upload-zone"
+              onclick="document.getElementById('inline-file-input').click()">
+              <div class="upload-icon-container">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="17 8 12 3 7 8" />
+                  <line x1="12" y1="3" x2="12" y2="15" />
+                </svg>
               </div>
+              <div class="upload-text">
+                <span class="click-upload">Click to upload</span> or drag and drop
+              </div>
+              <div class="upload-subtext">JPG, PNG or WEBP (max. 10MB each)</div>
+            </div>
+
+            <div class="preview-grid" id="inline-preview-grid"></div>
+
+            <p id="inline-error-message"></p>
+
+            <div class="btn-group mt-8">
+              <button type="button" class="btn-primary" id="inline-submit-btn" onclick="submitInlinePhotos()" disabled>
+                Submit Photos <span>→</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Thank-you panel (shown after successful upload) -->
+          <div id="step7-thankyou-panel" style="display: none;">
+            <div class="field-group py-4">
+              <div class="success-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              </div>
+              <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4"
+                style="font-family: 'General Sans', sans-serif; letter-spacing: -0.8px; line-height: 1.15;">
+                Photos received — we're reviewing your application
+              </h1>
+              <p class="text-gray-500 mb-8"
+                style="font-family: 'General Sans', sans-serif; line-height: 1.5; font-size: 15px;">
+                We'll be in touch within 1–2 days.
+              </p>
 
               <div>
-                <a href="mailto:" class="btn-success">
-                  Check email to upload photo
-                </a>
+                <p class="text-[14px] font-semibold text-gray-900"
+                  style="font-family: 'General Sans', sans-serif; margin-top: 16px; margin-bottom: 12px;">
+                  Application status</p>
+
+                <div class="status-timeline">
+                  <div class="status-item">
+                    <div class="status-icon-wrapper">
+                      <div class="status-dot completed">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                          stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                      </div>
+                    </div>
+                    <div class="status-content">
+                      <div class="status-title-row">
+                        <span class="status-title">Application received</span>
+                      </div>
+                      <p class="status-description">Details submitted.</p>
+                    </div>
+                  </div>
+
+                  <div class="status-item">
+                    <div class="status-icon-wrapper">
+                      <div class="status-dot completed">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                          stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                      </div>
+                    </div>
+                    <div class="status-content">
+                      <div class="status-title-row">
+                        <span class="status-title">Photos received</span>
+                      </div>
+                      <p class="status-description">Your photos have been submitted.</p>
+                    </div>
+                  </div>
+
+                  <div class="status-item">
+                    <div class="status-icon-wrapper">
+                      <div class="status-dot current"></div>
+                    </div>
+                    <div class="status-content">
+                      <div class="status-title-row">
+                        <span class="status-title">Application review</span>
+                        <span class="status-badge not-started">In progress</span>
+                      </div>
+                      <p class="status-description">We'll get back to you within 1–2 days.</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
+
         </div>
 
       </div>
@@ -931,6 +1045,8 @@
 
   <script>
     let currentStep = 1;
+    let applicationRecordId = null;
+    let inlineSelectedFiles = [];
     const STORAGE_KEY = 'swapspace_application_form';
 
     // PostHog experiment state
@@ -1148,7 +1264,7 @@
       const formData = {
         Name: document.getElementById('name').value,
         Email: document.getElementById('email').value,
-        Phone: '+' + document.getElementById('phone').value,
+        Phone: '+' + document.getElementById('phone').value.replace(/\s/g, '').replace(/^\+/, ''),
         Address: document.getElementById('address').value,
         City: document.getElementById('city').value,
         Country: document.getElementById('country').value,
@@ -1176,6 +1292,7 @@
         }
 
         const successData = await response.json();
+        applicationRecordId = successData.id;
         console.log('Form submitted successfully', successData);
 
         // Identify user in PostHog and capture submission event
@@ -1245,6 +1362,7 @@
 
     document.addEventListener('DOMContentLoaded', function () {
       setupAutoSave();
+      initInlineUpload();
       restoreFormData();
       updateProgressBar();
 
@@ -1275,6 +1393,184 @@
         });
       }
     });
+
+    // ── Inline Upload (Step 7) ──────────────────────────────────────────────
+    function initInlineUpload() {
+      const fileInput = document.getElementById('inline-file-input');
+      const uploadZone = document.getElementById('inline-upload-zone');
+
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        uploadZone.addEventListener(eventName, e => { e.preventDefault(); e.stopPropagation(); }, false);
+        document.body.addEventListener(eventName, e => { e.preventDefault(); e.stopPropagation(); }, false);
+      });
+
+      ['dragenter', 'dragover'].forEach(eventName => {
+        uploadZone.addEventListener(eventName, () => uploadZone.classList.add('dragover'), false);
+      });
+
+      ['dragleave', 'drop'].forEach(eventName => {
+        uploadZone.addEventListener(eventName, () => uploadZone.classList.remove('dragover'), false);
+      });
+
+      uploadZone.addEventListener('drop', e => handleInlineFiles(e.dataTransfer.files));
+
+      fileInput.addEventListener('change', function () {
+        handleInlineFiles(this.files);
+        this.value = '';
+      });
+    }
+
+    function resizeInlineImage(file, maxDimension = 1920) {
+      return new Promise((resolve) => {
+        if (file.size <= 1.5 * 1024 * 1024) return resolve(file);
+
+        const img = new Image();
+        const url = URL.createObjectURL(file);
+
+        img.onload = () => {
+          URL.revokeObjectURL(url);
+          let { width, height } = img;
+
+          if (width <= maxDimension && height <= maxDimension) return resolve(file);
+
+          if (width > height) {
+            height = Math.round((height / width) * maxDimension);
+            width = maxDimension;
+          } else {
+            width = Math.round((width / height) * maxDimension);
+            height = maxDimension;
+          }
+
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+
+          canvas.toBlob(blob => {
+            resolve(new File([blob], file.name, { type: 'image/jpeg', lastModified: Date.now() }));
+          }, 'image/jpeg', 0.92);
+        };
+
+        img.onerror = () => { URL.revokeObjectURL(url); resolve(file); };
+        img.src = url;
+      });
+    }
+
+    async function handleInlineFiles(files) {
+      const newFiles = Array.from(files).filter(f => f.type.startsWith('image/'));
+
+      if (inlineSelectedFiles.length + newFiles.length > 4) {
+        showInlineError('You can upload a maximum of 4 photos.');
+        return;
+      }
+
+      hideInlineError();
+
+      for (const file of newFiles) {
+        if (file.size > 10 * 1024 * 1024) {
+          showInlineError(`${file.name} is too large. Max size is 10MB.`);
+          continue;
+        }
+
+        const processed = await resizeInlineImage(file);
+        inlineSelectedFiles.push(processed);
+
+        const reader = new FileReader();
+        reader.onload = e => {
+          const preview = document.createElement('div');
+          preview.className = 'preview-item';
+
+          const img = document.createElement('img');
+          img.src = e.target.result;
+
+          const removeBtn = document.createElement('button');
+          removeBtn.className = 'remove-btn';
+          removeBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
+          removeBtn.onclick = ev => { ev.stopPropagation(); removeInlineFile(processed, preview); };
+
+          preview.appendChild(img);
+          preview.appendChild(removeBtn);
+          document.getElementById('inline-preview-grid').appendChild(preview);
+        };
+        reader.readAsDataURL(processed);
+      }
+
+      updateInlineSubmitButton();
+    }
+
+    function removeInlineFile(file, el) {
+      inlineSelectedFiles = inlineSelectedFiles.filter(f => f !== file);
+      el.remove();
+      updateInlineSubmitButton();
+      hideInlineError();
+    }
+
+    function updateInlineSubmitButton() {
+      document.getElementById('inline-submit-btn').disabled = inlineSelectedFiles.length === 0;
+    }
+
+    function showInlineError(msg) {
+      const el = document.getElementById('inline-error-message');
+      el.textContent = msg;
+      el.style.display = 'block';
+    }
+
+    function hideInlineError() {
+      const el = document.getElementById('inline-error-message');
+      el.style.display = 'none';
+      el.textContent = '';
+    }
+
+    async function submitInlinePhotos() {
+      if (inlineSelectedFiles.length === 0 || !applicationRecordId) return;
+
+      const btn = document.getElementById('inline-submit-btn');
+      const originalText = btn.innerHTML;
+      btn.innerHTML = 'Uploading...';
+      btn.disabled = true;
+      hideInlineError();
+
+      try {
+        await Promise.all(inlineSelectedFiles.map(async file => {
+          const formData = new FormData();
+          formData.append('recordId', applicationRecordId);
+          formData.append('images', file);
+
+          const res = await fetch('/api/upload-images', { method: 'POST', body: formData });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || `Failed to upload ${file.name}`);
+          return data;
+        }));
+
+        // Final status update — marks Application Status → "Photos Received" in Airtable
+        const statusForm = new FormData();
+        statusForm.append('recordId', applicationRecordId);
+        statusForm.append('updateStatus', 'true');
+
+        const statusRes = await fetch('/api/upload-images', { method: 'POST', body: statusForm });
+        const statusData = await statusRes.json();
+        if (!statusRes.ok) throw new Error(statusData.error || 'Failed to update application status');
+
+        if (typeof posthog !== 'undefined') {
+          posthog.capture('application_photos_uploaded', {
+            record_id: applicationRecordId,
+            photo_count: inlineSelectedFiles.length
+          });
+        }
+
+        // Transition to thank-you panel
+        document.getElementById('step7-upload-panel').style.display = 'none';
+        document.getElementById('step7-thankyou-panel').style.display = 'block';
+        window.scrollTo(0, 0);
+
+      } catch (error) {
+        console.error('Upload error:', error);
+        showInlineError((error.message || 'There was an error uploading your photos. Please try again.') +
+          ' You can also upload via the link in your email.');
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }
+    }
   </script>
 </body>
 
