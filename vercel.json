@@ -43,7 +43,7 @@
   "crons": [
     {
       "path": "/api/cron/check-approvals",
-      "schedule": "*/30 * * * *"
+      "schedule": "0 */4 * * *"
     }
   ]
 }
