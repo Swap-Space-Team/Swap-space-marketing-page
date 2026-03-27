@@ -686,8 +686,8 @@
               </div>
             </div>
 
-            <!-- Phone number field (hidden for now) -->
-            <div style="display: none;">
+            <!-- Phone number field -->
+            <div>
               <label class="form-label">Phone number<span class="required-asterisk">*</span></label>
               <p class="form-helper mb-2">Enter your phone number with country code (e.g., +44 7123 456789)</p>
               <div class="input-wrapper">
@@ -945,7 +945,7 @@
     let sequenceIndex = 0;
 
     // Form fields to persist
-    const formFields = ['name', 'email', 'address', 'city', 'country', 'homeType', 'bedrooms', 'guests'];
+    const formFields = ['name', 'email', 'phone', 'address', 'city', 'country', 'homeType', 'bedrooms', 'guests'];
 
     // Save form data to localStorage
     function saveFormData() {
@@ -1081,12 +1081,12 @@
           isValid = false;
         }
 
-        // Phone validation (disabled - phone field is hidden)
-        // const phoneField = document.getElementById('phone');
-        // if (phoneField && phoneField.value && !/^\d{8,15}$/.test(phoneField.value.replace(/\s/g, ''))) {
-        //   showFieldError(phoneField, 'Please enter a valid phone number with country code');
-        //   isValid = false;
-        // }
+        // Phone validation
+        const phoneField = document.getElementById('phone');
+        if (phoneField && phoneField.value && !/^\d{8,15}$/.test(phoneField.value.replace(/\s/g, ''))) {
+          showFieldError(phoneField, 'Please enter a valid phone number with country code');
+          isValid = false;
+        }
       }
 
 
@@ -1142,7 +1142,7 @@
       const formData = {
         Name: document.getElementById('name').value,
         Email: document.getElementById('email').value,
-        // Phone: '+' + document.getElementById('phone').value, // hidden for now
+        Phone: '+' + document.getElementById('phone').value,
         Address: document.getElementById('address').value,
         City: document.getElementById('city').value,
         Country: document.getElementById('country').value,
@@ -1177,7 +1177,7 @@
           posthog.identify(formData.Email, {
             name: formData.Name,
             email: formData.Email,
-            // phone: formData.Phone, // hidden for now
+            phone: formData.Phone,
             city: formData.City,
             country: formData.Country
           });
