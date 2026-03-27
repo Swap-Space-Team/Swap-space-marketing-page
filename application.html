@@ -692,7 +692,7 @@
               <p class="form-helper mb-2">Enter your phone number with country code (e.g., +44 7123 456789)</p>
               <div class="input-wrapper">
                 <span class="input-icon" style="left: 12px;">+</span>
-                <input type="tel" class="form-input" style="padding-left: 28px;" id="phone" placeholder="44 7123 456789" />
+                <input type="tel" class="form-input" style="padding-left: 28px;" id="phone" placeholder="44 7123 456789" required />
               </div>
             </div>
           </div>
@@ -1081,11 +1081,17 @@
           isValid = false;
         }
 
-        // Phone validation
+        // Phone validation — required and must contain digits
         const phoneField = document.getElementById('phone');
-        if (phoneField && phoneField.value && !/^\d{8,15}$/.test(phoneField.value.replace(/\s/g, ''))) {
-          showFieldError(phoneField, 'Please enter a valid phone number with country code');
-          isValid = false;
+        if (phoneField) {
+          const phoneDigits = phoneField.value.replace(/\s/g, '');
+          if (!phoneDigits) {
+            showFieldError(phoneField, 'Phone number is required');
+            isValid = false;
+          } else if (!/^\d{8,15}$/.test(phoneDigits)) {
+            showFieldError(phoneField, 'Please enter a valid phone number with country code');
+            isValid = false;
+          }
         }
       }
 
