@@ -1084,7 +1084,7 @@
         // Phone validation — required and must contain digits
         const phoneField = document.getElementById('phone');
         if (phoneField) {
-          const phoneDigits = phoneField.value.replace(/\s/g, '');
+          const phoneDigits = phoneField.value.replace(/\s/g, '').replace(/^\+/, '');
           if (!phoneDigits) {
             showFieldError(phoneField, 'Phone number is required');
             isValid = false;
