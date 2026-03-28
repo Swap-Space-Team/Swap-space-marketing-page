@@ -135,6 +135,12 @@
       transform: scale(0.98);
     }
 
+    .btn-primary:disabled {
+      background-color: #d1d5db;
+      cursor: not-allowed;
+      transform: none;
+    }
+
     .btn-secondary {
       display: inline-flex;
       align-items: center;
@@ -776,13 +782,24 @@
                 <input type="tel" class="form-input" style="padding-left: 28px;" id="phone" placeholder="44 7123 456789" required />
               </div>
             </div>
+
+            <!-- SMS/Phone consent checkbox -->
+            <div id="phone-consent-wrapper" style="margin-top: 16px;">
+              <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                <input type="checkbox" id="phone-consent" style="width: 16px; height: 16px; accent-color: #000; flex-shrink: 0; cursor: pointer;"
+                  onchange="document.getElementById('step2-next-btn').disabled = !this.checked;" />
+                <span style="font-size: 14px; color: #364152; font-family: 'General Sans', sans-serif; line-height: 1.5;">
+                  I consent to Swap Space contacting me by phone or SMS regarding my application or membership
+                </span>
+              </label>
+            </div>
           </div>
 
           <div class="btn-group mt-8">
             <button type="button" class="btn-secondary" onclick="prevStep()">
               <span>←</span> Previous
             </button>
-            <button type="button" class="btn-primary" onclick="nextStep()">
+            <button type="button" class="btn-primary" id="step2-next-btn" onclick="nextStep()" disabled>
               Next <span>→</span>
             </button>
           </div>
@@ -1160,6 +1177,12 @@
             showFieldError(phoneField, 'Please enter a valid phone number with country code');
             isValid = false;
           }
+        }
+
+        // Phone/SMS consent checkbox validation
+        const consentCheckbox = document.getElementById('phone-consent');
+        if (consentCheckbox && !consentCheckbox.checked) {
+          isValid = false;
         }
       }
 
