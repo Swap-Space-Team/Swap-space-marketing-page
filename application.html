@@ -918,14 +918,16 @@
           <div id="step7-upload-panel">
             <h1 class="text-3xl md:text-4xl font-semibold text-gray-900"
               style="font-family: 'General Sans', sans-serif; letter-spacing: -0.5px;">
-              Share photos of your home
+              One last thing, upload a photo of your home
             </h1>
             <p class="text-[16px] text-gray-500 mb-4">
-              To complete your application, we need a few photos of your home. 1–4 photos is fine.
+              We've received your application and this is the final step. We just need at least 1 photo of your home to complete your review. We can't review or approve your application without it.
             </p>
-            <p class="text-gray-600 mb-6 font-medium"
-              style="font-family: 'General Sans', sans-serif; line-height: 1.6;">
-              No need to tidy up or stage anything. We're simply looking to get a genuine sense of your space.
+            <p class="text-[16px] text-gray-500 mb-2" style="margin-top: 6px;">
+              No tidying up, or staging needed. A few quick shots from your phone right now are perfect. We review every home to keep the SwapSpace community safe and trusted for our members.
+            </p>
+            <p class="text-gray-400 mb-6" style="font-size: 12px; font-style: italic;">
+              We've also sent you an email with these instructions.
             </p>
 
             <input type="file" id="inline-file-input" multiple accept="image/jpeg,image/png,image/webp"
@@ -951,9 +953,9 @@
 
             <p id="inline-error-message"></p>
 
-            <div class="btn-group mt-8">
+            <div class="btn-group mt-8" style="display: flex; justify-content: center;">
               <button type="button" class="btn-primary" id="inline-submit-btn" onclick="submitInlinePhotos()" disabled>
-                Submit Photos <span>→</span>
+                Submit and complete application <span>→</span>
               </button>
             </div>
           </div>
