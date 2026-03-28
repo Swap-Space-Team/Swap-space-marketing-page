@@ -2,6 +2,20 @@
   "buildCommand": "",
   "outputDirectory": ".",
   "cleanUrls": true,
+  "headers": [
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/Style.css",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=86400" }
+      ]
+    }
+  ],
   "functions": {
     "api/upload-images.js": {
       "maxDuration": 60
