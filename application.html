@@ -652,6 +652,15 @@
     #step7-thankyou-panel .status-item:not(:last-child)::after {
       background-color: #079455;
     }
+    #upload-btn-group {
+      display: flex;
+      justify-content: center;
+    }
+    @media (min-width: 768px) {
+      #upload-btn-group {
+        justify-content: flex-start;
+      }
+    }
   </style>
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18015994151"></script>
@@ -953,7 +962,7 @@
 
             <p id="inline-error-message"></p>
 
-            <div class="btn-group mt-8" style="display: flex; justify-content: center;">
+            <div class="btn-group mt-8" id="upload-btn-group">
               <button type="button" class="btn-primary" id="inline-submit-btn" onclick="submitInlinePhotos()" disabled>
                 Submit and complete application <span>→</span>
               </button>
