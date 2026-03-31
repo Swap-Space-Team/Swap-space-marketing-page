@@ -62,6 +62,98 @@ function showAlert({ title, message, variant = 'info' }) {
 // ── End modal system ───────────────────────────────────────────────────────
 
 
+// ── Change Password modal ──────────────────────────────────────────────────
+
+(function injectChangePasswordModal() {
+  const el = document.createElement('div');
+  el.id = 'changePasswordModal';
+  el.className = 'admin-modal-overlay';
+  el.innerHTML = `
+    <div class="admin-modal-card">
+      <div class="admin-modal-icon info">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#079455" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+      </div>
+      <h3>Change Password</h3>
+      <p>Enter and confirm your new password.</p>
+      <div class="cpw-fields">
+        <div class="cpw-field">
+          <label class="cpw-label">New password</label>
+          <input type="password" id="cpwNew" class="cpw-input" placeholder="Minimum 8 characters" autocomplete="new-password">
+        </div>
+        <div class="cpw-field">
+          <label class="cpw-label">Confirm password</label>
+          <input type="password" id="cpwConfirm" class="cpw-input" placeholder="Repeat new password" autocomplete="new-password">
+        </div>
+        <p id="cpwError" class="cpw-error"></p>
+      </div>
+      <div class="admin-modal-btns" style="margin-top: 20px;">
+        <button class="btn btn-secondary" onclick="_closeChangePasswordModal()">Cancel</button>
+        <button class="btn btn-primary" id="cpwSaveBtn" onclick="_submitPasswordChange()">Save</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(el);
+})();
+
+function showChangePassword() {
+  document.getElementById('cpwNew').value = '';
+  document.getElementById('cpwConfirm').value = '';
+  document.getElementById('cpwError').textContent = '';
+  document.getElementById('cpwSaveBtn').disabled = false;
+  document.getElementById('cpwSaveBtn').textContent = 'Save';
+  document.getElementById('changePasswordModal').classList.add('active');
+}
+
+function _closeChangePasswordModal() {
+  document.getElementById('changePasswordModal').classList.remove('active');
+}
+
+async function _submitPasswordChange() {
+  const newPw = document.getElementById('cpwNew').value;
+  const confirmPw = document.getElementById('cpwConfirm').value;
+  const errorEl = document.getElementById('cpwError');
+  const saveBtn = document.getElementById('cpwSaveBtn');
+
+  errorEl.textContent = '';
+
+  if (newPw.length < 8) {
+    errorEl.textContent = 'Password must be at least 8 characters.';
+    return;
+  }
+  if (newPw !== confirmPw) {
+    errorEl.textContent = 'Passwords do not match.';
+    return;
+  }
+
+  saveBtn.disabled = true;
+  saveBtn.textContent = 'Saving...';
+
+  try {
+    const sb = await getSupabase();
+    const { error } = await sb.auth.updateUser({ password: newPw });
+
+    if (error) {
+      errorEl.textContent = error.message;
+      saveBtn.disabled = false;
+      saveBtn.textContent = 'Save';
+      return;
+    }
+
+    _closeChangePasswordModal();
+    await showAlert({ title: 'Password Updated', message: 'Your password has been changed successfully.', variant: 'info' });
+  } catch (err) {
+    errorEl.textContent = 'Something went wrong. Please try again.';
+    saveBtn.disabled = false;
+    saveBtn.textContent = 'Save';
+  }
+}
+
+// ── End Change Password modal ──────────────────────────────────────────────
+
+
 let _supabase = null;
 let _configPromise = null;
 
@@ -96,6 +188,19 @@ async function requireAuth() {
   }
   return session;
 }
+
+function toggleProfileMenu(e) {
+  e.stopPropagation();
+  document.getElementById('profileDropdown').classList.toggle('open');
+}
+
+function closeProfileMenu() {
+  const dd = document.getElementById('profileDropdown');
+  if (dd) dd.classList.remove('open');
+}
+
+// Close dropdown when clicking anywhere outside
+document.addEventListener('click', () => closeProfileMenu());
 
 async function signOut() {
   const sb = await getSupabase();
