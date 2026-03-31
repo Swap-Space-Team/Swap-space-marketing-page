@@ -1,4 +1,5 @@
 import crypto from 'crypto';
+import supabase from './lib/supabase.js';
 
 export default async function handler(req, res) {
   // CORS headers
@@ -16,16 +17,12 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // Get environment variables (set in Vercel dashboard)
-  const AIRTABLE_TOKEN = process.env.AIRTABLE_TOKEN;
-  const BASE_ID = process.env.AIRTABLE_BASE_ID;
-  const TABLE_ID = process.env.AIRTABLE_TABLE_ID;
   const RESEND_API_KEY = process.env.RESEND_API_KEY;
   const META_PIXEL_ID = process.env.META_PIXEL_ID;
   const META_ACCESS_TOKEN = process.env.META_ACCESS_TOKEN;
 
-  if (!AIRTABLE_TOKEN || !BASE_ID || !TABLE_ID) {
-    console.error('Missing Airtable environment variables');
+  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    console.error('Missing Supabase environment variables');
     return res.status(500).json({ error: 'Server configuration error' });
   }
 
@@ -36,25 +33,29 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Missing form fields' });
     }
 
-    // Forward the request to Airtable
-    const airtableResponse = await fetch(
-      `https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}`,
-      {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${AIRTABLE_TOKEN}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ fields })
-      }
-    );
+    // Insert into Supabase (map frontend field names to DB columns)
+    const { data, error: insertError } = await supabase
+      .from('applications')
+      .insert({
+        name: fields.Name,
+        email: fields.Email,
+        phone: fields.Phone,
+        address: fields.Address,
+        city: fields.City,
+        country: fields.Country,
+        home_type: fields['Home Type'],
+        bedrooms: fields.Bedrooms,
+        guest_capacity: fields['Guest Capacity'],
+        submission_date: fields['Submission Date'] || new Date().toISOString(),
+        application_status: 'Photos Requested',
+      })
+      .select()
+      .single();
 
-    const data = await airtableResponse.json();
-
-    if (!airtableResponse.ok) {
-      console.error('Airtable error:', data);
-      return res.status(airtableResponse.status).json({
-        error: data.error?.message || 'Failed to submit to Airtable'
+    if (insertError) {
+      console.error('Supabase insert error:', insertError);
+      return res.status(500).json({
+        error: insertError.message || 'Failed to submit application'
       });
     }
 
@@ -80,9 +81,9 @@ export default async function handler(req, res) {
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
               </head>
               <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.7; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
-                
+
                 <p style="font-size: 16px;">Hi ${fields.Name || 'there'},</p>
-                
+
                 <p>Thank you for applying to join SwapSpace.</p>
 
                 <p>We've received your application successfully. To complete the review process, we just need a few photos of your home. Between 1 and 5 photos is sufficient, and they do not need to be professionally taken.</p>
@@ -113,14 +114,14 @@ export default async function handler(req, res) {
 </a>
 
                 <p>We are excited to see the rest of your home. Please let us know if you have any questions!</p>
-                
+
                 <p style="margin-top: 30px;">
                   Warmly,<br>
                   <strong>The SwapSpace Team</strong>
                 </p>
-                
+
                 <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
-                
+
                 <p style="font-size: 12px; color: #888; text-align: center;">
                   © ${new Date().getFullYear()} SwapSpace. All rights reserved.
                 </p>
@@ -130,34 +131,6 @@ export default async function handler(req, res) {
           })
         });
         console.log('Confirmation email sent to:', fields.Email);
-
-        // Update Application Status in Airtable
-        try {
-          const updateResponse = await fetch(
-            `https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}/${data.id}`,
-            {
-              method: 'PATCH',
-              headers: {
-                'Authorization': `Bearer ${AIRTABLE_TOKEN}`,
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
-                fields: {
-                  'Application Status': 'Photos Requested'
-                }
-              })
-            }
-          );
-          if (!updateResponse.ok) {
-            const updateErr = await updateResponse.json();
-            console.error('Failed to update Application Status:', updateErr);
-          } else {
-            console.log('Application Status updated to Photos Requested for:', data.id);
-          }
-        } catch (updateError) {
-          console.error('Error updating Application Status:', updateError);
-        }
-
       } catch (emailError) {
         // Don't fail the whole request if email fails
         console.error('Email error:', emailError);
@@ -165,7 +138,6 @@ export default async function handler(req, res) {
     }
 
     // Fire Meta Conversions API (CAPI) Lead Event
-    // Generate a unique event_id for deduplication
     const eventId = `lead_${data.id}_${Date.now()}`;
 
     if (META_PIXEL_ID && META_ACCESS_TOKEN) {
@@ -185,12 +157,11 @@ export default async function handler(req, res) {
 
         if (fields.Email) userData.em = [hashData(fields.Email)];
         if (fields.Phone) {
-          // Meta expects phone numbers to contain only digits (and country code)
-          const cleanPhone = fields.Phone.replace(/\\D/g, '');
+          const cleanPhone = fields.Phone.replace(/\D/g, '');
           userData.ph = [hashData(cleanPhone)];
         }
         if (fields.City) userData.ct = [hashData(fields.City)];
-        if (fields.Country) userData.country = [hashData(fields.Country)]; // Should technically be 2-letter ISO, but hashing what we have
+        if (fields.Country) userData.country = [hashData(fields.Country)];
 
         const capiPayload = {
           data: [

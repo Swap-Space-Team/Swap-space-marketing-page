@@ -1,12 +1,31 @@
 import multiparty from 'multiparty';
 import fs from 'fs';
+import supabase from './lib/supabase.js';
 
-// No bodyParser config needed — multiparty handles raw request body on Vercel too
 export const config = {
     api: {
         bodyParser: false,
     },
 };
+
+// Resolve the application ID — supports both UUIDs and legacy Airtable record IDs
+async function resolveApplicationId(recordId) {
+    // If it looks like an Airtable ID (starts with "rec"), look up by airtable_record_id
+    if (recordId.startsWith('rec')) {
+        const { data, error } = await supabase
+            .from('applications')
+            .select('id')
+            .eq('airtable_record_id', recordId)
+            .single();
+
+        if (error || !data) {
+            console.error('Could not resolve Airtable record ID:', recordId, error);
+            return null;
+        }
+        return data.id;
+    }
+    return recordId;
+}
 
 export default async function handler(req, res) {
     // CORS headers
@@ -24,12 +43,8 @@ export default async function handler(req, res) {
         return res.status(405).json({ error: 'Method not allowed' });
     }
 
-    const AIRTABLE_TOKEN = process.env.AIRTABLE_TOKEN;
-    const BASE_ID = process.env.AIRTABLE_BASE_ID;
-    const TABLE_ID = process.env.AIRTABLE_TABLE_ID;
-
-    if (!AIRTABLE_TOKEN || !BASE_ID || !TABLE_ID) {
-        console.error('Missing Airtable environment variables');
+    if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+        console.error('Missing Supabase environment variables');
         return res.status(500).json({ error: 'Server configuration error' });
     }
 
@@ -37,88 +52,93 @@ export default async function handler(req, res) {
         // Parse the multipart form data using multiparty
         const form = new multiparty.Form();
 
-        const data = await new Promise((resolve, reject) => {
+        const formData = await new Promise((resolve, reject) => {
             form.parse(req, function (err, fields, files) {
                 if (err) reject(err);
                 resolve({ fields, files });
             });
         });
 
-        const recordId = data.fields.recordId ? data.fields.recordId[0] : null;
-        const updateStatus = data.fields.updateStatus ? data.fields.updateStatus[0] : null;
-        const images = data.files.images || [];
+        const rawRecordId = formData.fields.recordId ? formData.fields.recordId[0] : null;
+        const updateStatus = formData.fields.updateStatus ? formData.fields.updateStatus[0] : null;
+        const images = formData.files.images || [];
 
-        if (!recordId) {
+        if (!rawRecordId) {
             return res.status(400).json({ error: 'Missing recordId' });
         }
 
-        // Mode 1: Upload a single image to Airtable
+        // Resolve to UUID (handles legacy Airtable IDs)
+        const applicationId = await resolveApplicationId(rawRecordId);
+        if (!applicationId) {
+            return res.status(404).json({ error: 'Application not found' });
+        }
+
+        // Mode 1: Upload a single image to Supabase Storage
         if (images.length > 0) {
             const file = images[0]; // Handle one image per request
             const fileBuffer = await fs.promises.readFile(file.path);
             const contentType = file.headers['content-type'] || 'image/jpeg';
             const filename = file.originalFilename || `photo-${Date.now()}.jpg`;
-            const base64Content = fileBuffer.toString('base64');
 
-            const uploadUrl = `https://content.airtable.com/v0/${BASE_ID}/${recordId}/Photos/uploadAttachment`;
+            // Sanitize filename — remove characters Supabase storage rejects
+            const safeFilename = filename
+                .replace(/[^a-zA-Z0-9._-]/g, '-')
+                .replace(/-+/g, '-')
+                .replace(/^-|-$/g, '') || 'photo';
+
+            // Upload to Supabase Storage
+            const storagePath = `${applicationId}/${Date.now()}-${safeFilename}`;
             console.log(`[upload-images] Uploading "${filename}" (${contentType}, ${(fileBuffer.length / 1024 / 1024).toFixed(2)}MB)`);
 
-            const uploadRes = await fetch(uploadUrl, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${AIRTABLE_TOKEN}`,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
+            const { error: uploadError } = await supabase
+                .storage
+                .from('application-photos')
+                .upload(storagePath, fileBuffer, {
                     contentType,
-                    filename,
-                    file: base64Content,
-                }),
-            });
+                    upsert: false,
+                });
 
-            if (!uploadRes.ok) {
-                const rawText = await uploadRes.text();
-                console.error(`[upload-images] FAILED "${filename}" (${uploadRes.status}): ${rawText}`);
-                let errData = {};
-                try { errData = JSON.parse(rawText); } catch (e) { }
-                const errMsg = typeof errData.error === 'string'
-                    ? errData.error
-                    : errData.error?.message || errData.error?.type || JSON.stringify(errData.error) || `Airtable returned ${uploadRes.status}`;
-                return res.status(uploadRes.status).json({ error: errMsg });
+            if (uploadError) {
+                console.error(`[upload-images] FAILED "${filename}":`, uploadError);
+                return res.status(500).json({ error: uploadError.message || 'Failed to upload image' });
+            }
+
+            // Insert photo metadata into DB
+            const { error: insertError } = await supabase
+                .from('application_photos')
+                .insert({
+                    application_id: applicationId,
+                    storage_path: storagePath,
+                    original_filename: filename,
+                    content_type: contentType,
+                });
+
+            if (insertError) {
+                console.error(`[upload-images] Failed to insert photo record:`, insertError);
+                // Photo is uploaded but metadata failed — log but don't fail the request
             }
 
             console.log(`[upload-images] Successfully uploaded "${filename}"`);
             return res.status(200).json({ success: true, uploaded: filename });
         }
 
-        // Mode 2: Update the "Application Status" to "Photos Received" (no image in this request)
+        // Mode 2: Update the "Application Status" to "Photos Received"
         if (updateStatus === 'true') {
-            const updateResponse = await fetch(
-                `https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}/${recordId}`,
-                {
-                    method: 'PATCH',
-                    headers: {
-                        'Authorization': `Bearer ${AIRTABLE_TOKEN}`,
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        fields: {
-                            'Application Status': 'Photos Received',
-                        },
-                    }),
-                }
-            );
+            const { data: updateData, error: updateError } = await supabase
+                .from('applications')
+                .update({ application_status: 'Photos Received' })
+                .eq('id', applicationId)
+                .select()
+                .single();
 
-            const updateData = await updateResponse.json();
-
-            if (!updateResponse.ok) {
-                console.error('Airtable status update error:', updateData);
-                return res.status(updateResponse.status).json({
-                    error: updateData.error?.message || 'Failed to update Application Status',
+            if (updateError) {
+                console.error('Supabase status update error:', updateError);
+                return res.status(500).json({
+                    error: updateError.message || 'Failed to update Application Status',
                 });
             }
 
-            console.log(`[upload-images] Application Status updated to "Photos Received" for ${recordId}`);
+            console.log(`[upload-images] Application Status updated to "Photos Received" for ${applicationId}`);
             return res.status(200).json({
                 success: true,
                 recordId: updateData.id,

@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Application Detail | SwapSpace Admin</title>
+  <link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body>
+  <!-- Photo modal -->
+  <div id="photoModal" class="modal-overlay" onclick="handleModalClick(event)">
+    <button class="modal-close" onclick="closeModal()">&times;</button>
+    <button class="modal-arrow modal-prev" onclick="prevPhoto(event)">&#8592;</button>
+    <div class="modal-content">
+      <img id="modalImg" src="" alt="Photo">
+      <div class="modal-counter" id="modalCounter"></div>
+    </div>
+    <button class="modal-arrow modal-next" onclick="nextPhoto(event)">&#8594;</button>
+  </div>
+
+  <div class="admin-container">
+    <div class="admin-header">
+      <div>
+        <a href="/admin/applications"><img src="/assets/Swapspace wordmark.svg" height="28" alt="SwapSpace"></a>
+      </div>
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <span id="userEmail" style="font-size: 13px; color: #6B7280;"></span>
+        <button class="btn btn-secondary btn-sm" onclick="signOut()">Sign out</button>
+      </div>
+    </div>
+
+    <a href="/admin/applications" class="back-link">&larr; Back to applications</a>
+
+    <div id="content">
+      <div class="loading">Loading application...</div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/admin/admin.js"></script>
+  <script>
+    let currentApp = null;
+    let allPhotoUrls = [];
+    let modalIndex = 0;
+
+    (async () => {
+      const session = await requireAuth();
+      if (!session) return;
+
+      document.getElementById('userEmail').textContent = session.user.email;
+
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('id');
+
+      if (!id) {
+        document.getElementById('content').innerHTML =
+          '<div class="empty-state">No application ID provided.</div>';
+        return;
+      }
+
+      await loadApplication(id);
+    })();
+
+    async function loadApplication(id) {
+      const sb = await getSupabase();
+
+      // Fetch application
+      const { data: app, error } = await sb
+        .from('applications')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+      if (error || !app) {
+        document.getElementById('content').innerHTML =
+          '<div class="empty-state">Application not found.</div>';
+        return;
+      }
+
+      currentApp = app;
+
+      // Fetch photos
+      const { data: photos } = await sb
+        .from('application_photos')
+        .select('*')
+        .eq('application_id', id)
+        .order('uploaded_at', { ascending: true });
+
+      // Generate signed URLs for photos
+      const photoUrls = [];
+      if (photos && photos.length > 0) {
+        for (const photo of photos) {
+          const { data: urlData } = await sb
+            .storage
+            .from('application-photos')
+            .createSignedUrl(photo.storage_path, 3600);
+
+          if (urlData) {
+            photoUrls.push({
+              id: photo.id,
+              storagePath: photo.storage_path,
+              url: urlData.signedUrl,
+              filename: photo.original_filename,
+            });
+          }
+        }
+      }
+
+      allPhotoUrls = photoUrls;
+      renderDetail(app, photoUrls);
+    }
+
+    function renderDetail(app, photoUrls) {
+      const contentEl = document.getElementById('content');
+
+      // Actions based on status
+      let actionsHtml = '';
+      if (app.application_status === 'Photos Received') {
+        actionsHtml = `
+          <button class="btn btn-primary" id="approveBtn" onclick="approveApplication('${app.id}')">
+            Approve Application
+          </button>
+          <button class="btn btn-secondary" id="resendBtn" onclick="resendPhotos('${app.id}')">
+            Resend Photo Request
+          </button>
+          <button class="btn btn-danger" id="rejectBtn" onclick="rejectApplication('${app.id}')">
+            Reject
+          </button>
+        `;
+      } else if (app.application_status === 'Photos Requested') {
+        actionsHtml = `
+          <button class="btn btn-secondary" id="resendBtn" onclick="resendPhotos('${app.id}')">
+            Resend Photo Request
+          </button>
+          <button class="btn btn-danger" id="rejectBtn" onclick="rejectApplication('${app.id}')">
+            Reject
+          </button>
+        `;
+      } else if (app.application_status === 'Approved') {
+        actionsHtml = `<span style="color: #065F46; font-weight: 500;">✓ This application has been approved.</span>`;
+      } else if (app.application_status === 'Rejected') {
+        actionsHtml = `<span style="color: #991B1B; font-weight: 500;">✕ This application has been rejected.</span>`;
+      }
+
+      // Photos section
+      let photosHtml = '<p style="color: #9CA3AF; font-size: 14px;">No photos uploaded yet.</p>';
+      if (photoUrls.length > 0) {
+        photosHtml = `
+          <div class="photos-grid">
+            ${photoUrls.map((p, i) => `
+              <div class="photo-item" style="animation-delay: ${i * 80}ms">
+                <img src="${p.url}" alt="${p.filename}" onclick="openModal(${i})" title="Click to view">
+                <button class="photo-delete-btn" onclick="deletePhoto(event, '${p.id}', '${p.storagePath}')" title="Delete photo">
+                  <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6l-1 14H6L5 6"></path>
+                    <path d="M10 11v6M14 11v6"></path>
+                    <path d="M9 6V4h6v2"></path>
+                  </svg>
+                </button>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+
+      contentEl.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+          <h1 style="font-size: 22px; font-weight: 600;">${app.name || 'Unnamed Application'}</h1>
+          ${statusBadge(app.application_status)}
+        </div>
+
+        <div class="actions-bar" id="actionsBar">
+          ${actionsHtml}
+        </div>
+
+        <div class="detail-grid">
+          <div class="detail-card">
+            <h2>Personal Information</h2>
+            <div class="detail-field">
+              <span class="detail-label">Name</span>
+              <span class="detail-value">${app.name || '—'}</span>
+            </div>
+            <div class="detail-field">
+              <span class="detail-label">Email</span>
+              <span class="detail-value">${app.email || '—'}</span>
+            </div>
+            <div class="detail-field">
+              <span class="detail-label">Phone</span>
+              <span class="detail-value">${app.phone || '—'}</span>
+            </div>
+          </div>
+
+          <div class="detail-card">
+            <h2>Location</h2>
+            <div class="detail-field">
+              <span class="detail-label">Address</span>
+              <span class="detail-value">${app.address || '—'}</span>
+            </div>
+            <div class="detail-field">
+              <span class="detail-label">City</span>
+              <span class="detail-value">${app.city || '—'}</span>
+            </div>
+            <div class="detail-field">
+              <span class="detail-label">Country</span>
+              <span class="detail-value">${app.country || '—'}</span>
+            </div>
+          </div>
+
+          <div class="detail-card">
+            <h2>Home Details</h2>
+            <div class="detail-field">
+              <span class="detail-label">Home Type</span>
+              <span class="detail-value" style="text-transform: capitalize;">${app.home_type || '—'}</span>
+            </div>
+            <div class="detail-field">
+              <span class="detail-label">Bedrooms</span>
+              <span class="detail-value">${app.bedrooms || '—'}</span>
+            </div>
+            <div class="detail-field">
+              <span class="detail-label">Guest Capacity</span>
+              <span class="detail-value">${app.guest_capacity || '—'}</span>
+            </div>
+          </div>
+
+          <div class="detail-card">
+            <h2>Application Info</h2>
+            <div class="detail-field">
+              <span class="detail-label">Status</span>
+              <span class="detail-value">${statusBadge(app.application_status)}</span>
+            </div>
+            <div class="detail-field">
+              <span class="detail-label">Submitted</span>
+              <span class="detail-value">${formatDate(app.submission_date || app.created_at)}</span>
+            </div>
+            <div class="detail-field">
+              <span class="detail-label">Approval Email Sent</span>
+              <span class="detail-value">${app.approval_email_sent ? 'Yes' : 'No'}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-card" style="margin-top: 8px;">
+          <h2>Photos (${photoUrls.length})</h2>
+          ${photosHtml}
+        </div>
+      `;
+
+    }
+
+    function openModal(index) {
+      modalIndex = index;
+      const modal = document.getElementById('photoModal');
+      modal.classList.add('active');
+      updateModalImage();
+      document.addEventListener('keydown', handleModalKey);
+    }
+
+    function closeModal() {
+      document.getElementById('photoModal').classList.remove('active');
+      document.removeEventListener('keydown', handleModalKey);
+    }
+
+    function updateModalImage() {
+      const p = allPhotoUrls[modalIndex];
+      document.getElementById('modalImg').src = p.url;
+      document.getElementById('modalCounter').textContent =
+        allPhotoUrls.length > 1 ? `${modalIndex + 1} / ${allPhotoUrls.length}` : '';
+      document.querySelector('.modal-prev').style.display = modalIndex === 0 ? 'none' : '';
+      document.querySelector('.modal-next').style.display = modalIndex === allPhotoUrls.length - 1 ? 'none' : '';
+    }
+
+    function prevPhoto(e) {
+      e.stopPropagation();
+      if (modalIndex > 0) { modalIndex--; updateModalImage(); }
+    }
+
+    function nextPhoto(e) {
+      e.stopPropagation();
+      if (modalIndex < allPhotoUrls.length - 1) { modalIndex++; updateModalImage(); }
+    }
+
+    function handleModalClick(e) {
+      if (e.target === document.getElementById('photoModal')) closeModal();
+    }
+
+    function handleModalKey(e) {
+      if (e.key === 'Escape') closeModal();
+      if (e.key === 'ArrowLeft') { if (modalIndex > 0) { modalIndex--; updateModalImage(); } }
+      if (e.key === 'ArrowRight') { if (modalIndex < allPhotoUrls.length - 1) { modalIndex++; updateModalImage(); } }
+    }
+
+    async function deletePhoto(e, photoId, storagePath) {
+      e.stopPropagation();
+      const btn = e.currentTarget;
+      if (!await showConfirm({ title: 'Delete Photo', message: 'This photo will be permanently deleted and cannot be recovered.', confirmText: 'Delete' })) return;
+
+      btn.disabled = true;
+
+      const response = await adminFetch('/api/admin/delete-photo', {
+        method: 'POST',
+        body: JSON.stringify({ photoId, storagePath }),
+      });
+
+      if (!response) { btn.disabled = false; return; }
+      const result = await response.json();
+
+      if (result.success) {
+        const params = new URLSearchParams(window.location.search);
+        await loadApplication(params.get('id'));
+      } else {
+        await showAlert({ title: 'Error', message: 'Failed to delete: ' + (result.error || 'Unknown error'), variant: 'danger' });
+        btn.disabled = false;
+      }
+    }
+
+    async function rejectApplication(id) {
+      if (!await showConfirm({ title: 'Reject Application', message: 'Are you sure you want to reject this application?', confirmText: 'Reject', variant: 'warning' })) return;
+
+      const btn = document.getElementById('rejectBtn');
+      btn.disabled = true;
+      btn.textContent = 'Rejecting...';
+
+      try {
+        const response = await adminFetch('/api/admin/reject', {
+          method: 'POST',
+          body: JSON.stringify({ applicationId: id }),
+        });
+
+        if (!response) return;
+        const result = await response.json();
+
+        if (result.success) {
+          await loadApplication(id);
+        } else {
+          await showAlert({ title: 'Error', message: result.error || 'Failed to reject application.', variant: 'danger' });
+          btn.disabled = false;
+          btn.textContent = 'Reject';
+        }
+      } catch (err) {
+        await showAlert({ title: 'Error', message: err.message, variant: 'danger' });
+        btn.disabled = false;
+        btn.textContent = 'Reject';
+      }
+    }
+
+    async function approveApplication(id) {
+      const btn = document.getElementById('approveBtn');
+      btn.disabled = true;
+      btn.textContent = 'Approving...';
+
+      try {
+        const response = await adminFetch('/api/admin/approve', {
+          method: 'POST',
+          body: JSON.stringify({ applicationId: id }),
+        });
+
+        if (!response) return;
+
+        const result = await response.json();
+
+        if (result.success) {
+          if (result.warning) {
+            await showAlert({ title: 'Warning', message: result.warning, variant: 'warning' });
+          }
+          await loadApplication(id);
+        } else {
+          await showAlert({ title: 'Error', message: result.error || 'Failed to approve application.', variant: 'danger' });
+          btn.disabled = false;
+          btn.textContent = 'Approve Application';
+        }
+      } catch (err) {
+        await showAlert({ title: 'Error', message: err.message, variant: 'danger' });
+        btn.disabled = false;
+        btn.textContent = 'Approve Application';
+      }
+    }
+
+    async function resendPhotos(id) {
+      const btn = document.getElementById('resendBtn');
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+
+      try {
+        const response = await adminFetch('/api/admin/resend-photos', {
+          method: 'POST',
+          body: JSON.stringify({ applicationId: id }),
+        });
+
+        if (!response) return;
+
+        const result = await response.json();
+
+        if (result.success) {
+          await showAlert({ title: 'Email Sent', message: 'Photo request email sent successfully.', variant: 'info' });
+          btn.disabled = false;
+          btn.textContent = 'Resend Photo Request';
+        } else {
+          await showAlert({ title: 'Error', message: result.error || 'Failed to send email.', variant: 'danger' });
+          btn.disabled = false;
+          btn.textContent = 'Resend Photo Request';
+        }
+      } catch (err) {
+        await showAlert({ title: 'Error', message: err.message, variant: 'danger' });
+        btn.disabled = false;
+        btn.textContent = 'Resend Photo Request';
+      }
+    }
+  </script>
+</body>
+</html>
