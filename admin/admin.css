@@ -81,6 +81,135 @@ body {
   font-size: 13px;
 }
 
+/* Profile menu */
+.profile-menu-wrap {
+  position: relative;
+}
+
+.profile-icon-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid #E5E7EB;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #374151;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.profile-icon-btn:hover {
+  background: #F3F4F6;
+  border-color: #D1D5DB;
+}
+
+.profile-dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 200px;
+  background: #fff;
+  border: 1px solid #E5E7EB;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  padding: 6px;
+  z-index: 200;
+}
+
+.profile-dropdown.open {
+  display: block;
+}
+
+.profile-dropdown-email {
+  display: block;
+  font-size: 12px;
+  color: #9CA3AF;
+  padding: 6px 10px 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.profile-dropdown-divider {
+  height: 1px;
+  background: #F3F4F6;
+  margin: 2px 0 6px;
+}
+
+.profile-dropdown-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 8px 10px;
+  font-size: 14px;
+  color: #374151;
+  background: none;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.12s;
+}
+
+.profile-dropdown-item:hover {
+  background: #F3F4F6;
+}
+
+.profile-dropdown-item--danger {
+  color: #DC2626;
+}
+
+.profile-dropdown-item--danger:hover {
+  background: #FEF2F2;
+}
+
+/* Change Password modal */
+.cpw-fields {
+  width: 100%;
+  text-align: left;
+  margin-top: 4px;
+}
+
+.cpw-field {
+  margin-bottom: 14px;
+}
+
+.cpw-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 6px;
+}
+
+.cpw-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #D1D5DB;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #111827;
+  background: #fff;
+  transition: border-color 0.15s;
+  font-family: inherit;
+}
+
+.cpw-input:focus {
+  outline: none;
+  border-color: #079455;
+  box-shadow: 0 0 0 3px rgba(7, 148, 85, 0.1);
+}
+
+.cpw-error {
+  font-size: 13px;
+  color: #DC2626;
+  min-height: 18px;
+  margin-top: -6px;
+}
+
 /* Login */
 .login-topbar {
   position: fixed;
