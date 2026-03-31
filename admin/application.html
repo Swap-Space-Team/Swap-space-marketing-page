@@ -71,12 +71,11 @@
     async function loadApplication(id) {
       const sb = await getSupabase();
 
-      // Fetch application
-      const { data: app, error } = await sb
-        .from('applications')
-        .select('*')
-        .eq('id', id)
-        .single();
+      // Fetch application + photos in parallel
+      const [{ data: app, error }, { data: photos }] = await Promise.all([
+        sb.from('applications').select('*').eq('id', id).single(),
+        sb.from('application_photos').select('*').eq('application_id', id).order('uploaded_at', { ascending: true }),
+      ]);
 
       if (error || !app) {
         document.getElementById('content').innerHTML =
@@ -86,30 +85,26 @@
 
       currentApp = app;
 
-      // Fetch photos
-      const { data: photos } = await sb
-        .from('application_photos')
-        .select('*')
-        .eq('application_id', id)
-        .order('uploaded_at', { ascending: true });
-
-      // Generate signed URLs for photos
+      // Generate all signed URLs in one batch call
       const photoUrls = [];
       if (photos && photos.length > 0) {
-        for (const photo of photos) {
-          const { data: urlData } = await sb
-            .storage
-            .from('application-photos')
-            .createSignedUrl(photo.storage_path, 3600);
+        const paths = photos.map(p => p.storage_path);
+        const { data: signedData } = await sb
+          .storage
+          .from('application-photos')
+          .createSignedUrls(paths, 3600);
 
-          if (urlData) {
-            photoUrls.push({
-              id: photo.id,
-              storagePath: photo.storage_path,
-              url: urlData.signedUrl,
-              filename: photo.original_filename,
-            });
-          }
+        if (signedData) {
+          signedData.forEach((item, i) => {
+            if (item.signedUrl) {
+              photoUrls.push({
+                id: photos[i].id,
+                storagePath: photos[i].storage_path,
+                url: item.signedUrl,
+                filename: photos[i].original_filename,
+              });
+            }
+          });
         }
       }
 

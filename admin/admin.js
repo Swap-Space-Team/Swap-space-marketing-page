@@ -159,9 +159,19 @@ let _configPromise = null;
 
 async function loadConfig() {
   if (!_configPromise) {
-    _configPromise = fetch('/api/config')
-      .then(r => r.json())
-      .then(({ url, anonKey }) => ({ url, anonKey }));
+    const cached = sessionStorage.getItem('_sbcfg');
+    if (cached) {
+      const cfg = JSON.parse(cached);
+      _configPromise = Promise.resolve(cfg);
+    } else {
+      _configPromise = fetch('/api/config')
+        .then(r => r.json())
+        .then(({ url, anonKey }) => {
+          const cfg = { url, anonKey };
+          sessionStorage.setItem('_sbcfg', JSON.stringify(cfg));
+          return cfg;
+        });
+    }
   }
   return _configPromise;
 }
