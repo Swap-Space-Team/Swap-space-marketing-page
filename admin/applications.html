@@ -146,23 +146,31 @@
         grouped[p.application_id].push(p.storage_path);
       }
 
-      // Generate signed URLs for the first 2 photos of each application
+      // Collect the first 2 preview paths per application
       photoMap = {};
       const appIdsWithPhotos = Object.keys(grouped);
-      await Promise.all(appIdsWithPhotos.map(async (appId) => {
-        const paths = grouped[appId];
-        const preview = paths.slice(0, 2);
-        const urls = await Promise.all(preview.map(async (path) => {
-          const { data: urlData } = await sb.storage
-            .from('application-photos')
-            .createSignedUrl(path, 3600);
-          return urlData?.signedUrl || null;
-        }));
-        photoMap[appId] = {
-          urls: urls.filter(Boolean),
-          count: paths.length,
-        };
-      }));
+      const previewMeta = []; // { appId, path }
+      for (const appId of appIdsWithPhotos) {
+        grouped[appId].slice(0, 2).forEach(path => previewMeta.push({ appId, path }));
+      }
+
+      // Fetch all preview signed URLs in one batch call
+      if (previewMeta.length > 0) {
+        const { data: signedData } = await sb.storage
+          .from('application-photos')
+          .createSignedUrls(previewMeta.map(m => m.path), 3600);
+
+        (signedData || []).forEach((item, i) => {
+          const { appId } = previewMeta[i];
+          if (!photoMap[appId]) photoMap[appId] = { urls: [], count: grouped[appId].length };
+          if (item.signedUrl) photoMap[appId].urls.push(item.signedUrl);
+        });
+
+        // Ensure all apps with photos have an entry even if signing failed
+        for (const appId of appIdsWithPhotos) {
+          if (!photoMap[appId]) photoMap[appId] = { urls: [], count: grouped[appId].length };
+        }
+      }
 
       updateStats();
       renderTable();
