@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login | SwapSpace</title>
+  <link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body>
+  <div class="login-topbar">
+    <img src="/assets/Swapspace wordmark.svg" alt="SwapSpace" style="height: 26px; display: block;">
+  </div>
+
+  <div class="login-container" id="loginForm">
+    <h1>Admin</h1>
+    <p>Sign in to manage applications</p>
+
+    <form onsubmit="handleLogin(event)">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" required placeholder="admin@swap-space.com">
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" required placeholder="Enter your password">
+      </div>
+
+      <div id="error" class="error-message"></div>
+
+      <button type="submit" class="btn btn-primary" id="loginBtn" style="width: 100%; justify-content: center; margin-top: 8px;">
+        Sign in
+      </button>
+    </form>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/admin/admin.js"></script>
+  <script>
+    // If already logged in, redirect to applications
+    (async () => {
+      const session = await getSession();
+      if (session) {
+        window.location.href = '/admin/applications';
+      }
+    })();
+
+    async function handleLogin(e) {
+      e.preventDefault();
+
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const errorEl = document.getElementById('error');
+      const loginBtn = document.getElementById('loginBtn');
+
+      errorEl.style.display = 'none';
+      loginBtn.disabled = true;
+      loginBtn.textContent = 'Signing in...';
+
+      try {
+        const sb = await getSupabase();
+        const { data, error } = await sb.auth.signInWithPassword({ email, password });
+
+        if (error) {
+          errorEl.textContent = error.message;
+          errorEl.style.display = 'block';
+          loginBtn.disabled = false;
+          loginBtn.textContent = 'Sign in';
+          return;
+        }
+
+        window.location.href = '/admin/applications';
+      } catch (err) {
+        errorEl.textContent = 'Something went wrong. Please try again.';
+        errorEl.style.display = 'block';
+        loginBtn.disabled = false;
+        loginBtn.textContent = 'Sign in';
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Applications | SwapSpace Admin</title>
+  <link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body>
+  <div class="admin-container">
+    <div class="admin-header">
+      <div>
+        <a href="/admin/applications"><img src="/assets/Swapspace wordmark.svg" height="28" alt="SwapSpace"></a>
+      </div>
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <span id="userEmail" style="font-size: 13px; color: #6B7280;"></span>
+        <button class="btn btn-secondary btn-sm" onclick="signOut()">Sign out</button>
+      </div>
+    </div>
+
+    <h1 style="font-size: 22px; font-weight: 600; margin-bottom: 24px;">Applications</h1>
+
+    <!-- Stats -->
+    <div class="stats-bar" id="statsBar">
+      <div class="stat-card">
+        <div class="stat-label">Total</div>
+        <div class="stat-value" id="statTotal">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Photos Requested</div>
+        <div class="stat-value" id="statRequested">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Photos Received</div>
+        <div class="stat-value" id="statReceived">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Approved</div>
+        <div class="stat-value" id="statApproved">—</div>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="Photos Requested">Photos Requested</button>
+      <button class="filter-btn" data-filter="Photos Received">Photos Received</button>
+      <button class="filter-btn" data-filter="Approved">Approved</button>
+    </div>
+
+    <!-- Table -->
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Country</th>
+            <th>City</th>
+            <th>Date</th>
+            <th>Photos</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="applicationsBody">
+          <tr>
+            <td colspan="9" class="loading">Loading applications...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/admin/admin.js"></script>
+  <script>
+    let allApplications = [];
+    let photoMap = {}; // applicationId -> { firstUrl, count }
+    let currentFilter = 'all';
+
+    (async () => {
+      const session = await requireAuth();
+      if (!session) return;
+
+      document.getElementById('userEmail').textContent = session.user.email;
+      await loadApplications();
+    })();
+
+    // Filter buttons
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilter = btn.dataset.filter;
+        renderTable();
+      });
+    });
+
+    async function loadApplications() {
+      const sb = await getSupabase();
+
+      const [{ data, error }, { data: photos }] = await Promise.all([
+        sb.from('applications').select('*').order('created_at', { ascending: false }),
+        sb.from('application_photos').select('application_id, storage_path').order('uploaded_at', { ascending: true }),
+      ]);
+
+      if (error) {
+        console.error('Error loading applications:', error);
+        document.getElementById('applicationsBody').innerHTML =
+          '<tr><td colspan="9" class="empty-state">Failed to load applications.</td></tr>';
+        return;
+      }
+
+      allApplications = data || [];
+
+      // Build a map: appId -> [storagePaths]
+      const grouped = {};
+      for (const p of (photos || [])) {
+        if (!grouped[p.application_id]) grouped[p.application_id] = [];
+        grouped[p.application_id].push(p.storage_path);
+      }
+
+      // Generate signed URLs for the first 2 photos of each application
+      photoMap = {};
+      const appIdsWithPhotos = Object.keys(grouped);
+      await Promise.all(appIdsWithPhotos.map(async (appId) => {
+        const paths = grouped[appId];
+        const preview = paths.slice(0, 2);
+        const urls = await Promise.all(preview.map(async (path) => {
+          const { data: urlData } = await sb.storage
+            .from('application-photos')
+            .createSignedUrl(path, 3600);
+          return urlData?.signedUrl || null;
+        }));
+        photoMap[appId] = {
+          urls: urls.filter(Boolean),
+          count: paths.length,
+        };
+      }));
+
+      updateStats();
+      renderTable();
+    }
+
+    function updateStats() {
+      document.getElementById('statTotal').textContent = allApplications.length;
+      document.getElementById('statRequested').textContent =
+        allApplications.filter(a => a.application_status === 'Photos Requested').length;
+      document.getElementById('statReceived').textContent =
+        allApplications.filter(a => a.application_status === 'Photos Received').length;
+      document.getElementById('statApproved').textContent =
+        allApplications.filter(a => a.application_status === 'Approved').length;
+    }
+
+    function renderPhotos(appId) {
+      const p = photoMap[appId];
+      if (!p || !p.urls.length) return '<span style="color:#9CA3AF; font-size:13px;">—</span>';
+      const remaining = p.count - p.urls.length;
+      return `
+        <div class="thumb-cell">
+          ${p.urls.map(url => `<img class="thumb" src="${url}" alt="Photo">`).join('')}
+          ${remaining > 0 ? `<span class="thumb-count">+${remaining}</span>` : ''}
+        </div>`;
+    }
+
+    function renderTable() {
+      const tbody = document.getElementById('applicationsBody');
+      const filtered = currentFilter === 'all'
+        ? allApplications
+        : allApplications.filter(a => a.application_status === currentFilter);
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9" class="empty-state">No applications found.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(app => `
+        <tr onclick="window.location.href='/admin/application?id=${app.id}'">
+          <td style="font-weight: 500;">${app.name || '—'}</td>
+          <td>${app.email || '—'}</td>
+          <td>${app.phone || '—'}</td>
+          <td>${app.country || '—'}</td>
+          <td>${app.city || '—'}</td>
+          <td>${formatDate(app.created_at)}</td>
+          <td>${renderPhotos(app.id)}</td>
+          <td>${statusBadge(app.application_status)}</td>
+          <td onclick="event.stopPropagation()">
+            <button class="row-delete-btn" onclick="deleteApplication('${app.id}', event)" title="Delete record">
+              <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6l-1 14H6L5 6"></path>
+                <path d="M10 11v6M14 11v6"></path>
+                <path d="M9 6V4h6v2"></path>
+              </svg>
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+    async function deleteApplication(appId, e) {
+      e.stopPropagation();
+      const btn = e.currentTarget;
+      if (!await showConfirm({
+        title: 'Delete Application',
+        message: 'This will permanently delete the application and all associated photos. This cannot be undone.',
+        confirmText: 'Delete',
+        variant: 'danger',
+      })) return;
+      btn.disabled = true;
+
+      const response = await adminFetch('/api/admin/delete-application', {
+        method: 'POST',
+        body: JSON.stringify({ applicationId: appId }),
+      });
+
+      if (!response) { btn.disabled = false; return; }
+      const result = await response.json();
+
+      if (result.success) {
+        allApplications = allApplications.filter(a => a.id !== appId);
+        delete photoMap[appId];
+        updateStats();
+        renderTable();
+      } else {
+        await showAlert({ title: 'Error', message: result.error || 'Failed to delete application.', variant: 'danger' });
+        btn.disabled = false;
+      }
+    }
+  </script>
+</body>
+</html>
