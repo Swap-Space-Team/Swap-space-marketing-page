@@ -49,6 +49,10 @@ export default async function handler(req, res) {
         home_type: fields['Home Type'],
         bedrooms: fields.Bedrooms,
         guest_capacity: fields['Guest Capacity'],
+        home_ownership: fields['Home Ownership'] || null,
+        listing_ready: fields['Listing Ready'] || null,
+        top_cities: fields['Top Cities'] || null,
+        travel_dates: fields['Travel Dates'] || null,
         submission_date: fields['Submission Date'] || new Date().toISOString(),
         application_status: 'Photos Requested',
       })
