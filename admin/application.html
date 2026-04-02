@@ -213,16 +213,21 @@
             <h2>Home Details</h2>
             <div class="detail-field">
               <span class="detail-label">Home Type</span>
-              <span class="detail-value" style="text-transform: capitalize;">${app.home_type || '—'}</span>
+              <span class="detail-value" style="text-transform: capitalize;">${(app.home_type || '—').replace('-', ' ')}</span>
             </div>
             <div class="detail-field">
               <span class="detail-label">Bedrooms</span>
               <span class="detail-value">${app.bedrooms || '—'}</span>
             </div>
             <div class="detail-field">
-              <span class="detail-label">Guest Capacity</span>
-              <span class="detail-value">${app.guest_capacity || '—'}</span>
+              <span class="detail-label">Ownership</span>
+              <span class="detail-value" style="text-transform: capitalize;">${app.home_ownership || '—'}</span>
             </div>
+            ${app.guest_capacity ? `
+            <div class="detail-field">
+              <span class="detail-label">Guest Capacity</span>
+              <span class="detail-value">${app.guest_capacity}</span>
+            </div>` : ''}
           </div>
 
           <div class="detail-card">
@@ -241,6 +246,26 @@
             </div>
           </div>
         </div>
+
+        ${(app.top_cities || app.travel_dates || app.listing_ready) ? `
+        <div class="detail-card" style="margin-top: 8px;">
+          <h2>Travel Preferences</h2>
+          ${app.top_cities ? `
+          <div class="detail-field">
+            <span class="detail-label">Desired Destinations</span>
+            <span class="detail-value">${app.top_cities}</span>
+          </div>` : ''}
+          ${app.travel_dates ? `
+          <div class="detail-field">
+            <span class="detail-label">Travel Dates</span>
+            <span class="detail-value">${app.travel_dates}</span>
+          </div>` : ''}
+          ${app.listing_ready ? `
+          <div class="detail-field">
+            <span class="detail-label">Ready to List</span>
+            <span class="detail-value" style="text-transform: capitalize;">${app.listing_ready === 'ready' ? 'Yes' : 'Not yet'}</span>
+          </div>` : ''}
+        </div>` : ''}
 
         <div class="detail-card" style="margin-top: 8px;">
           <h2>Photos (${photoUrls.length})</h2>
