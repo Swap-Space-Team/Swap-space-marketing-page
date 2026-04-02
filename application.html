@@ -30,7 +30,7 @@
 
   <!-- PostHog Analytics -->
   <script>
-    !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once register_for_session unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group identify setPersonProperties setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags resetGroups onFeatureFlags addFeatureFlagsHandler onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey getNextSurveyStep".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+    !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once register_for_session unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group identify setPersonProperties setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroups onFeatureFlags addFeatureFlagsHandler onSessionId getSurveys getActiveMatchingSurveys renderSurvey canRenderSurvey getNextSurveyStep".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
     posthog.init('phc_qPlxJ84Q6HCS1E6ULdUhGn5frh9TaC4s6ZWXlwMxj7N', {
         api_host: 'https://events.swap-space.com',
         defaults: '2026-01-30'
@@ -39,7 +39,7 @@
 
   <!-- Anti-flickering script -->
   <script>
-    var timeout = 3000; // Timeout value to remove the flicker (in milliseconds)
+    var timeout = 3000;
     !function (h, i, d, e) { var t, n = h.createElement("style"); n.id = e, n.innerHTML = "body{opacity:0}", h.head.appendChild(n), t = d, i.rmfk = function () { var t = h.getElementById(e); t && t.parentNode.removeChild(t) }, setTimeout(i.rmfk, t) }(document, window, timeout, "abhide");
   </script>
 
@@ -55,539 +55,741 @@
   <noscript><img height="1" width="1" style="display:none"
       src="https://www.facebook.com/tr?id=2324029631392103&ev=PageView&noscript=1" /></noscript>
   <!-- End Meta Pixel Code -->
+
   <style>
-    /* Custom styles for form elements */
-    .form-input {
+    /* ── Reset / base ─────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      background: #fff;
+      font-family: 'Geist', 'General Sans', sans-serif;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* ── Decorative blob ──────────────────────────────────── */
+    .app-blob {
+      position: fixed;
+      bottom: -120px;
+      left: -180px;
+      width: 693px;
+      height: 750px;
+      background: radial-gradient(ellipse 60% 45% at 40% 55%,
+        rgba(171, 239, 198, 0.55) 0%,
+        rgba(210, 245, 220, 0.25) 40%,
+        rgba(255, 255, 255, 0) 70%);
+      transform: rotate(-54deg);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Masthead ─────────────────────────────────────────── */
+    .app-masthead {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      padding: 0 80px;
+      background: #fff;
+      z-index: 10;
+    }
+
+    .app-masthead .logo {
+      height: 28px;
+      width: auto;
+    }
+
+    /* ── Main centered layout ─────────────────────────────── */
+    .app-main {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-top: 80px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .app-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      width: 482px;
+      max-width: calc(100vw - 32px);
+      padding: 32px 0;
+    }
+
+    /* ── Progress dots ────────────────────────────────────── */
+    .app-progress {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .progress-dot {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Geist', sans-serif;
+      font-size: 9.6px;
+      font-weight: 600;
+      line-height: 1;
+      flex-shrink: 0;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+
+    .progress-dot span {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+
+    /* ── Textarea ─────────────────────────────────────────── */
+    .field-textarea {
       width: 100%;
-      padding: 14px 16px;
-      border: 1px solid #d5d9eb;
+      min-height: 137px;
+      padding: 12px 14px;
+      background: #fcfcfd;
+      border: 1px solid #d5d7da;
       border-radius: 8px;
+      box-shadow: 0px 1px 2px rgba(10, 13, 18, 0.05);
+      font-family: 'Geist', sans-serif;
       font-size: 16px;
-      font-family: 'General Sans', sans-serif;
-      color: #364152;
-      background-color: #fff;
-      margin-top: 4px;
-      margin-bottom: 8px;
+      font-weight: 400;
+      line-height: 24px;
+      color: #101928;
+      resize: vertical;
       transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
-    .form-input:focus {
+    .field-textarea::placeholder {
+      color: #cdd5df;
+    }
+
+    .field-textarea:focus {
       outline: none;
-      border-color: #079455;
-      box-shadow: 0 0 0 3px rgba(7, 148, 85, 0.1);
+      border-color: #202939;
+      box-shadow: 0 0 0 3px rgba(32, 41, 57, 0.08);
     }
 
-    .form-input::placeholder {
-      color: #9aa4b2;
-    }
-
-    .form-select {
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%239aa4b2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 12px center;
-      padding-right: 40px;
-    }
-
-    .form-label {
-      display: block;
-      font-size: 16px;
-      font-weight: 500;
-      color: #202939;
-      margin-bottom: 4px;
-      margin-top: 8px;
-    }
-
-    .form-helper {
-      font-size: 14px;
-      color: #697586;
-      margin-top: 4px;
-    }
-
-    .required-asterisk {
-      color: red;
-      margin-left: 2px;
-    }
-
-    .btn-primary {
-      display: inline-flex;
-      align-items: center;
-      width: fit-content;
-      gap: 8px;
-      margin-top: 24px;
-      padding: 12px 24px;
-      background-color: #000;
+    .progress-dot.current {
+      background: #202939;
       color: #fff;
-      font-size: 16px;
-      font-weight: 600;
-      font-family: 'General Sans', sans-serif;
-      border: none;
-      border-radius: 40px;
-      cursor: pointer;
-      transition: background-color 0.2s ease, transform 0.1s ease;
     }
 
-    .btn-primary:hover {
-      background-color: #333;
+    .progress-dot.completed {
+      background: #079455;
+      color: #fff;
     }
 
-    .btn-primary:active {
-      transform: scale(0.98);
+    .progress-dot.pending {
+      background: #fff;
+      border: 1.5px solid #d5d7da;
+      color: #202939;
     }
 
-    .btn-secondary {
-      display: inline-flex;
-      align-items: center;
-      width: fit-content;
-      gap: 8px;
-      margin-top: 24px;
-      padding: 12px 24px;
-      background-color: transparent;
-      color: #364152;
-      font-size: 16px;
-      font-weight: 600;
-      font-family: 'General Sans', sans-serif;
-      border: 1px solid #d5d9eb;
-      border-radius: 40px;
-      cursor: pointer;
-      transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+    .progress-line {
+      width: 58px;
+      height: 2px;
+      background: #d9d9d9;
+      flex-shrink: 0;
     }
 
-    .btn-secondary:hover {
-      background-color: #f9fafb;
-      border-color: #9aa4b2;
-    }
-
-    .btn-secondary:active {
-      transform: scale(0.98);
-    }
-
-    .btn-group {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      flex-wrap: wrap;
+    /* ── Step container ───────────────────────────────────── */
+    #stepsContainer {
+      width: 100%;
     }
 
     .step {
       display: none;
-      padding-left: 0;
-      padding-right: 0;
+      flex-direction: column;
+      width: 100%;
     }
 
     .step.active {
       display: flex;
+    }
+
+    /* ── Step 1: Home location ────────────────────────────── */
+    .step-1-inner {
+      display: flex;
       flex-direction: column;
-      gap: 4px;
-      padding-left: 16px;
-      padding-right: 16px;
-      margin-left: 24px;
+      gap: 32px;
       width: 100%;
     }
 
-    .step h1 {
-      margin-bottom: 8px;
-    }
-
-    .phone-input-wrapper {
-      display: flex;
-      gap: 0;
-    }
-
-    .country-select {
-      width: 80px;
-      border-radius: 8px 0 0 8px;
-      border-right: none;
-      padding: 14px 12px;
-      font-size: 20px;
-    }
-
-    .phone-input {
-      border-radius: 0 8px 8px 0;
-      flex: 1;
-    }
-
-    .upload-zone {
-      border: 1px solid #e5e7eb;
-      border-radius: 12px;
-      padding: 32px 24px;
-      text-align: center;
-      cursor: pointer;
-      margin-top: 16px;
-      background-color: #f9fafb;
-      transition: border-color 0.2s ease, background-color 0.2s ease;
-    }
-
-    .upload-zone:hover {
-      border-color: #079455;
-      background-color: #f3f4f6;
-    }
-
-    .upload-zone.dragover {
-      border-color: #079455;
-      background-color: #ecfdf5;
-    }
-
-    .upload-icon-container {
-      width: 48px;
-      height: 48px;
-      background-color: #fff;
-      border: 1px solid #e5e7eb;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 16px;
-    }
-
-    .upload-icon-container svg {
-      width: 24px;
-      height: 24px;
-      color: #697586;
-    }
-
-    .upload-text {
-      font-size: 14px;
-      color: #697586;
-      font-family: 'General Sans', sans-serif;
-    }
-
-    .upload-text .click-upload {
-      font-weight: 600;
-      color: #079455;
-      text-decoration: underline;
-      cursor: pointer;
-    }
-
-    .upload-text .take-photo {
-      font-weight: 500;
-      color: #079455;
-      cursor: pointer;
-    }
-
-    .upload-text .take-photo:hover {
-      text-decoration: underline;
-    }
-
-    .upload-subtext {
-      font-size: 12px;
-      color: #9aa4b2;
-      margin-top: 4px;
-      font-family: 'General Sans', sans-serif;
-    }
-
-    .camera-modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.9);
-      z-index: 1000;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .camera-modal.active {
-      display: flex;
-    }
-
-    .camera-modal video {
-      max-width: 100%;
-      max-height: 70vh;
-      border-radius: 12px;
-    }
-
-    .camera-controls {
-      display: flex;
-      gap: 16px;
-      margin-top: 24px;
-    }
-
-    .camera-btn {
-      width: 64px;
-      height: 64px;
-      border-radius: 50%;
-      border: 4px solid #fff;
-      background: transparent;
-      cursor: pointer;
-      transition: transform 0.1s ease;
-    }
-
-    .camera-btn:hover {
-      transform: scale(1.05);
-    }
-
-    .camera-btn.capture {
-      background: #fff;
-    }
-
-    .camera-btn.close {
-      width: 48px;
-      height: 48px;
-      background: rgba(255, 255, 255, 0.2);
-      border: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .success-icon {
-      width: 64px;
-      height: 64px;
-      background-color: rgba(7, 148, 85, 0.1);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 24px;
-    }
-
-    .success-icon svg {
-      width: 32px;
-      height: 32px;
-      color: #079455;
-    }
-
-    .input-wrapper {
-      position: relative;
-    }
-
-    .input-icon {
-      position: absolute;
-      left: 16px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #9aa4b2;
-      pointer-events: none;
-    }
-
-    .input-with-icon {
-      padding-left: 44px;
-    }
-
-    /* Progress Bar Styles */
-    .progress-container {
-      width: calc(100% - 48px);
-      margin: 24px;
-    }
-
-    /* Timeline Styles */
-    .status-timeline {
-      margin-top: 24px;
+    .step-header {
       display: flex;
       flex-direction: column;
-    }
-
-    .status-item {
-      display: flex;
-      gap: 16px;
-      position: relative;
-      padding-bottom: 28px;
-    }
-
-    .status-item:last-child {
-      padding-bottom: 0;
-    }
-
-    /* Connector line between dots */
-    .status-item:not(:last-child)::after {
-      content: '';
-      position: absolute;
-      left: 12px;
-      top: 28px;
-      bottom: 0;
-      width: 1.5px;
-      background-color: #d5d9eb;
-    }
-
-    .status-item:first-child::after {
-      background-color: #079455;
-    }
-
-    .status-icon-wrapper {
-      display: flex;
-      align-items: flex-start;
-      flex-shrink: 0;
-      width: 24px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .status-dot {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1;
-    }
-
-    .status-dot.completed {
-      background-color: #079455;
-      color: white;
-    }
-
-    .status-dot.current {
-      background-color: #fff;
-      border: 6px solid #079455;
-      box-shadow: 0 0 0 1px #e5e7eb;
-      animation: pulse-current 2s ease-in-out infinite;
-    }
-
-    @keyframes pulse-current {
-
-      0%,
-      100% {
-        box-shadow: 0 0 0 0px rgba(7, 148, 85, 0.15);
-      }
-
-      50% {
-        box-shadow: 0 0 0 8px rgba(7, 148, 85, 0.08);
-      }
-    }
-
-    .status-dot.pending {
-      background-color: #f3f4f6;
-      border: 1px solid #e5e7eb;
-    }
-
-    .status-content {
-      padding-top: 2px;
-    }
-
-    .status-title-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 4px;
-    }
-
-    .status-title {
-      font-size: 16px;
-      font-weight: 600;
-      color: #101828;
-      font-family: 'General Sans', sans-serif;
-    }
-
-    .status-badge {
-      font-size: 12px;
-      font-weight: 500;
-      padding: 2px 8px;
-      border-radius: 12px;
-      font-family: 'General Sans', sans-serif;
-    }
-
-    .status-badge.required {
-      background-color: #FEFBE8;
-      color: #CA8504;
-    }
-
-    .status-badge.not-started {
-      background-color: #f3f4f6;
-      color: #4b5563;
-    }
-
-    .status-description {
-      font-size: 14px;
-      color: #667085;
-      line-height: 1.5;
-      font-family: 'General Sans', sans-serif;
-    }
-
-    .btn-success {
-      display: inline-block;
-      background-color: #079455;
-      color: white;
-      padding: 12px 24px;
-      border-radius: 50px;
-      font-weight: 600;
-      font-family: 'General Sans', sans-serif;
-      border: none;
-      cursor: pointer;
-      margin-top: 32px;
-      width: fit-content;
-      text-decoration: none;
-      transition: background-color 0.2s;
-    }
-
-    .btn-success:hover {
-      background-color: #067647;
-    }
-
-    @media (max-width: 768px) {
-
-      /* Expand the container to full width on mobile for all steps */
-      #stepsContainer {
-        max-width: 100%;
-      }
-
-      /* Equal padding on all steps, no left margin offset */
-      .step.active {
-        margin-left: 0;
-        padding-left: 16px;
-        padding-right: 16px;
-        width: 100%;
-        box-sizing: border-box;
-      }
-
-      [data-step="7"] h1 {
-        width: 100%;
-        box-sizing: border-box;
-      }
-
-      [data-step="7"]>.field-group>p {
-        width: 100%;
-        box-sizing: border-box;
-      }
-
-      [data-step="7"] .btn-success {
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-      }
-    }
-
-    .progress-bar-wrapper {
-      display: flex;
-      align-items: center;
       gap: 12px;
     }
 
-    .progress-bar {
-      flex: 1;
-      height: 8px;
-      background-color: #e5e7eb;
-      border-radius: 100px;
+    .step-title {
+      font-family: 'Geist', sans-serif;
+      font-size: 36px;
+      font-weight: 700;
+      line-height: 44px;
+      letter-spacing: -0.72px;
+      color: #202939;
+    }
+
+    .step-subtitle {
+      font-family: 'Geist', sans-serif;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      color: #4b5565;
+    }
+
+    .step-fields {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .field-item {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field-label {
+      display: flex;
+      gap: 2px;
+      font-family: 'Geist', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 20px;
+      color: #414651;
+    }
+
+    .field-label .required-star {
+      color: #d92d20;
+    }
+
+    .field-input {
+      width: 100%;
+      padding: 10px 14px;
+      background: #fcfcfd;
+      border: 1px solid #d5d7da;
+      border-radius: 8px;
+      box-shadow: 0px 1px 2px 0px rgba(10, 13, 18, 0.05);
+      font-family: 'Geist', sans-serif;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      color: #101928;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .field-input::placeholder {
+      color: #cdd5df;
+    }
+
+    .field-input:focus {
+      outline: none;
+      border-color: #202939;
+      box-shadow: 0 0 0 3px rgba(32, 41, 57, 0.08);
+    }
+
+    .field-input.error {
+      border-color: #d92d20;
+    }
+
+    .field-error {
+      font-size: 13px;
+      color: #d92d20;
+      margin-top: 2px;
+    }
+
+    /* ── Phone split input ───────────────────────────────── */
+    .phone-input-wrapper {
+      display: flex;
+      align-items: stretch;
+      background: #fcfcfd;
+      border: 1px solid #d5d7da;
+      border-radius: 8px;
+      box-shadow: 0px 1px 2px 0px rgba(10, 13, 18, 0.05);
       overflow: hidden;
     }
 
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #000, #333);
-      border-radius: 100px;
-      transition: width 0.4s ease-out;
-      width: 0%;
+    .phone-input-wrapper:focus-within {
+      border-color: #202939;
+      box-shadow: 0 0 0 3px rgba(32, 41, 57, 0.08);
     }
 
-    .progress-text {
+    .phone-prefix {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 10px 8px 10px 14px;
+      border-right: 1px solid #9aa4b2;
+      font-family: 'Geist', sans-serif;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      color: #414651;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .phone-input-wrapper input {
+      flex: 1;
+      padding: 10px 14px;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-family: 'Geist', sans-serif;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      color: #101928;
+      min-width: 0;
+    }
+
+    .phone-input-wrapper input::placeholder {
+      color: #cdd5df;
+    }
+
+    /* ── SMS consent row ─────────────────────────────────── */
+    .consent-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .consent-checkbox {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      border: 1px solid #d5d7da;
+      border-radius: 6px;
+      cursor: pointer;
+      accent-color: #079455;
+      margin-top: 1px;
+    }
+
+    .consent-label {
+      flex: 1;
+      font-family: 'Geist', sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+      color: #4b5565;
+      cursor: pointer;
+    }
+
+    /* ── Go back button ──────────────────────────────────── */
+    .go-back-btn {
+      display: none;
+      position: fixed;
+      top: 88px;
+      left: 80px;
+      padding: 10px 14px;
+      background: #fff;
+      border: 1px solid #d5d7da;
+      border-radius: 40px;
+      box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05),
+                  inset 0 0 0 1px rgba(10, 13, 18, 0.18),
+                  inset 0 -2px 0 rgba(10, 13, 18, 0.05);
+      font-family: 'Geist', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 20px;
+      color: #414651;
+      cursor: pointer;
+      z-index: 10;
+      transition: background 0.15s;
+    }
+
+    .go-back-btn:hover { background: #f9fafb; }
+    .go-back-btn.visible { display: block; }
+
+    /* ── Custom dropdown ──────────────────────────────────── */
+    .custom-select {
+      position: relative;
+      width: 100%;
+    }
+
+    .custom-select-trigger {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 10px 14px;
+      background: #fcfcfd;
+      border: 1px solid #d5d7da;
+      border-radius: 8px;
+      box-shadow: 0px 1px 2px rgba(10, 13, 18, 0.05);
+      font-family: 'Geist', sans-serif;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      color: #cdd5df;
+      cursor: pointer;
+      text-align: left;
+      transition: border-color 0.2s;
+    }
+
+    .custom-select-trigger.has-value {
+      color: #202939;
+    }
+
+    .custom-select-trigger:focus {
+      outline: none;
+      border-color: #202939;
+      box-shadow: 0 0 0 3px rgba(32, 41, 57, 0.08);
+    }
+
+    .custom-select-chevron {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      color: #667085;
+      transition: transform 0.2s;
+    }
+
+    .custom-select.open .custom-select-chevron {
+      transform: rotate(180deg);
+    }
+
+    .custom-select-dropdown {
+      display: none;
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      right: 0;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0px 20px 24px -4px rgba(10, 13, 18, 0.08),
+                  0px 8px 8px -4px rgba(10, 13, 18, 0.03),
+                  0px 3px 3px -1.5px rgba(10, 13, 18, 0.04);
+      padding: 16px 8px;
+      z-index: 100;
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .custom-select.open .custom-select-dropdown {
+      display: flex;
+    }
+
+    .custom-select-item {
+      padding: 8px 10px;
+      border-radius: 6px;
+      font-family: 'Geist', sans-serif;
       font-size: 14px;
       font-weight: 500;
-      color: #697586;
-      white-space: nowrap;
-      font-family: 'General Sans', sans-serif;
+      line-height: 20px;
+      color: #364152;
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+
+    .custom-select-item:hover {
+      background: #f8fafc;
+    }
+
+    .custom-select-item.selected {
+      background: #f0fdf4;
+      color: #079455;
+    }
+
+    /* ── Confirmation page (step 6) ─────────────────────────── */
+    .confirmation-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 32px;
+      width: 100%;
+    }
+
+    .confirmation-header {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .confirmation-title {
+      font-family: 'Geist', sans-serif;
+      font-size: 36px;
+      font-weight: 700;
+      line-height: 44px;
+      letter-spacing: -0.72px;
+      color: #202939;
+      text-align: center;
+    }
+
+    .confirmation-body {
+      font-family: 'Geist', sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+      color: #364152;
+      text-align: center;
+    }
+
+    .confirmation-body p + p {
+      margin-top: 14px;
+    }
+
+    .btn-go-home {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 400px;
+      padding: 12px 18px;
+      background: #079455;
+      border: none;
+      border-radius: 40px;
+      font-family: 'Geist', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 24px;
+      color: #fff;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+
+    .btn-go-home:hover { background: #067647; }
+
+    .confirmation-photos {
+      display: flex;
+      gap: 12px;
+      width: 100%;
+      margin-top: 24px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .confirmation-photos::-webkit-scrollbar { display: none; }
+
+    .confirmation-photo {
+      flex: 0 0 260px;
+      height: 280px;
+      border-radius: 6px;
+      object-fit: cover;
+      scroll-snap-align: start;
+    }
+
+    .confirmation-caption {
+      font-family: 'Geist', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 24px;
+      color: #202939;
+      text-align: center;
+      margin-top: 16px;
+    }
+
+    /* ── Green continue button (steps 3+) ─────────────────── */
+    .btn-continue.green:not(:disabled) {
+      background: #079455;
+      border-color: #079455;
+      color: #fff;
+    }
+
+    .btn-continue.green:not(:disabled):hover {
+      background: #067647;
+      border-color: #067647;
+    }
+
+    /* ── City cluster callout ────────────────────────────── */
+    .city-callout {
+      display: none;
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(180deg, rgba(23,178,106,0.04) 0%, rgba(247,144,9,0.04) 100%);
+      border: 1px solid rgba(23, 178, 106, 0.2);
+      border-radius: 12px;
+      box-shadow: 0px 1px 2px rgba(10, 13, 18, 0.05);
+      font-family: 'Geist', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 20px;
+      color: #535862;
+    }
+
+    .city-callout.visible {
+      display: block;
+    }
+
+    /* ── Continue / pill buttons ──────────────────────────── */
+    .btn-continue {
+      width: 400px;
+      max-width: 100%;
+      align-self: center;
+      padding: 12px 18px;
+      background: #f5f5f5;
+      border: 1px solid #e9eaeb;
+      border-radius: 40px;
+      box-shadow: 0px 1px 2px 0px rgba(10, 13, 18, 0.05);
+      font-family: 'Geist', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 24px;
+      color: #a4a7ae;
+      cursor: not-allowed;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+
+    .btn-continue:not(:disabled) {
+      background: #000;
+      border-color: #000;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .btn-continue:not(:disabled):hover {
+      background: #1a1a1a;
+      border-color: #1a1a1a;
+    }
+
+    .btn-continue:not(:disabled):active {
+      transform: scale(0.98);
+    }
+
+    /* ── Option cards (rent/own style) ───────────────────── */
+    .option-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      width: 100%;
+    }
+
+    .option-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      padding: 16px 20px;
+      background: #fff;
+      border: 1px solid #cdd5df;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      user-select: none;
+    }
+
+    .option-card:hover {
+      border-color: #a4a7ae;
+    }
+
+    .option-card.selected {
+      border-color: #079455;
+    }
+
+    .option-radio {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 1px solid #d5d7da;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .option-card.selected .option-radio {
+      background: #079455;
+      border-color: #079455;
+    }
+
+    .option-label {
+      font-family: 'Geist', sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 24px;
+      color: #202939;
+    }
+
+    /* ── Responsive ───────────────────────────────────────── */
+    @media (max-width: 600px) {
+      .app-masthead {
+        padding: 0 24px;
+      }
+
+      /* Go back: align left with masthead padding */
+      .go-back-btn {
+        left: 24px;
+      }
+
+      /* Progress bar: allow to flex into available width */
+      .app-progress {
+        width: 100%;
+        flex-shrink: 1;
+      }
+
+      .progress-dot {
+        width: 20px;
+        height: 20px;
+        font-size: 8px;
+      }
+
+      .progress-line {
+        flex: 1;
+        min-width: 8px;
+        width: auto;
+      }
+
+      .step-title {
+        font-size: 28px;
+        line-height: 36px;
+      }
+
+      .step-subtitle {
+        font-size: 15px;
+      }
+
+      /* Continue button already full-width via max-width:100%, make explicit */
+      .btn-continue {
+        width: 100%;
+      }
+
+      /* Confirmation page */
+      .confirmation-title {
+        font-size: 28px;
+        line-height: 36px;
+      }
+
+      .btn-go-home {
+        width: 100%;
+      }
+
+      /* Option cards — slightly less horizontal padding on small screens */
+      .option-card {
+        padding: 14px 16px;
+      }
+
+      /* City callout padding */
+      .city-callout {
+        padding: 12px;
+      }
     }
   </style>
+
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18015994151"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-
     gtag('config', 'AW-18015994151');
   </script>
   <!-- Event snippet for Swapspace application submitted conversion -->
@@ -609,428 +811,620 @@
   </script>
 </head>
 
-<body class="min-h-screen bg-white">
+<body>
+
+  <!-- Decorative background blob -->
+  <div class="app-blob" aria-hidden="true"></div>
+
   <!-- Masthead -->
-  <div class="masthead">
+  <header class="app-masthead">
     <a href="index.html">
-      <img class="logo" src="assets/Swapspace wordmark.svg" alt="Swap-space-logo">
+      <img class="logo" src="assets/Swapspace wordmark.svg" alt="SwapSpace">
     </a>
+  </header>
 
+  <!-- Go back button (shown on steps 2+) -->
+  <button class="go-back-btn" id="goBackBtn" type="button" onclick="prevStep()">Go back</button>
 
-  </div>
+  <!-- Main centered layout -->
+  <main class="app-main">
+    <div class="app-center">
 
-  <div class="flex min-h-screen">
-    <!-- Left Side: Form -->
-    <div class="w-full lg:w-1/2 flex flex-col pl-8 pr-8 md:pl-16 md:pr-16 lg:pl-24 lg:pr-20 py-8">
-
-      <!-- Progress Bar -->
-      <div class="progress-container" id="progressContainer">
-        <div class="progress-bar-wrapper">
-          <div class="progress-bar">
-            <div class="progress-fill" id="progressFill"></div>
-          </div>
-          <span class="progress-text" id="progressText">Step 1 of 7</span>
-        </div>
+      <!-- 6-step progress dots -->
+      <div class="app-progress" id="progressContainer">
+        <div class="progress-dot current" data-dot="1"><span>1</span></div>
+        <div class="progress-line"></div>
+        <div class="progress-dot pending" data-dot="2"><span>2</span></div>
+        <div class="progress-line"></div>
+        <div class="progress-dot pending" data-dot="3"><span>3</span></div>
+        <div class="progress-line"></div>
+        <div class="progress-dot pending" data-dot="4"><span>4</span></div>
+        <div class="progress-line"></div>
+        <div class="progress-dot pending" data-dot="5"><span>5</span></div>
+        <div class="progress-line"></div>
+        <div class="progress-dot pending" data-dot="6"><span>6</span></div>
+        <div class="progress-line"></div>
+        <div class="progress-dot pending" data-dot="7"><span>7</span></div>
       </div>
 
-      <div id="stepsContainer" class="max-w-[80%] flex-1 flex flex-col justify-center">
+      <!-- Steps -->
+      <div id="stepsContainer">
 
-        <!-- Step 1: Introduction -->
-        <div class="step active " data-step="1">
-
-          <h1 class="text-3xl md:text-4xl font-semibold text-gray-900"
-            style="font-family: 'General Sans', sans-serif; letter-spacing: -0.5px; ">
-            Turn your home into your ticket to travel
-          </h1>
-          <p class="text-[16px] text-gray-500" style="margin-bottom: 24px; width: 100%;"> Check if your home is a fit
-            for SwapSpace.</p>
-          <p class="text-gray-600 mb-4 mt-8 font-medium"
-            style="font-family: 'General Sans', sans-serif; line-height: 1.6;">
-            Thanks for your interest in joining SwapSpace. We're building a trusted, members-only home swapping
-            community for people who want to travel more without paying for accommodation.
-          </p>
-          <p class="text-gray-600 mb-8 font-medium"
-            style="font-family: 'General Sans', sans-serif; line-height: 1.6; width: 100%;">
-            Answer a few questions about your home to see if it's a fit. This short form helps us keep the community
-            trusted and high quality. There's no need for anything to be perfect, We're looking for real, lived in homes
-            from people who want to travel more meaningfully and affordably.
-          </p>
-          <button type="button" class="btn-primary" onclick="nextStep()">
-            Next <span>→</span>
-          </button>
-        </div>
-
-        <!-- Step 2: Personal Info -->
-        <div class="step" data-step="2">
-          <h1 class="text-3xl md:text-4xl font-semibold text-gray-900 mb-8"
-            style="font-family: 'General Sans', sans-serif; letter-spacing: -0.5px;">
-            Let's get to know you?
-          </h1>
-
-          <div class="space-y-6">
-            <div>
-              <label class="form-label">What should we call you?<span class="required-asterisk">*</span></label>
-              <input type="text" class="form-input" id="name" required />
+        <!-- ── Step 1: Home location (Figma redesign) ── -->
+        <div class="step active" data-step="1">
+          <div class="step-1-inner">
+            <div class="step-header">
+              <h1 class="step-title">Tell us a bit about your home</h1>
+              <p class="step-subtitle">What city and country is your home in?</p>
             </div>
 
-            <div>
-              <label class="form-label">Email address<span class="required-asterisk">*</span></label>
-              <div class="input-wrapper">
-                <span class="input-icon">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <rect x="2" y="4" width="20" height="16" rx="2" />
-                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-                  </svg>
-                </span>
-                <input type="email" class="form-input input-with-icon" id="email" required />
+            <div class="step-fields">
+              <div class="field-item">
+                <label class="field-label" for="city">
+                  City <span class="required-star">*</span>
+                </label>
+                <input
+                  type="text"
+                  class="field-input"
+                  id="city"
+                  name="city"
+                  placeholder="New York"
+                  required
+                  autocomplete="address-level2"
+                />
+              </div>
+
+              <div class="field-item">
+                <label class="field-label" for="country">
+                  Country <span class="required-star">*</span>
+                </label>
+                <input
+                  type="text"
+                  class="field-input"
+                  id="country"
+                  name="country"
+                  placeholder="United States"
+                  required
+                  autocomplete="country-name"
+                />
               </div>
             </div>
 
-            <!-- Phone number field -->
-            <div>
-              <label class="form-label">Phone number<span class="required-asterisk">*</span></label>
-              <p class="form-helper mb-2">Enter your phone number with country code (e.g., +44 7123 456789)</p>
-              <div class="input-wrapper">
-                <span class="input-icon" style="left: 12px;">+</span>
-                <input type="tel" class="form-input" style="padding-left: 28px;" id="phone" placeholder="44 7123 456789" required />
-              </div>
-            </div>
-          </div>
+            <button
+              type="button"
+              class="btn-continue green"
+              id="step1ContinueBtn"
+              onclick="nextStep()"
+              disabled
+            >
+              Continue
+            </button>
 
-          <div class="btn-group mt-8">
-            <button type="button" class="btn-secondary" onclick="prevStep()">
-              <span>←</span> Previous
-            </button>
-            <button type="button" class="btn-primary" onclick="nextStep()">
-              Next <span>→</span>
-            </button>
+            <div class="city-callout" id="cityCallout">
+              Great news! Your city is a top priority and we'll expedite your application.
+            </div>
           </div>
         </div>
 
-        <!-- Step 3: Location -->
+        <!-- ── Step 3: Home Type ── -->
         <div class="step" data-step="3">
-          <h1 class="text-3xl md:text-4xl font-semibold text-gray-900 mb-8"
-            style="font-family: 'General Sans', sans-serif; letter-spacing: -0.5px;">
-            Is my home a fit?
-          </h1>
+          <div class="step-1-inner">
+            <div class="step-header">
+              <h1 class="step-title">What type of home do you have?</h1>
+              <p class="step-subtitle">Choose one option to continue</p>
+            </div>
 
-          <div class="field-group">
-            <label class="form-label">What city and country is your home in?<span
-                class="required-asterisk">*</span></label>
-            <p class="form-helper mb-4">Enter your city and country only</p>
-
-            <div class="space-y-4">
-              <div>
-                <label class="text-sm font-medium text-gray-700 mb-1 block">Address</label>
-                <div class="input-wrapper">
-                  <span class="input-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
-                      <circle cx="12" cy="10" r="3" />
+            <div class="step-fields">
+              <div class="field-item">
+                <label class="field-label" id="homeTypeLabel">
+                  Home type <span class="required-star">*</span>
+                </label>
+                <!-- Custom dropdown -->
+                <div class="custom-select" id="homeTypeSelect" role="combobox" aria-labelledby="homeTypeLabel" aria-expanded="false">
+                  <button type="button" class="custom-select-trigger" id="homeTypeTrigger" aria-haspopup="listbox">
+                    <span class="custom-select-value" id="homeTypeValue">Choose an option</span>
+                    <svg class="custom-select-chevron" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
-                  </span>
-                  <input type="text" class="form-input input-with-icon" id="address" />
+                  </button>
+                  <div class="custom-select-dropdown" role="listbox">
+                    <div class="custom-select-item" role="option" data-value="apartment">Apartment/Flat</div>
+                    <div class="custom-select-item" role="option" data-value="house">House</div>
+                    <div class="custom-select-item" role="option" data-value="studio">Studio</div>
+                    <div class="custom-select-item" role="option" data-value="cottage">Cottage</div>
+                    <div class="custom-select-item" role="option" data-value="beach-house">Beach House</div>
+                  </div>
+                </div>
+                <!-- Hidden input for form submission -->
+                <input type="hidden" id="homeType" name="homeType">
+              </div>
+            </div>
+
+            <button type="button" class="btn-continue green" id="step3ContinueBtn" onclick="nextStep()" disabled>
+              Continue
+            </button>
+          </div>
+        </div>
+
+        <!-- ── Step 4: Bedrooms ── -->
+        <div class="step" data-step="4">
+          <div class="step-1-inner">
+            <div class="step-header">
+              <h1 class="step-title">How many bedrooms does your home have?</h1>
+              <p class="step-subtitle">This helps us match you with the right guests and swaps for your home.</p>
+            </div>
+
+            <div class="step-fields">
+              <div class="field-item">
+                <label class="field-label" id="bedroomsLabel">
+                  Bedroom <span class="required-star">*</span>
+                </label>
+                <div class="custom-select" id="bedroomsSelect" role="combobox" aria-labelledby="bedroomsLabel" aria-expanded="false">
+                  <button type="button" class="custom-select-trigger" id="bedroomsTrigger" aria-haspopup="listbox">
+                    <span class="custom-select-value" id="bedroomsValue">Select number of bedrooms</span>
+                    <svg class="custom-select-chevron" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.67" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </button>
+                  <div class="custom-select-dropdown" role="listbox">
+                    <div class="custom-select-item" role="option" data-value="studio">Studio</div>
+                    <div class="custom-select-item" role="option" data-value="1">1 bedroom</div>
+                    <div class="custom-select-item" role="option" data-value="2">2 bedrooms</div>
+                    <div class="custom-select-item" role="option" data-value="3">3 bedrooms</div>
+                    <div class="custom-select-item" role="option" data-value="4">4 bedrooms</div>
+                    <div class="custom-select-item" role="option" data-value="5+">5+ bedrooms</div>
+                  </div>
+                </div>
+                <input type="hidden" id="bedrooms" name="bedrooms">
+              </div>
+            </div>
+
+            <button type="button" class="btn-continue green" id="step4ContinueBtn" onclick="nextStep()" disabled>
+              Continue
+            </button>
+          </div>
+        </div>
+
+        <!-- ── Step 7: Rent or Own ── -->
+        <div class="step" data-step="7">
+          <div class="step-1-inner">
+            <div class="step-header">
+              <h1 class="step-title">Do you rent or own your home?</h1>
+              <p class="step-subtitle">Either is absolutely fine. Renters and home owners are welcome on SwapSpace.</p>
+            </div>
+
+            <div class="option-cards" id="step7Cards">
+              <div class="option-card" data-value="own" onclick="selectOption(this, 'homeOwnership', 'step7ContinueBtn')">
+                <div class="option-radio">
+                  <svg class="option-check" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:none">
+                    <path d="M2 6L5 9L10 3" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <span class="option-label">I own my home</span>
+              </div>
+              <div class="option-card" data-value="rent" onclick="selectOption(this, 'homeOwnership', 'step7ContinueBtn')">
+                <div class="option-radio">
+                  <svg class="option-check" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:none">
+                    <path d="M2 6L5 9L10 3" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <span class="option-label">I rent my home</span>
+              </div>
+              <input type="hidden" id="homeOwnership" name="homeOwnership">
+            </div>
+
+            <div class="city-callout" id="ownershipCallout"></div>
+
+            <button type="button" class="btn-continue green" id="step7ContinueBtn" onclick="nextStep()" disabled>
+              Continue
+            </button>
+          </div>
+        </div>
+
+        <!-- ── Step 8: Destination cities ── -->
+        <div class="step" data-step="8">
+          <div class="step-1-inner">
+            <div class="step-header">
+              <h1 class="step-title">What cities in the world do you want to go?</h1>
+              <p class="step-subtitle">Enter up to 3 destinations. This helps SwapMatch find the right swaps for you.</p>
+            </div>
+
+            <div class="step-fields">
+              <div class="field-item">
+                <label class="field-label" for="topCities">
+                  Top cities <span class="required-star">*</span>
+                </label>
+                <textarea
+                  class="field-textarea"
+                  id="topCities"
+                  name="topCities"
+                  placeholder="New York"
+                  required
+                ></textarea>
+              </div>
+            </div>
+
+            <button type="button" class="btn-continue green" id="step8ContinueBtn" onclick="nextStep()" disabled>
+              Continue
+            </button>
+          </div>
+        </div>
+
+        <!-- ── Step 9: Travel dates ── -->
+        <div class="step" data-step="9">
+          <div class="step-1-inner">
+            <div class="step-header">
+              <h1 class="step-title">When are you looking to travel?</h1>
+              <p class="step-subtitle">Enter at least 3 months you have in mind. This helps us match you with the right swaps and can help speed up your application.</p>
+            </div>
+
+            <div class="step-fields">
+              <div class="field-item">
+                <label class="field-label" for="travelDates">
+                  Travel dates <span class="required-star">*</span>
+                </label>
+                <textarea
+                  class="field-textarea"
+                  id="travelDates"
+                  name="travelDates"
+                  placeholder="e.g January 2026, March 2026, December 2026"
+                  required
+                ></textarea>
+              </div>
+            </div>
+
+            <button type="button" class="btn-continue green" id="step9ContinueBtn" onclick="nextStep()" disabled>
+              Continue
+            </button>
+          </div>
+        </div>
+
+        <!-- ── Step 10: What's your name? ── -->
+        <div class="step" data-step="10">
+          <div class="step-1-inner">
+            <div class="step-header">
+              <h1 class="step-title">What's your name?</h1>
+              <p class="step-subtitle">Only your first name will be shown to other members on the platform. Your surname stays private.</p>
+            </div>
+
+            <div class="step-fields">
+              <div class="field-item">
+                <label class="field-label" for="name">
+                  Full name <span class="required-star">*</span>
+                </label>
+                <input
+                  type="text"
+                  class="field-input"
+                  id="name"
+                  name="name"
+                  placeholder="Jane Doe"
+                  required
+                  autocomplete="name"
+                />
+              </div>
+            </div>
+
+            <button type="button" class="btn-continue green" id="step10ContinueBtn" onclick="nextStep()" disabled>
+              Continue
+            </button>
+          </div>
+        </div>
+
+        <!-- ── Step 11: How can we reach you? ── -->
+        <div class="step" data-step="11">
+          <div class="step-1-inner">
+            <div class="step-header">
+              <h1 class="step-title">How can we reach you?</h1>
+              <p class="step-subtitle">We'll use these details to keep you updated on your application. We never share your contact information with other members.</p>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 32px;">
+              <div class="step-fields">
+                <div class="field-item">
+                  <label class="field-label" for="email11">
+                    Email address <span class="required-star">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    class="field-input"
+                    id="email11"
+                    name="email11"
+                    placeholder="Enter email address"
+                    required
+                    autocomplete="email"
+                  />
+                </div>
+
+                <div class="field-item">
+                  <label class="field-label" for="phone11">
+                    Phone number <span class="required-star">*</span>
+                  </label>
+                  <div class="phone-input-wrapper">
+                    <div class="phone-prefix">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8 3V13M3 8H13" stroke="#414651" stroke-width="1.5" stroke-linecap="round"/>
+                      </svg>
+                    </div>
+                    <input
+                      type="tel"
+                      id="phone11"
+                      name="phone11"
+                      placeholder="Enter phone number with country code"
+                      required
+                      autocomplete="tel"
+                    />
+                  </div>
+                </div>
+
+                <div class="consent-row">
+                  <input
+                    type="checkbox"
+                    class="consent-checkbox"
+                    id="smsConsent11"
+                    name="smsConsent11"
+                  />
+                  <label class="consent-label" for="smsConsent11">
+                    I consent to SwapSpace contacting me by phone or SMS regarding my application or membership.
+                  </label>
                 </div>
               </div>
 
-              <div>
-                <label class="text-sm font-medium text-gray-700 mb-1 block">City</label>
-                <input type="text" class="form-input" id="city" placeholder="e.g., London" required />
-              </div>
-
-              <div>
-                <label class="text-sm font-medium text-gray-700 mb-1 block">Country</label>
-                <input type="text" class="form-input" id="country" placeholder="e.g., United Kingdom" required />
-              </div>
+              <button type="button" class="btn-continue green" id="step11ContinueBtn" onclick="nextStep()" disabled>
+                Continue
+              </button>
             </div>
           </div>
-
-          <div class="btn-group mt-8">
-            <button type="button" class="btn-secondary" onclick="prevStep()">
-              <span>←</span> Previous
-            </button>
-            <button type="button" class="btn-primary" onclick="nextStep()">
-              Continue
-            </button>
-          </div>
         </div>
 
-        <!-- Step 4: Home Type -->
-        <div class="step" data-step="4">
-          <h1 class="text-3xl md:text-4xl font-semibold text-gray-900 mb-8"
-            style="font-family: 'General Sans', sans-serif; letter-spacing: -0.5px;">
-            What type of home do you have?
-          </h1>
+        <!-- ── Step 12: One last thing before you submit ── -->
+        <div class="step" data-step="12">
+          <div class="step-1-inner">
+            <div class="step-header">
+              <h1 class="step-title">One last thing before you submit</h1>
+              <p class="step-subtitle">To keep SwapSpace active and fair for everyone, approved members are required to list their home within 5 days of being approved. This makes sure every member joining the platform is ready to swap.</p>
+            </div>
 
-          <div class="field-group">
-            <label class="form-label">Choose one option<span class="required-asterisk">*</span></label>
-            <select class="form-input form-select" id="homeType" required>
-              <option value="">Select home type</option>
-              <option value="apartment">Apartment/Flat</option>
-              <option value="house">House</option>
-              <option value="studio">Studio</option>
-              <option value="cottage">Cottage</option>
-            </select>
-          </div>
+            <div class="option-cards" id="step12Cards">
+              <div class="option-card" data-value="ready" onclick="selectOption(this, 'listingReady', 'step12ContinueBtn')">
+                <div class="option-radio">
+                  <svg class="option-check" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:none">
+                    <path d="M2.5 6L4.5 8.5L9.5 3.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <span class="option-label">Yes, I'm ready to list my home once approved</span>
+              </div>
+              <div class="option-card" data-value="not-ready" onclick="selectOption(this, 'listingReady', 'step12ContinueBtn')">
+                <div class="option-radio">
+                  <svg class="option-check" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:none">
+                    <path d="M2.5 6L4.5 8.5L9.5 3.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <span class="option-label">I'm not quite ready to list my home yet</span>
+              </div>
+            </div>
 
-          <div class="btn-group mt-8">
-            <button type="button" class="btn-secondary" onclick="prevStep()">
-              <span>←</span> Previous
-            </button>
-            <button type="button" class="btn-primary" onclick="nextStep()">
-              Continue
-            </button>
-          </div>
-        </div>
+            <input type="hidden" id="listingReady" name="listingReady" />
 
-        <!-- Step 5: Bedrooms -->
-        <div class="step" data-step="5">
-          <h1 class="text-3xl md:text-4xl font-semibold text-gray-900 mb-8"
-            style="font-family: 'General Sans', sans-serif; letter-spacing: -0.5px;">
-            How many bedrooms does it have?
-          </h1>
-
-          <div class="field-group">
-            <label class="form-label">Choose one option<span class="required-asterisk">*</span></label>
-            <select class="form-input form-select" id="bedrooms" required>
-              <option value="">Select number of bedrooms</option>
-              <option value="1">1 bedroom</option>
-              <option value="2">2 bedrooms</option>
-              <option value="3">3 bedrooms</option>
-              <option value="4+">4+ bedrooms</option>
-            </select>
-          </div>
-
-          <div class="btn-group mt-8">
-            <button type="button" class="btn-secondary" onclick="prevStep()">
-              <span>←</span> Previous
-            </button>
-            <button type="button" class="btn-primary" onclick="nextStep()">
-              Continue
-            </button>
-          </div>
-        </div>
-
-        <!-- Step 6: Guest Capacity -->
-        <div class="step" data-step="6">
-          <h1 class="text-3xl md:text-4xl font-semibold text-gray-900 mb-8"
-            style="font-family: 'General Sans', sans-serif; letter-spacing: -0.5px;">
-            How many people can your home comfortably accommodate?
-          </h1>
-
-          <div class="field-group">
-            <label class="form-label">Choose one option<span class="required-asterisk">*</span></label>
-            <select class="form-input form-select" id="guests" required>
-              <option value="">Select guest capacity</option>
-              <option value="1">1 guest</option>
-              <option value="2">2 guests</option>
-              <option value="3">3 guests</option>
-              <option value="4+">4+ guests</option>
-            </select>
-          </div>
-
-          <div class="btn-group mt-8">
-            <button type="button" class="btn-secondary" onclick="prevStep()">
-              <span>←</span> Previous
-            </button>
-            <button type="button" class="btn-primary" onclick="submitForm()">
+            <button type="button" class="btn-continue green" id="step12ContinueBtn" onclick="submitForm()" disabled>
               Submit
             </button>
           </div>
         </div>
 
-        <!-- Step 7: Thank You -->
-        <div class="step" data-step="7">
-          <div class="field-group py-4">
-            <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4"
-              style="font-family: 'General Sans', sans-serif; letter-spacing: -0.8px; line-height: 1.15;">
-              One final step before we review your application
-            </h1>
-            <p class="text-gray-500 mb-8"
-              style="font-family: 'General Sans', sans-serif; line-height: 1.5; font-size: 15px;">
-              Thanks for submitting your application. Upload your photo using the link in your email so we can begin
-              reviewing it.
-            </p>
-
-            <div>
-              <p class="text-[14px] font-semibold text-gray-900"
-                style="font-family: 'General Sans', sans-serif; margin-top: 16px; margin-bottom: 12px;">
-                Application status</p>
-
-              <div class="status-timeline">
-                <!-- Step 1: Completed -->
-                <div class="status-item">
-                  <div class="status-icon-wrapper">
-                    <div class="status-dot completed">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                      </svg>
-                    </div>
-
-                  </div>
-                  <div class="status-content">
-                    <div class="status-title-row">
-                      <span class="status-title">Application received</span>
-                    </div>
-                    <p class="status-description">Details submitted.</p>
-                  </div>
-                </div>
-
-                <!-- Step 2: Current -->
-                <div class="status-item">
-                  <div class="status-icon-wrapper">
-                    <div class="status-dot current"></div>
-
-                  </div>
-                  <div class="status-content">
-                    <div class="status-title-row">
-                      <span class="status-title">Add photos of your home</span>
-                      <span class="status-badge required">Required</span>
-                    </div>
-                    <p class="status-description">Upload at least one photo to complete your application. No need to
-                      tidy up or take professional photos. We just want to get a sense of your home.</p>
-                  </div>
-                </div>
-
-                <!-- Step 3: Pending -->
-                <div class="status-item">
-                  <div class="status-icon-wrapper">
-                    <div class="status-dot pending"></div>
-
-
-                  </div>
-                  <div class="status-content">
-                    <div class="status-title-row">
-                      <span class="status-title">Application review</span>
-                      <span class="status-badge not-started">Not started</span>
-                    </div>
-                    <p class="status-description">Review begins once your photos are uploaded. We'll get back to you
-                      within 1–2 days.</p>
-                  </div>
-                </div>
+        <!-- ── Step 6: Application Submitted ── -->
+        <div class="step" data-step="6">
+          <div class="confirmation-inner">
+            <div class="confirmation-header">
+              <h1 class="confirmation-title">Application submitted</h1>
+              <div class="confirmation-body" id="confirmationBody">
+                <!-- Content injected by JS based on listingReady value -->
               </div>
+            </div>
 
-              <div>
-                <a href="mailto:" class="btn-success">
-                  Check email to upload photo
-                </a>
+            <a href="https://swap-space.com" class="btn-go-home">Go home</a>
+
+            <div style="width: 100%;">
+              <div class="confirmation-photos">
+                <img
+                  class="confirmation-photo"
+                  src="https://www.figma.com/api/mcp/asset/2e7b1e50-9b9a-461b-839d-e7f5163709c3"
+                  alt="A member home exterior"
+                />
+                <img
+                  class="confirmation-photo"
+                  src="https://www.figma.com/api/mcp/asset/04a5a7c9-3a89-41e1-b4ff-ee6c5acf0f24"
+                  alt="A member home interior"
+                />
+                <img
+                  class="confirmation-photo"
+                  src="https://www.figma.com/api/mcp/asset/47925c09-68bd-4f88-be6a-fd5dfbc25885"
+                  alt="A member home outdoor space"
+                />
               </div>
+              <p class="confirmation-caption">A member's home in Nowy Targ</p>
             </div>
           </div>
         </div>
 
-      </div>
-    </div>
-
-    <!-- Right Side: Image (fixed full height on desktop) -->
-    <div class="hidden lg:fixed lg:block lg:right-0 lg:top-0 lg:w-1/2 lg:h-screen bg-gray-100">
-      <img src="assets/close-up-2.webp" alt="Cozy living room" class="w-full h-full object-cover" />
-    </div>
-  </div>
+      </div><!-- /stepsContainer -->
+    </div><!-- /app-center -->
+  </main>
 
   <script>
     let currentStep = 1;
     const STORAGE_KEY = 'swapspace_application_form';
 
     // PostHog experiment state
-    let reorderVariant = 'control'; // application-form-reorder experiment
+    let reorderVariant = 'control';
 
-    // Step sequences per variant
+    // Step sequences: 1(location) → 3(home type) → 4(bedrooms) → 7(rent/own) → 8(destinations) → 9(travel dates) → 10(name) → 11(contact) → 12(listing commitment) → 6(thanks)
     const STEP_SEQUENCES = {
-      control: [1, 2, 3, 4, 5, 6, 7],
-      reorder: [3, 4, 5, 6, 2, 7]    // skip intro, move personal info to last before thank you
+      control: [1, 3, 4, 7, 8, 9, 10, 11, 12, 6],
+      reorder: [1, 3, 4, 7, 8, 9, 10, 11, 12, 6]
     };
     let stepSequence = STEP_SEQUENCES.control;
     let sequenceIndex = 0;
 
-    // Form fields to persist
-    const formFields = ['name', 'email', 'phone', 'address', 'city', 'country', 'homeType', 'bedrooms', 'guests'];
+    // Dot mapping: step → which dot (1-4) should be active
+    const STEP_TO_DOT = { 1: 1, 3: 2, 4: 3, 7: 4, 8: 5, 9: 6, 10: null, 11: null, 12: 7, 6: null };
 
-    // Save form data to localStorage
+    // Form fields to persist
+    const formFields = ['name', 'email11', 'phone11', 'city', 'country', 'homeType', 'bedrooms', 'homeOwnership', 'listingReady', 'topCities', 'travelDates'];
+
+    // ── Continue button + city cluster callout for step 1 ───
+    const CITY_CLUSTERS = [
+      { city: 'london',   country: ['united kingdom', 'uk'] },
+      { city: 'new york', country: ['united states', 'us', 'usa'] }
+    ];
+
+    function isPriorityCluster(city, country) {
+      const c = city.trim().toLowerCase();
+      const co = country.trim().toLowerCase();
+      return CITY_CLUSTERS.some(
+        cluster => cluster.city === c && cluster.country.includes(co)
+      );
+    }
+
+    function updateStep1Button() {
+      const btn      = document.getElementById('step1ContinueBtn');
+      const callout  = document.getElementById('cityCallout');
+      const city     = document.getElementById('city');
+      const country  = document.getElementById('country');
+      if (!btn || !city || !country) return;
+
+      const hasCity    = city.value.trim();
+      const hasCountry = country.value.trim();
+      btn.disabled = !(hasCity && hasCountry);
+
+      if (callout) {
+        callout.classList.toggle(
+          'visible',
+          !!(hasCity && hasCountry && isPriorityCluster(city.value, country.value))
+        );
+      }
+    }
+
+    // ── Persistence ─────────────────────────────────────────
     function saveFormData() {
-      const data = {
-        step: currentStep,
-        fields: {}
-      };
-      formFields.forEach(fieldId => {
-        const field = document.getElementById(fieldId);
-        if (field) {
-          data.fields[fieldId] = field.value;
-        }
+      const data = { step: currentStep, fields: {} };
+      formFields.forEach(id => {
+        const f = document.getElementById(id);
+        if (f) data.fields[id] = f.value;
       });
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     }
 
-    // Restore form data from localStorage
     function restoreFormData() {
       const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        try {
-          const data = JSON.parse(saved);
-          // Restore field values
-          if (data.fields) {
-            Object.keys(data.fields).forEach(fieldId => {
-              const field = document.getElementById(fieldId);
-              if (field && data.fields[fieldId]) {
-                field.value = data.fields[fieldId];
-              }
-            });
-          }
-          // Restore step (but not if they completed the form)
-          if (data.step && data.step > 1 && data.step < 7) {
-            showStep(data.step);
-          }
-        } catch (e) {
-          console.error('Error restoring form data:', e);
+      if (!saved) return;
+      try {
+        const data = JSON.parse(saved);
+        if (data.fields) {
+          Object.keys(data.fields).forEach(id => {
+            const f = document.getElementById(id);
+            if (f && data.fields[id]) f.value = data.fields[id];
+          });
         }
+        if (data.step && stepSequence.includes(data.step) && data.step !== 6) {
+          showStep(data.step);
+        }
+      } catch (e) {
+        console.error('Error restoring form data:', e);
       }
     }
 
-    // Clear form data from localStorage
     function clearFormData() {
       localStorage.removeItem(STORAGE_KEY);
     }
 
-    // Add event listeners to save form data on change
     function setupAutoSave() {
-      formFields.forEach(fieldId => {
-        const field = document.getElementById(fieldId);
-        if (field) {
-          field.addEventListener('input', saveFormData);
-          field.addEventListener('change', saveFormData);
+      formFields.forEach(id => {
+        const f = document.getElementById(id);
+        if (f) {
+          f.addEventListener('input', saveFormData);
+          f.addEventListener('change', saveFormData);
         }
       });
     }
 
+    // ── Step navigation ──────────────────────────────────────
     function showStep(step) {
       document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
-      document.querySelector(`[data-step="${step}"]`).classList.add('active');
+      const stepEl = document.querySelector(`[data-step="${step}"]`);
+      if (!stepEl) return;
+      stepEl.classList.add('active');
       currentStep = step;
       const idx = stepSequence.indexOf(step);
       sequenceIndex = idx >= 0 ? idx : 0;
+
+      // Reset rent/own cards to resting state each time step 7 is shown
+      if (step === 7) {
+        document.querySelectorAll('#step7Cards .option-card').forEach(c => {
+          c.classList.remove('selected');
+          c.querySelector('.option-check').style.display = 'none';
+        });
+        document.getElementById('homeOwnership').value = '';
+        document.getElementById('step7ContinueBtn').disabled = true;
+        const callout = document.getElementById('ownershipCallout');
+        if (callout) callout.classList.remove('visible');
+      }
+
+      // Reset listing commitment cards to resting state each time step 12 is shown
+      if (step === 12) {
+        document.querySelectorAll('#step12Cards .option-card').forEach(c => {
+          c.classList.remove('selected');
+          c.querySelector('.option-check').style.display = 'none';
+        });
+        document.getElementById('listingReady').value = '';
+        document.getElementById('step12ContinueBtn').disabled = true;
+      }
+
+      if (step === 6) {
+        const isReady = document.getElementById('listingReady')?.value === 'ready';
+        const body = document.getElementById('confirmationBody');
+        if (body) {
+          body.innerHTML = isReady
+            ? `<p>Thanks for applying to Swap Space. We'll review your application and get back to you within 24 hours.</p>
+               <p>Once approved, you'll have 5 days to list your home and start swapping. We've sent you an email with everything you'll need to get your listing live.</p>`
+            : `<p>Thanks for applying to SwapSpace. We understand you're not quite ready to list your home yet and that's completely fine. We'll review your application and be in touch when you're ready to take the next step.</p>`;
+        }
+      }
+
       saveFormData();
-      updateProgressBar();
+      updateProgressDots();
       window.scrollTo(0, 0);
     }
 
-    function updateProgressBar() {
-      const progressFill = document.getElementById('progressFill');
-      const progressText = document.getElementById('progressText');
-      const progressContainer = document.getElementById('progressContainer');
+    const CHECK_SVG = `<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 7L5.5 10L11.5 4" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
-      if (currentStep === 7) {
-        progressContainer.style.display = 'none';
+    function updateProgressDots() {
+      const container = document.getElementById('progressContainer');
+      const activeDot = STEP_TO_DOT[currentStep];
+
+      // Show/hide Go back button
+      const goBackBtn = document.getElementById('goBackBtn');
+      if (goBackBtn) goBackBtn.classList.toggle('visible', sequenceIndex > 0 && currentStep !== 6);
+
+      if (activeDot === null) {
+        container.style.display = 'none';
         return;
-      } else {
-        progressContainer.style.display = 'block';
       }
+      container.style.display = 'flex';
 
-      const formSteps = stepSequence.filter(s => s !== 7).length;
-      const displayStep = sequenceIndex + 1;
-      const progress = (displayStep / formSteps) * 100;
-      progressFill.style.width = `${progress}%`;
-      progressText.textContent = `Step ${displayStep} of ${formSteps}`;
+      document.querySelectorAll('.progress-dot').forEach(dot => {
+        const n = parseInt(dot.dataset.dot);
+        dot.className = 'progress-dot';
+        if (n < activeDot) {
+          dot.classList.add('completed');
+          dot.innerHTML = CHECK_SVG;
+        } else if (n === activeDot) {
+          dot.classList.add('current');
+          dot.innerHTML = `<span>${n}</span>`;
+        } else {
+          dot.classList.add('pending');
+          dot.innerHTML = `<span>${n}</span>`;
+        }
+      });
     }
 
     function nextStep() {
@@ -1055,171 +1449,118 @@
       }
     }
 
+    // ── Validation ───────────────────────────────────────────
     function validateCurrentStep() {
-      const currentStepEl = document.querySelector(`[data-step="${currentStep}"]`);
-      const requiredFields = currentStepEl.querySelectorAll('[required]');
-      let isValid = true;
+      const stepEl = document.querySelector(`[data-step="${currentStep}"]`);
+      const required = stepEl.querySelectorAll('[required]');
+      let valid = true;
 
-      // Remove all previous error messages
-      currentStepEl.querySelectorAll('.error-message').forEach(el => el.remove());
+      stepEl.querySelectorAll('.field-error').forEach(el => el.remove());
 
-      requiredFields.forEach(field => {
-        // Remove previous error styling
-        field.style.borderColor = '';
-
+      required.forEach(field => {
+        field.classList.remove('error');
         if (!field.value.trim()) {
           showFieldError(field, 'This field is required');
-          isValid = false;
+          valid = false;
         }
       });
 
-      // Email validation for step 2
-      if (currentStep === 2) {
-        const emailField = document.getElementById('email');
+      if (currentStep === 11) {
+        const emailField = document.getElementById('email11');
         if (emailField && emailField.value && !isValidEmail(emailField.value)) {
           showFieldError(emailField, 'Please enter a valid email address');
-          isValid = false;
+          valid = false;
         }
-
-        // Phone validation — required and must contain digits
-        const phoneField = document.getElementById('phone');
+        const phoneField = document.getElementById('phone11');
         if (phoneField) {
-          const phoneDigits = phoneField.value.replace(/\s/g, '');
-          if (!phoneDigits) {
-            showFieldError(phoneField, 'Phone number is required');
-            isValid = false;
-          } else if (!/^\d{8,15}$/.test(phoneDigits)) {
+          const digits = phoneField.value.replace(/\s/g, '');
+          if (digits && !/^\d{8,15}$/.test(digits)) {
             showFieldError(phoneField, 'Please enter a valid phone number with country code');
-            isValid = false;
+            valid = false;
           }
         }
       }
 
-
-
-      if (!isValid) {
-        // Focus on first invalid field
-        const firstInvalid = currentStepEl.querySelector('.error-message')?.previousElementSibling?.querySelector('input, select')
-          || currentStepEl.querySelector('[style*="border-color"]');
-        if (firstInvalid) firstInvalid.focus();
-      }
-
-      return isValid;
+      return valid;
     }
 
     function showFieldError(field, message) {
-      field.style.borderColor = '#ef4444';
-
-      // Find the input-wrapper or immediate parent
-      let inputWrapper = field.closest('.input-wrapper');
-      let container = inputWrapper ? inputWrapper.parentElement : field.closest('div');
-
-      if (container && !container.querySelector('.error-message')) {
-        const errorEl = document.createElement('p');
-        errorEl.className = 'error-message';
-        errorEl.style.color = '#ef4444';
-        errorEl.style.fontSize = '14px';
-        errorEl.style.marginTop = '4px';
-        errorEl.textContent = message;
-
-        // Insert after input-wrapper if it exists, otherwise append to container
-        if (inputWrapper) {
-          inputWrapper.insertAdjacentElement('afterend', errorEl);
-        } else {
-          container.appendChild(errorEl);
-        }
-      }
+      field.classList.add('error');
+      const err = document.createElement('p');
+      err.className = 'field-error';
+      err.textContent = message;
+      const container = field.closest('.field-item') || field.parentElement;
+      container.appendChild(err);
     }
 
     function isValidEmail(email) {
       return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     }
 
+    // ── Form submission ──────────────────────────────────────
     async function submitForm() {
       if (!validateCurrentStep()) return;
 
-      // Disable submit button and show loading
-      const submitBtn = document.querySelector(`[data-step="${currentStep}"] .btn-primary`);
+      const submitBtn = document.querySelector(`[data-step="${currentStep}"] .btn-continue`);
       const originalText = submitBtn.innerHTML;
       submitBtn.innerHTML = 'Submitting...';
       submitBtn.disabled = true;
 
-      // Collect form data
       const formData = {
-        Name: document.getElementById('name').value,
-        Email: document.getElementById('email').value,
-        Phone: '+' + document.getElementById('phone').value,
-        Address: document.getElementById('address').value,
-        City: document.getElementById('city').value,
-        Country: document.getElementById('country').value,
-        'Home Type': document.getElementById('homeType').value,
-        Bedrooms: document.getElementById('bedrooms').value,
-        'Guest Capacity': document.getElementById('guests').value,
-        // Add submission date
+        Name:            document.getElementById('name').value,
+        Email:           document.getElementById('email11')?.value || '',
+        Phone:           '+' + (document.getElementById('phone11')?.value || ''),
+        City:             document.getElementById('city').value,
+        Country:          document.getElementById('country').value,
+        'Home Type':      document.getElementById('homeType').value,
+        Bedrooms:         document.getElementById('bedrooms').value,
+        'Home Ownership': document.getElementById('homeOwnership').value,
+        'Listing Ready':  document.getElementById('listingReady') ? document.getElementById('listingReady').value : '',
+        'Top Cities':     document.getElementById('topCities') ? document.getElementById('topCities').value : '',
+        'Travel Dates':   document.getElementById('travelDates') ? document.getElementById('travelDates').value : '',
         'Submission Date': new Date().toISOString()
       };
-      // Submit to Vercel serverless function (which proxies to Airtable)
+
       try {
         const response = await fetch('/api/submit-application', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            fields: formData
-          })
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ fields: formData })
         });
 
         if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.error || 'Failed to submit form');
+          const err = await response.json();
+          throw new Error(err.error || 'Failed to submit form');
         }
 
         const successData = await response.json();
-        console.log('Form submitted successfully', successData);
 
-        // Identify user in PostHog and capture submission event
         if (typeof posthog !== 'undefined') {
           posthog.identify(formData.Email, {
-            name: formData.Name,
-            email: formData.Email,
-            phone: formData.Phone,
-            city: formData.City,
-            country: formData.Country
+            name: formData.Name, email: formData.Email,
+            phone: formData.Phone, city: formData.City, country: formData.Country
           });
           posthog.capture('application_submitted', {
-            name: formData.Name,
-            email: formData.Email,
-            city: formData.City,
-            country: formData.Country,
-            home_type: formData['Home Type'],
-            bedrooms: formData.Bedrooms,
+            name: formData.Name, email: formData.Email,
+            city: formData.City, country: formData.Country,
+            home_type: formData['Home Type'], bedrooms: formData.Bedrooms,
             guest_capacity: formData['Guest Capacity'],
             experiment_variant: reorderVariant
           });
         }
 
-        // Fire Meta Pixel conversion events
         if (typeof fbq === 'function') {
-          // Pass the eventId returned by our server for deduplication
           const eventIdObj = successData.eventId ? { eventID: successData.eventId } : undefined;
-          
           fbq('track', 'Lead', {}, eventIdObj);
           fbq('track', 'CompleteRegistration', {}, eventIdObj);
-          console.log('Meta Pixel Lead & CompleteRegistration events fired', eventIdObj);
         }
 
-        // Fire Google Ads conversion event
         if (typeof gtag_report_conversion === 'function') {
           gtag_report_conversion();
-          console.log('Google Ads conversion event fired');
         }
 
-        // Clear saved form data after successful submission
         clearFormData();
-
-        // Show thank you step
-        showStep(7);
+        showStep(6);
       } catch (error) {
         console.error('Submission error:', error);
         alert('There was an error submitting your application. Please try again.');
@@ -1228,49 +1569,160 @@
       }
     }
 
+    // ── Option card selection (rent/own style) ───────────────
+    const OWNERSHIP_CALLOUTS = {
+      rent: "Great news, many of our members are renters. You're in good company.",
+      own:  "Perfect. Home owners are a big part of the Swap Space community. You're in great company."
+    };
 
-    // Swap step 6's Submit → Continue and step 2's Next → Submit for reorder test variant
-    function applyReorderExperiment() {
-      const step6Btn = document.querySelector('[data-step="6"] .btn-primary');
-      if (step6Btn) {
-        step6Btn.innerHTML = 'Continue <span>→</span>';
-        step6Btn.setAttribute('onclick', 'nextStep()');
+    function selectOption(card, hiddenId, btnId) {
+      const group = card.closest('.option-cards');
+      // Deselect all
+      group.querySelectorAll('.option-card').forEach(c => {
+        c.classList.remove('selected');
+        c.querySelector('.option-check').style.display = 'none';
+      });
+      // Select clicked
+      card.classList.add('selected');
+      card.querySelector('.option-check').style.display = 'block';
+      // Update hidden input
+      const val = card.dataset.value;
+      document.getElementById(hiddenId).value = val;
+      // Enable continue
+      const btn = document.getElementById(btnId);
+      if (btn) btn.disabled = false;
+      // Show ownership callout if applicable
+      const callout = document.getElementById('ownershipCallout');
+      if (callout && OWNERSHIP_CALLOUTS[val]) {
+        callout.textContent = OWNERSHIP_CALLOUTS[val];
+        callout.classList.add('visible');
       }
-      const step2Btn = document.querySelector('[data-step="2"] .btn-primary');
-      if (step2Btn) {
-        step2Btn.innerHTML = 'Submit';
-        step2Btn.setAttribute('onclick', 'submitForm()');
-      }
+      saveFormData();
     }
 
+    // ── Custom dropdown factory ──────────────────────────────
+    function initCustomDropdown() {
+      const configs = [
+        { selectId: 'homeTypeSelect',  triggerId: 'homeTypeTrigger',  valueId: 'homeTypeValue',  hiddenId: 'homeType',  btnId: 'step3ContinueBtn' },
+        { selectId: 'bedroomsSelect',  triggerId: 'bedroomsTrigger',  valueId: 'bedroomsValue',  hiddenId: 'bedrooms',  btnId: 'step4ContinueBtn' },
+      ];
+
+      configs.forEach(({ selectId, triggerId, valueId, hiddenId, btnId }) => {
+        const select      = document.getElementById(selectId);
+        const trigger     = document.getElementById(triggerId);
+        const valueEl     = document.getElementById(valueId);
+        const hidden      = document.getElementById(hiddenId);
+        const continueBtn = document.getElementById(btnId);
+        if (!select) return;
+
+        trigger.addEventListener('click', () => {
+          const isOpen = select.classList.toggle('open');
+          select.setAttribute('aria-expanded', isOpen);
+        });
+
+        select.querySelectorAll('.custom-select-item').forEach(item => {
+          item.addEventListener('click', () => {
+            valueEl.textContent = item.textContent.trim();
+            trigger.classList.add('has-value');
+            select.querySelectorAll('.custom-select-item').forEach(i => i.classList.remove('selected'));
+            item.classList.add('selected');
+            hidden.value = item.dataset.value;
+            if (continueBtn) continueBtn.disabled = false;
+            select.classList.remove('open');
+            select.setAttribute('aria-expanded', 'false');
+            saveFormData();
+          });
+        });
+      });
+
+      // Close all dropdowns on outside click
+      document.addEventListener('click', e => {
+        document.querySelectorAll('.custom-select.open').forEach(select => {
+          if (!select.contains(e.target)) {
+            select.classList.remove('open');
+            select.setAttribute('aria-expanded', 'false');
+          }
+        });
+      });
+    }
+
+    // ── Init ─────────────────────────────────────────────────
     document.addEventListener('DOMContentLoaded', function () {
+      // Wire up step 1 continue button
+      const cityInput    = document.getElementById('city');
+      const countryInput = document.getElementById('country');
+      if (cityInput)    cityInput.addEventListener('input', updateStep1Button);
+      if (countryInput) countryInput.addEventListener('input', updateStep1Button);
+
+      // Wire up step 8 continue button
+      const topCitiesInput = document.getElementById('topCities');
+      if (topCitiesInput) {
+        topCitiesInput.addEventListener('input', function () {
+          const btn = document.getElementById('step8ContinueBtn');
+          if (btn) btn.disabled = !this.value.trim();
+        });
+      }
+
+      // Wire up step 9 continue button
+      const travelDatesInput = document.getElementById('travelDates');
+      if (travelDatesInput) {
+        travelDatesInput.addEventListener('input', function () {
+          const btn = document.getElementById('step9ContinueBtn');
+          if (btn) btn.disabled = !this.value.trim();
+        });
+      }
+
+      // Wire up step 10 continue button
+      const nameInput = document.getElementById('name');
+      if (nameInput) {
+        nameInput.addEventListener('input', function () {
+          const btn = document.getElementById('step10ContinueBtn');
+          if (btn) btn.disabled = !this.value.trim();
+        });
+        // Enable if pre-filled from localStorage
+        const btn10 = document.getElementById('step10ContinueBtn');
+        if (btn10 && nameInput.value.trim()) btn10.disabled = false;
+      }
+
+      // Wire up step 11 continue button (email + phone + consent)
+      function updateStep11Btn() {
+        const btn = document.getElementById('step11ContinueBtn');
+        if (!btn) return;
+        const emailVal = document.getElementById('email11')?.value.trim();
+        const phoneVal = document.getElementById('phone11')?.value.trim();
+        const consented = document.getElementById('smsConsent11')?.checked;
+        btn.disabled = !(emailVal && phoneVal && consented);
+      }
+      document.getElementById('email11')?.addEventListener('input', updateStep11Btn);
+      document.getElementById('phone11')?.addEventListener('input', updateStep11Btn);
+      document.getElementById('smsConsent11')?.addEventListener('change', updateStep11Btn);
+
+      initCustomDropdown();
       setupAutoSave();
       restoreFormData();
-      updateProgressBar();
+      updateStep1Button();
+      updateProgressDots();
 
-      // PostHog experiments: detect variants and update UI
       if (typeof posthog !== 'undefined' && posthog.onFeatureFlags) {
         posthog.onFeatureFlags(function () {
-          const reorderFlag = posthog.getFeatureFlag('application-form-reorder');
+          const flag = posthog.getFeatureFlag('application-form-reorder');
+          posthog.capture('$feature_flag_called', {
+            $feature_flag: 'application-form-reorder',
+            $feature_flag_response: flag
+          });
 
-          posthog.capture('$feature_flag_called', { $feature_flag: 'application-form-reorder', $feature_flag_response: reorderFlag });
-
-          if (reorderFlag === 'test') {
+          if (flag === 'test') {
             reorderVariant = 'test';
             stepSequence = STEP_SEQUENCES.reorder;
-            applyReorderExperiment();
-            console.log('PostHog Experiment: application-form-reorder → TEST');
           } else {
             stepSequence = STEP_SEQUENCES.control;
-            console.log('PostHog Experiment: application-form-reorder → CONTROL');
           }
 
-          // If current step isn't in the new sequence, jump to first step
           if (!stepSequence.includes(currentStep)) {
             showStep(stepSequence[0]);
           } else {
             sequenceIndex = stepSequence.indexOf(currentStep);
-            updateProgressBar();
+            updateProgressDots();
           }
         });
       }
