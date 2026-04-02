@@ -76,6 +76,7 @@
             <th>City</th>
             <th>Status</th>
             <th>Photos</th>
+            <th>Ready to List</th>
             <th>
               <button id="sortDateBtn" onclick="toggleSort()" style="background:none;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:5px;font:inherit;font-size:11px;font-weight:600;color:#6B7280;text-transform:uppercase;letter-spacing:0.05em;padding:0;">
                 Submission date
@@ -240,6 +241,7 @@
           <td>${app.city || '—'}</td>
           <td>${statusBadge(app.application_status)}</td>
           <td>${renderPhotos(app.id)}</td>
+          <td>${app.listing_ready === 'ready' ? 'Yes' : app.listing_ready === 'not-ready' ? 'Not yet' : '—'}</td>
           <td>${formatDate(app.submission_date || app.created_at)}</td>
           <td onclick="event.stopPropagation()">
             <button class="row-delete-btn" onclick="deleteApplication('${app.id}', event)" title="Delete record">
