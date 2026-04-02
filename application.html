@@ -1241,7 +1241,7 @@
                   alt="A member home outdoor space"
                 />
               </div>
-              <p class="confirmation-caption">A member home in Nowy Targ</p>
+              <p class="confirmation-caption">A member's home in Nowy Targ</p>
             </div>
           </div>
         </div>
@@ -1403,7 +1403,7 @@
 
       // Show/hide Go back button
       const goBackBtn = document.getElementById('goBackBtn');
-      if (goBackBtn) goBackBtn.classList.toggle('visible', sequenceIndex > 0);
+      if (goBackBtn) goBackBtn.classList.toggle('visible', sequenceIndex > 0 && currentStep !== 6);
 
       if (activeDot === null) {
         container.style.display = 'none';
