@@ -49,9 +49,6 @@ export default async function handler(req, res) {
         home_type: fields['Home Type'],
         bedrooms: fields.Bedrooms,
         guest_capacity: fields['Guest Capacity'],
-        listing_ready: fields['Listing Ready'] || null,
-        top_cities: fields['Top Cities'] || null,
-        travel_dates: fields['Travel Dates'] || null,
         submission_date: fields['Submission Date'] || new Date().toISOString(),
         application_status: 'Photos Requested',
       })
@@ -145,7 +142,7 @@ export default async function handler(req, res) {
               `
             };
 
-        await fetch('https://api.resend.com/emails', {
+        const resendRes = await fetch('https://api.resend.com/emails', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${RESEND_API_KEY}`,
@@ -158,7 +155,12 @@ export default async function handler(req, res) {
             ...emailPayload
           })
         });
-        console.log(`Confirmation email (${listingReady ? 'ready' : 'not-ready'} path) sent to:`, fields.Email);
+        if (!resendRes.ok) {
+          const resendErr = await resendRes.json();
+          console.error('Resend API error:', JSON.stringify(resendErr));
+        } else {
+          console.log(`Confirmation email (${listingReady ? 'ready' : 'not-ready'} path) sent to:`, fields.Email);
+        }
       } catch (emailError) {
         // Don't fail the whole request if email fails
         console.error('Email error:', emailError);
