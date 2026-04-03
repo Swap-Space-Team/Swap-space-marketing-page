@@ -323,67 +323,118 @@ p {
 /* ============================================
    HERO SECTION (DESKTOP)
    ============================================ */
-.hero{
+/* ── Hero section ─────────────────────────────────────── */
+.hero {
+  position: relative;
+  width: 100%;
+  height: 530px;
+  margin-top: 80px; /* masthead height */
+  overflow: hidden;
+  display: flex;
+  align-items: flex-start;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  gap: 12px;
-  padding: 40px;
-  padding-top: 120px;
-  position: relative;
-  min-height: 100vh;
-  overflow: hidden;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 121px 80px 0 80px;
+  max-width: 960px;
 }
 
-/* Hero section text colors - white for visibility on video */
-.hero .h1-text,
-.hero .body-text,
-.hero .highlight-text {
+.hero-heading {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 60px;
+  font-weight: 700;
+  line-height: 72px;
+  letter-spacing: -1.2px;
   color: #fff;
+  margin: 0;
+  max-width: 880px;
 }
 
-.h1-text{
-  width: 50%;
-  font-size: 4rem;
-  text-align: center;
+.hero-body {
+  font-family: 'Geist', sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 28px;
+  color: #fff;
+  margin: 0;
+  max-width: 813px;
+}
+
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  padding: 0 22px;
+  background-color: #06633d;
+  color: #fff;
+  font-family: 'Geist', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 9999px;
+  white-space: nowrap;
+  transition: background-color 0.15s;
+}
+
+.hero-cta:hover {
+  background-color: #054f31;
+}
+
+/* Background image + overlay */
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.hero-bg-img {
+  width: 100%;
+  height: 181.13%;
+  object-fit: cover;
+  position: absolute;
+  top: -56.87%;
+  left: 0;
+}
+
+.hero-bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(16, 15, 14, 0.5);
+}
+
+/* Featured In */
+.featured-in-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.featured-in-label {
+  font-family: 'Geist', sans-serif;
+  font-size: 11px;
   font-weight: 500;
-  padding-top: 60px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.6);
   margin: 0;
 }
 
-.body-text{
-  font-weight: 400;
-  font-size: 1.1rem;
-  width: 60%;
-  text-align: center;
-  margin-top: 8px;
-  padding: 0;
-}
-.swap-text{
-
-  color: #fff;
-}
- .hero .button-primary {
-  width: fit-content;
-  height: 60px;
-  background-color: #fff;
-  color:#000;
-  font-size: 16px;
-  font-weight: 600;
-  padding: 16px 22px;
-  border-radius: 200px;
-  border: solid 2px #FFF;
-  margin-top: 12px;
-  display: inline-flex;
-  justify-content: center;
+.featured-in-logos {
+  display: flex;
   align-items: center;
-  position: relative;
-  overflow: hidden;
-  font-family: 'General Sans', sans-serif;
-  box-sizing: border-box;
-  letter-spacing: -0.4px;
+  gap: 16px;
+}
+
+.featured-in-logo {
+  height: 17px;
+  width: auto;
+  opacity: 0.85;
 }
 
 .pricing-section .button-primary {
