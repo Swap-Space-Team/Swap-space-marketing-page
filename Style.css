@@ -218,54 +218,106 @@ p {
 /* ============================================
    HEADER / MASTHEAD SECTION (DESKTOP)
    ============================================ */
-.masthead{
+.masthead {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   align-items: center;
-  padding: 32px 32px 0 32px;
-  gap: 16px;
-  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 0 80px;
+  height: 80px;
   width: 100%;
   box-sizing: border-box;
-  background-color: transparent;
-  position: absolute;
+  background-color: #043f29;
+  position: fixed;
   top: 0;
   left: 0;
-  z-index: 10;
-}
-.logo{
-  width: 200px;
-  height: 40px;
+  z-index: 100;
 }
 
-.masthead a:first-child {
-  display: inline-block;
+.masthead-logo-link {
+  display: flex;
+  align-items: center;
   text-decoration: none;
-  cursor: pointer;
+  flex-shrink: 0;
 }
-.secondary-button{
-  padding-top: 12px;
-  padding-bottom: 12px;
-  padding-left: 16px;
-  padding-right: 16px;
-  background-color: none;
-  color: #fff;
-  font-weight: 500;
-  width: 120px;
-  height: auto;
-  border:solid 2px #fff;
-  border-radius: 40px;
+
+.logo {
+  height: 32px;
+  width: auto;
+}
+
+.masthead-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.nav-link {
+  font-family: 'Geist', sans-serif;
   font-size: 16px;
-  letter-spacing: -0.4px;
+  font-weight: 500;
+  color: #fff;
+  text-decoration: none;
+  padding: 8px;
+  white-space: nowrap;
+  transition: opacity 0.15s;
+}
+
+.nav-link:hover {
+  opacity: 0.75;
+}
+
+.masthead-actions {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex-shrink: 0;
+}
+
+.btn-cta-masthead {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  text-decoration: none;
-  text-align: center;
-  font-family: 'General Sans', sans-serif;
-  box-sizing: border-box;
+  height: 40px;
+  padding: 0 18px;
+  background-color: #f4960a;
+  color: #1a1917;
+  font-family: 'Geist', sans-serif;
+  font-size: 14px;
   font-weight: 600;
+  text-decoration: none;
+  border-radius: 9999px;
+  white-space: nowrap;
+  transition: background-color 0.15s;
+}
+
+.btn-cta-masthead:hover {
+  background-color: #e08709;
+}
+
+.btn-login-masthead {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  padding: 0 18px;
+  background-color: transparent;
+  color: #fff;
+  font-family: 'Geist', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 9999px;
+  border: 1px solid #f4960a;
+  white-space: nowrap;
+  transition: background-color 0.15s;
+}
+
+.btn-login-masthead:hover {
+  background-color: rgba(244, 150, 10, 0.1);
 }
 
 /* ============================================
@@ -279,6 +331,7 @@ p {
   width: 100%;
   gap: 12px;
   padding: 40px;
+  padding-top: 120px;
   position: relative;
   min-height: 100vh;
   overflow: hidden;
