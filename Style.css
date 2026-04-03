@@ -331,9 +331,11 @@ p {
   margin-top: 80px;
   display: flex;
   align-items: flex-start;
-  background-image: url('assets/hero-image.webp');
+  background-color: #1a1917;
+  background-image: url('/assets/hero-image.webp');
   background-size: cover;
   background-position: center;
+  overflow: hidden;
 }
 
 .hero::before {
