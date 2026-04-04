@@ -1710,7 +1710,6 @@ p {
 
   .hero-cta {
     width: 100%;
-    max-width: 320px;
     height: 48px;
     font-size: 15px;
     justify-content: center;
@@ -1734,7 +1733,6 @@ p {
     padding: 14px 20px;
     height: 48px;
     width: 100%;
-    max-width: 300px;
   }
   .highlight-text{
     text-align: center;
@@ -1844,7 +1842,6 @@ p {
 
   .btn-travel-cta {
     width: 100%;
-    max-width: 320px;
     justify-content: center;
   }
 
