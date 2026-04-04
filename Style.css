@@ -1463,21 +1463,51 @@ p {
 /* ============================================
    TABLET AND BELOW (max-width: 1024px)
    ============================================ */
-@media screen and (max-width: 1024px) {
+/* Traveller section switches to stacked layout below 1280px */
+@media screen and (max-width: 1280px) and (min-width: 769px) {
   .traveller-section {
-    min-height: 560px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: unset;
+    padding: 60px 40px;
+    gap: 40px;
+    overflow: hidden;
+    width: 100%;
+    box-sizing: border-box;
   }
   .traveller-left {
-    left: 40px;
-    top: 260px;
-    width: min(420px, calc(50% - 40px));
+    position: relative;
+    left: auto;
+    top: auto;
+    width: 100%;
+    max-width: 680px;
+    z-index: 1;
   }
   .traveller-right {
-    right: 40px;
-    width: 420px;
+    position: relative;
+    width: 100%;
+    right: auto;
+    top: auto;
+    z-index: 1;
   }
   .traveller-video-container {
-    height: 360px;
+    height: 420px;
+    border-radius: 16px;
+  }
+  .traveller-tabs {
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    right: auto;
+    flex-direction: row;
+    gap: 8px;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .traveller-section {
+    min-height: unset;
   }
 
   .masthead {
@@ -1574,7 +1604,7 @@ p {
 @media screen and (max-width: 768px) {
   /* Switch to stacked flex layout on mobile */
   .traveller-section {
-    position: static;
+    position: relative;
     display: flex;
     flex-direction: column;
     min-height: unset;
@@ -1585,10 +1615,13 @@ p {
     box-sizing: border-box;
   }
   .traveller-left {
-    position: static;
+    position: relative;
+    left: auto;
+    top: auto;
     width: 100%;
     padding: 40px 16px 32px;
     box-sizing: border-box;
+    z-index: 1;
   }
   .traveller-heading {
     font-size: 32px;
