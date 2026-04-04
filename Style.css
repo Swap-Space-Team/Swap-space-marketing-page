@@ -334,6 +334,135 @@ p {
 }
 
 /* ============================================
+   HAMBURGER + MOBILE MENU
+   ============================================ */
+.masthead-mobile-right {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.btn-cta-mobile {
+  /* inherits .btn-cta-masthead styles */
+  font-size: 13px;
+  padding: 0 14px;
+  height: 36px;
+}
+
+.hamburger-btn {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  flex-shrink: 0;
+}
+
+.hamburger-line {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background-color: #fff;
+  border-radius: 2px;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+  transform-origin: center;
+}
+
+.hamburger-btn.is-open .hamburger-line:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.hamburger-btn.is-open .hamburger-line:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+.hamburger-btn.is-open .hamburger-line:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Mobile menu overlay */
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 64px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--surface-hero);
+  z-index: 99;
+  flex-direction: column;
+  padding: 32px 24px;
+  gap: 0;
+  overflow-y: auto;
+  transform: translateY(-8px);
+  opacity: 0;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.mobile-menu.is-open {
+  display: flex;
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.mobile-menu-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding-bottom: 24px;
+  margin-bottom: 24px;
+}
+
+.mobile-nav-link {
+  font-family: 'Geist', sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  color: #fff;
+  text-decoration: none;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  transition: opacity 0.15s;
+}
+
+.mobile-nav-link:last-child {
+  border-bottom: none;
+}
+
+.mobile-nav-link:hover {
+  opacity: 0.75;
+}
+
+.mobile-login-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  padding: 0 24px;
+  background-color: transparent;
+  color: #fff;
+  font-family: 'Geist', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-amber-500);
+  width: 100%;
+  transition: background-color 0.15s;
+}
+
+.mobile-login-btn:hover {
+  background-color: rgba(244, 150, 10, 0.1);
+}
+
+/* ============================================
    HERO SECTION (DESKTOP)
    ============================================ */
 /* ── Hero section ─────────────────────────────────────── */
@@ -1351,8 +1480,9 @@ p {
     height: 360px;
   }
 
-  .masthead{
-    padding: 24px;
+  .masthead {
+    padding: 0 24px;
+    height: 72px;
     flex-wrap: nowrap;
     gap: 12px;
   }
@@ -1411,6 +1541,11 @@ p {
   .listing-cards {
     overflow-x: auto;
   }
+
+  .listing-card {
+    flex: 0 0 280px;
+    min-width: 280px;
+  }
 }
 
 /* ============================================
@@ -1450,17 +1585,34 @@ p {
     margin-top: 12px;
   }
 
-  .masthead{
-    padding: 16px 16px 0 16px;
+  .masthead {
+    padding: 0 16px;
+    height: 64px;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     flex-wrap: nowrap;
   }
-  
-  .logo{
-    width: 150px;
-    height: 30px;
+
+  .masthead-nav {
+    display: none;
+  }
+
+  .masthead-actions {
+    display: none;
+  }
+
+  .masthead-mobile-right {
+    display: flex;
+  }
+
+  .mobile-menu {
+    top: 64px;
+  }
+
+  .logo {
+    width: 140px;
+    height: auto;
   }
   
   .secondary-button{
@@ -1664,8 +1816,8 @@ p {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-4);
-  flex: 0 0 448px;
-  width: 448px;
+  flex: 1 1 0;
+  min-width: 0;
   padding-bottom: var(--spacing-6);
   box-shadow: 0 0 0 1px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.06);
 }
@@ -1875,6 +2027,11 @@ p {
   .listing-cards {
     overflow-x: auto;
     margin-top: 24px;
+  }
+
+  .listing-card {
+    flex: 0 0 260px;
+    min-width: 260px;
   }
 }
 

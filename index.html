@@ -142,7 +142,28 @@
         <a href="/application.html" class="btn-cta-masthead">Can I swap my home?</a>
         <a href="https://app.swap-space.com/login" class="btn-login-masthead">Log in</a>
       </div>
+
+      <!-- Mobile: CTA + hamburger -->
+      <div class="masthead-mobile-right">
+        <a href="/application.html" class="btn-cta-masthead btn-cta-mobile">Can I swap my home?</a>
+        <button class="hamburger-btn" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
+      </div>
     </header>
+
+    <!-- Mobile menu overlay -->
+    <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+      <nav class="mobile-menu-nav">
+        <a href="#how-it-works" class="mobile-nav-link">How it works</a>
+        <a href="#who-is-it-for" class="mobile-nav-link">Who is it for?</a>
+        <a href="#guides" class="mobile-nav-link">Guides</a>
+        <a href="#faq" class="mobile-nav-link">FAQ</a>
+      </nav>
+      <a href="https://app.swap-space.com/login" class="mobile-login-btn">Log in</a>
+    </div>
 
     <!-- ============================================
          HERO SECTION
@@ -178,6 +199,7 @@
 
       <div class="listing-cards" id="listingCards">
         <!-- Skeleton loaders shown while fetching -->
+        <div class="listing-card listing-card--skeleton"></div>
         <div class="listing-card listing-card--skeleton"></div>
         <div class="listing-card listing-card--skeleton"></div>
         <div class="listing-card listing-card--skeleton"></div>
@@ -842,7 +864,7 @@
         function renderListings(data) {
           if (!listingCardsEl) return;
 
-          const listings = (data.listings || data || []).slice(0, 3);
+          const listings = (data.listings || data || []).slice(0, 4);
 
           if (listings.length === 0) {
             listingCardsEl.innerHTML = '';
@@ -997,6 +1019,37 @@
 
         // Kick off auto-rotation
         startTimer();
+      })();
+    </script>
+
+    <!-- Hamburger menu toggle -->
+    <script>
+      (function () {
+        var btn = document.getElementById('hamburgerBtn');
+        var menu = document.getElementById('mobileMenu');
+        var mobileLinks = menu.querySelectorAll('.mobile-nav-link');
+
+        function openMenu() {
+          menu.classList.add('is-open');
+          btn.setAttribute('aria-expanded', 'true');
+          btn.classList.add('is-open');
+          document.body.style.overflow = 'hidden';
+        }
+
+        function closeMenu() {
+          menu.classList.remove('is-open');
+          btn.setAttribute('aria-expanded', 'false');
+          btn.classList.remove('is-open');
+          document.body.style.overflow = '';
+        }
+
+        btn.addEventListener('click', function () {
+          menu.classList.contains('is-open') ? closeMenu() : openMenu();
+        });
+
+        mobileLinks.forEach(function (link) {
+          link.addEventListener('click', closeMenu);
+        });
       })();
     </script>
 
