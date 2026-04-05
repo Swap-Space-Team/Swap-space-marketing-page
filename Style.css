@@ -187,6 +187,108 @@
 }
 
 /* ============================================
+   HOW IT WORKS — HERO SECTION
+   ============================================ */
+.hiw-hero {
+  position: relative;
+  width: 100%;
+  height: 530px;
+  margin-top: 80px;
+  overflow: hidden;
+  background-color: var(--surface-hero);
+  display: flex;
+  align-items: flex-start;
+}
+
+.hiw-hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: 0;
+}
+
+.hiw-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(4, 63, 41, 0.55);
+  z-index: 1;
+}
+
+.hiw-hero-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 128px 0 0 80px;
+  max-width: 960px;
+}
+
+.hiw-hero-heading {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 60px;
+  font-weight: 700;
+  line-height: 72px;
+  letter-spacing: -1.2px;
+  color: var(--text-inverse);
+  margin: 0;
+  max-width: 880px;
+}
+
+.hiw-hero-body {
+  font-family: 'Geist', sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 28px;
+  color: var(--text-inverse);
+  margin: 0;
+  max-width: 813px;
+}
+
+.hiw-hero-cta {
+  margin-top: 8px;
+}
+
+/* Mobile */
+@media screen and (max-width: 768px) {
+  .hiw-hero {
+    height: auto;
+    min-height: 480px;
+    margin-top: 64px;
+    align-items: flex-end;
+  }
+
+  .hiw-hero-content {
+    padding: 40px 16px 48px;
+    max-width: 100%;
+    gap: 14px;
+    width: 100%;
+  }
+
+  .hiw-hero-heading {
+    font-size: 34px;
+    line-height: 42px;
+    letter-spacing: -0.5px;
+    max-width: 100%;
+  }
+
+  .hiw-hero-body {
+    font-size: 15px;
+    line-height: 24px;
+    max-width: 100%;
+  }
+
+  .hiw-hero-cta {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ============================================
    CSS RESET & GLOBAL STYLES (DESKTOP)
    ============================================ */
 
