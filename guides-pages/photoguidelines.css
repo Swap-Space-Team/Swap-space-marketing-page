@@ -45,9 +45,11 @@
 }
 
 .guide-hero-text h1 {
+  font-family: 'Clash Display', sans-serif;
   font-size: 72px;
-  line-height: 90px;
+  line-height: 88px;
   font-weight: 600;
+  letter-spacing: -1.44px;
   margin: 0 0 12px 0;
   color: #fff;
 }
@@ -134,7 +136,10 @@
 }
 
 .guide-step-header h2 {
+  font-family: 'Clash Display', sans-serif;
   font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.56px;
   margin: 0 0 8px 0;
 }
 
