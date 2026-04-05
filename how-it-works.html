@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" type="text/css" href="Style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="canonical" href="https://www.swap-space.com/how-it-works" />
+    <title>How It Works | SwapSpace</title>
+    <meta name="description" content="Learn how SwapSpace home swapping works — list your home, find a swap, and travel for free." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="ClashDisplay_Complete/Fonts/WEB/css/clash-display.css" />
+    <link rel="stylesheet" href="swap-space-tokens.css" />
+    <style>
+      @font-face {
+        font-family: 'Geist';
+        src: url('https://cdn.jsdelivr.net/npm/geist@1.3.0/dist/fonts/geist-sans/Geist-Regular.woff2') format('woff2');
+        font-weight: 400; font-style: normal;
+      }
+      @font-face {
+        font-family: 'Geist';
+        src: url('https://cdn.jsdelivr.net/npm/geist@1.3.0/dist/fonts/geist-sans/Geist-Medium.woff2') format('woff2');
+        font-weight: 500; font-style: normal;
+      }
+      @font-face {
+        font-family: 'Geist';
+        src: url('https://cdn.jsdelivr.net/npm/geist@1.3.0/dist/fonts/geist-sans/Geist-SemiBold.woff2') format('woff2');
+        font-weight: 600; font-style: normal;
+      }
+      @font-face {
+        font-family: 'Geist';
+        src: url('https://cdn.jsdelivr.net/npm/geist@1.3.0/dist/fonts/geist-sans/Geist-Bold.woff2') format('woff2');
+        font-weight: 700; font-style: normal;
+      }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body { font-family: 'Geist', sans-serif; background-color: #fff; }
+
+      .page-content {
+        min-height: calc(100vh - 80px);
+        margin-top: 80px;
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <!-- ============================================
+         MASTHEAD
+         ============================================ -->
+    <header class="masthead">
+      <a href="/" class="masthead-logo-link">
+        <img class="logo" src="assets/Swapspace-wordmark-white.svg" alt="SwapSpace">
+      </a>
+
+      <nav class="masthead-nav">
+        <a href="/how-it-works.html" class="nav-link">How it works</a>
+        <a href="#who-is-it-for" class="nav-link">Who is it for?</a>
+        <a href="guides.html" class="nav-link">Guides</a>
+        <a href="#faq" class="nav-link">FAQ</a>
+      </nav>
+
+      <div class="masthead-actions">
+        <a href="/application.html" class="btn-cta-masthead">Can I swap my home?</a>
+        <a href="https://app.swap-space.com/login" class="btn-login-masthead">Log in</a>
+      </div>
+
+      <!-- Mobile: CTA + hamburger -->
+      <div class="masthead-mobile-right">
+        <a href="/application.html" class="btn-cta-masthead btn-cta-mobile">Can I swap my home?</a>
+        <button class="hamburger-btn" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Mobile menu overlay -->
+    <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+      <nav class="mobile-menu-nav">
+        <a href="/how-it-works.html" class="mobile-nav-link">How it works</a>
+        <a href="#who-is-it-for" class="mobile-nav-link">Who is it for?</a>
+        <a href="guides.html" class="mobile-nav-link">Guides</a>
+        <a href="#faq" class="mobile-nav-link">FAQ</a>
+      </nav>
+      <a href="https://app.swap-space.com/login" class="mobile-login-btn">Log in</a>
+    </div>
+
+    <!-- ============================================
+         PAGE CONTENT (empty for now)
+         ============================================ -->
+    <main class="page-content">
+    </main>
+
+    <!-- ============================================
+         FOOTER
+         ============================================ -->
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <img src="assets/Swapspace-logo-in-white.svg" alt="SwapSpace Logo" class="footer-logo" />
+          <p class="footer-tagline">Built for those ready to explore the world</p>
+        </div>
+
+        <div class="footer-column">
+          <h4 class="footer-heading">Socials</h4>
+          <div class="footer-links">
+            <a href="https://www.facebook.com/people/Swap-Space/61573070484976/" class="footer-link">Facebook</a>
+            <a href="https://www.instagram.com/swapspaceapp?igsh=MWQzZmN5d2dhaG1yeg%3D%3D&utm_source=qr" class="footer-link">Instagram</a>
+            <a href="https://x.com/SwapSpaceapp" class="footer-link">X</a>
+          </div>
+        </div>
+
+        <div class="footer-column">
+          <h4 class="footer-heading">Company</h4>
+          <div class="footer-links">
+            <a href="guides.html" class="footer-link">Guides</a>
+            <a href="https://blog.swap-space.com/" class="footer-link">Blog</a>
+            <a href="https://www.notion.so/Privacy-policy-for-Swap-Space-1fae94969a8980e29e02ef5a3051e927?pvs=4" class="footer-link">Privacy policy</a>
+          </div>
+        </div>
+
+        <div class="footer-column">
+          <h4 class="footer-heading">Contact</h4>
+          <div class="footer-links">
+            <a href="mailto:Hello@Swap-space.com" class="footer-link">Hello@swap-space.com</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Hamburger menu toggle -->
+    <script>
+      (function () {
+        var btn = document.getElementById('hamburgerBtn');
+        var menu = document.getElementById('mobileMenu');
+        var mobileLinks = menu.querySelectorAll('.mobile-nav-link');
+
+        function openMenu() {
+          menu.classList.add('is-open');
+          btn.setAttribute('aria-expanded', 'true');
+          btn.classList.add('is-open');
+          document.body.style.overflow = 'hidden';
+        }
+
+        function closeMenu() {
+          menu.classList.remove('is-open');
+          btn.setAttribute('aria-expanded', 'false');
+          btn.classList.remove('is-open');
+          document.body.style.overflow = '';
+        }
+
+        btn.addEventListener('click', function () {
+          menu.classList.contains('is-open') ? closeMenu() : openMenu();
+        });
+
+        mobileLinks.forEach(function (link) {
+          link.addEventListener('click', closeMenu);
+        });
+      })();
+    </script>
+
+  </body>
+</html>
