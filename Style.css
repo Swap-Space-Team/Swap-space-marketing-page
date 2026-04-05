@@ -623,6 +623,7 @@
 
 .btn-hiw-step:hover {
   background-color: var(--color-amber-600);
+  color: #fff;
 }
 
 /* HIW Steps — mobile */
@@ -785,6 +786,7 @@ p {
 
 .btn-cta-masthead:hover {
   background-color: var(--color-amber-600);
+  color: #fff;
 }
 
 .btn-login-masthead {
@@ -1313,6 +1315,7 @@ p {
 
 .btn-travel-cta:hover {
   background-color: var(--color-amber-600);
+  color: #fff;
 }
 
 /* ============================================
@@ -1432,6 +1435,7 @@ p {
 
 .btn-difference-primary:hover {
   background-color: var(--color-amber-600);
+  color: #fff;
 }
 
 .btn-difference-ghost {
@@ -1610,6 +1614,7 @@ p {
 
 .btn-traveller-primary:hover {
   background-color: #d97706;
+  color: #fff;
 }
 
 /* Right block: video card anchored top-right */
