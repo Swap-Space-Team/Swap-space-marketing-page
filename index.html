@@ -4,15 +4,14 @@
        HEAD SECTION
        ============================================ -->
   <head>
-    <!-- Stylesheet -->
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="Style.css"
-    />
     <meta charset="UTF-8" />
-    <meta name="robots" content="index, follow" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <!-- Preconnect to key third-party origins -->
+    <link rel="preconnect" href="https://www.googletagmanager.com" />
+    <link rel="preconnect" href="https://events.swap-space.com" />
+    <!-- Stylesheet -->
+    <link rel="stylesheet" type="text/css" href="Style.css" />
+    <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://www.swap-space.com/" />
     <script
       async=""
@@ -105,17 +104,10 @@
         fbq("init", "2324029631392103");
         fbq("track", "PageView");
 
-        // Google Ads tag
-        var gadsScript = document.createElement('script');
-        gadsScript.async = true;
-        gadsScript.src = 'https://www.googletagmanager.com/gtag/js?id=AW-18015994151';
-        document.head.appendChild(gadsScript);
-        gadsScript.onload = function() {
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'AW-18015994151');
-        };
+        // Google Ads tag — gtag.js already loaded in head, just configure the additional ID
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('config', 'AW-18015994151');
       });
     </script>
   </head>
@@ -129,7 +121,7 @@
          ============================================ -->
     <header class="masthead">
       <a href="/" class="masthead-logo-link">
-        <img class="logo" src="assets/Swapspace-wordmark-white.svg" alt="SwapSpace">
+        <img class="logo" src="assets/Swapspace-wordmark-white.svg" alt="SwapSpace" width="140" height="29">
       </a>
 
       <nav class="masthead-nav">
@@ -179,7 +171,7 @@
         <div class="featured-in-section">
           <p class="featured-in-label">AS SEEN IN</p>
           <div class="featured-in-logos">
-            <img src="assets/City news logo white .svg" alt="City News" class="featured-in-logo">
+            <img src="assets/City news logo white .svg" alt="City News" class="featured-in-logo" width="120" height="32" loading="lazy">
           </div>
         </div>
       </div>
@@ -230,21 +222,21 @@
 
       <div class="difference-features">
         <div class="difference-feature">
-          <img src="assets/Verified members icon.svg" alt="Verified members" class="difference-feature-icon">
+          <img src="assets/Verified members icon.svg" alt="Verified members" class="difference-feature-icon" width="56" height="39" loading="lazy">
           <div class="difference-feature-text">
             <h3 class="difference-feature-title">Verified members only</h3>
             <p class="difference-feature-body">Every home on SwapSpace belongs to a real, verified member. You always know who you are swapping with before you confirm anything.</p>
           </div>
         </div>
         <div class="difference-feature">
-          <img src="assets/Host and earn coins icon.svg" alt="SwapCredits" class="difference-feature-icon">
+          <img src="assets/Host and earn coins icon.svg" alt="SwapCredits" class="difference-feature-icon" width="56" height="56" loading="lazy">
           <div class="difference-feature-text">
             <h3 class="difference-feature-title">Host and earn SwapCredits</h3>
             <p class="difference-feature-body">Swap homes directly with another member and earn SwapCredits when you host. Travel on your schedule with SwapCredits.</p>
           </div>
         </div>
         <div class="difference-feature">
-          <img src="assets/membership icon.svg" alt="No fees" class="difference-feature-icon">
+          <img src="assets/membership icon.svg" alt="No fees" class="difference-feature-icon" width="56" height="56" loading="lazy">
           <div class="difference-feature-text">
             <h3 class="difference-feature-title">No service fee or cleaning fee</h3>
             <p class="difference-feature-body">One annual or quarterly membership unlocks unlimited home swaps. No service fees, no cleaning fees, just show up and enjoy where you are.</p>
@@ -277,22 +269,22 @@
          ============================================ -->
     <section class="traveller-section">
       <div class="traveller-left">
-        <h2 class="traveller-heading">Home swapping for every kind of traveller. <img src="assets/Explorer icon.svg" class="traveller-explorer-icon" alt=""></h2>
+        <h2 class="traveller-heading">Home swapping for every kind of traveller. <img src="assets/Explorer icon.svg" class="traveller-explorer-icon" alt="" width="40" height="40" loading="lazy"></h2>
         <p class="traveller-body">Whether you are a solo explorer, a family looking for more space, a remote worker chasing a change of scenery, or a retiree with the time to finally see the world, SwapSpace was built for you. If you have a home worth sharing, you have everything you need to start swapping.</p>
         <a href="/application.html" class="btn-traveller-primary">Can I swap my home?</a>
       </div>
       <div class="traveller-right">
         <div class="traveller-video-container">
-          <video class="traveller-video active" autoplay muted loop playsinline preload="auto">
+          <video class="traveller-video active" autoplay muted loop playsinline preload="metadata">
             <source src="assets/videos/solo-travel.mp4" type="video/mp4">
           </video>
-          <video class="traveller-video" muted loop playsinline preload="auto">
+          <video class="traveller-video" muted loop playsinline preload="none">
             <source src="assets/videos/family-travel.mp4" type="video/mp4">
           </video>
-          <video class="traveller-video" muted loop playsinline preload="auto">
+          <video class="traveller-video" muted loop playsinline preload="none">
             <source src="assets/videos/retiree.mp4" type="video/mp4">
           </video>
-          <video class="traveller-video" muted loop playsinline preload="auto">
+          <video class="traveller-video" muted loop playsinline preload="none">
             <source src="assets/videos/remote-worker.mp4" type="video/mp4">
           </video>
         </div>
