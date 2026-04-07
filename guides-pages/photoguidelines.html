@@ -3,6 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
+  <meta name="robots" content="index, follow" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="canonical" href="https://www.swap-space.com/guides-pages/photoguidelines" />
       <meta
@@ -25,9 +26,17 @@
   <meta property="twitter:image" content="https://www.swap-space.com/assets/decluter-1.webp" />
   <title>How to photograph your home for a home swap | SwapSpace</title>
   <link rel="icon" href="../assets/Swap-space_favicon_g6hAj61Zg_Rij2PQiQbR6.svg" />
+  <link rel="stylesheet" href="../ClashDisplay_Complete/Fonts/WEB/css/clash-display.css" />
+  <link rel="stylesheet" href="../swap-space-tokens.css" />
   <link rel="stylesheet" href="../Style.css" />
   <link rel="stylesheet" href="../guides-page.css" />
   <link rel="stylesheet" href="photoguidelines.css" />
+  <style>
+    @font-face { font-family: 'Geist'; src: url('../assets/Geist-Regular_mbVT_SmsTvyJMAw1fxROp.ttf'); font-weight: 400; }
+    @font-face { font-family: 'Geist'; src: url('../assets/Geist-Medium_Jg6B-stEFhOflMHleox4D.ttf'); font-weight: 500; }
+    @font-face { font-family: 'Geist'; src: url('../assets/Geist-SemiBold_hwscF-kRHXo8XSftNHkjB.ttf'); font-weight: 600; }
+    @font-face { font-family: 'Geist'; src: url('../assets/Geist-Bold_nVi4kiOs_3Bb_EFbLMflT.ttf'); font-weight: 700; }
+  </style>
 
   <!-- Anti-flickering script -->
   <script>
@@ -49,14 +58,40 @@
 </head>
 
 <body>
-  <header class="guides-top-bar">
-    <div class="guides-brand">
-      <a href="/" class="guides-logo-link">
-        <img class="guides-logo" src="../assets/Swapspace guides.svg" alt="SwapSpace" />
-      </a>
+  <header class="masthead">
+    <a href="/" class="masthead-logo-link">
+      <img class="logo" src="../assets/Swapspace-wordmark-white.svg" alt="SwapSpace">
+    </a>
+    <nav class="masthead-nav">
+      <a href="/how-it-works.html" class="nav-link">How it works</a>
+      <a href="#who-is-it-for" class="nav-link" style="display:none">Who is it for?</a>
+      <a href="/guides.html" class="nav-link">Guides</a>
+      <a href="/#faq" class="nav-link">FAQ</a>
+    </nav>
+    <div class="masthead-actions">
+      <a href="/application.html" class="btn-cta-masthead">Can I swap my home?</a>
+      <a href="https://app.swap-space.com/login" class="btn-login-masthead">Log in</a>
     </div>
-    <a href="mailto:Hello@Swap-space.com" class="guides-contact-button">Contact us</a>
+    <div class="masthead-mobile-right">
+      <a href="/application.html" class="btn-cta-masthead btn-cta-mobile">Can I swap my home?</a>
+      <button class="hamburger-btn" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+    </div>
   </header>
+
+  <!-- Mobile menu -->
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <nav class="mobile-menu-nav">
+      <a href="/how-it-works.html" class="mobile-nav-link">How it works</a>
+      <a href="#who-is-it-for" class="mobile-nav-link" style="display:none">Who is it for?</a>
+      <a href="/guides.html" class="mobile-nav-link">Guides</a>
+      <a href="/#faq" class="mobile-nav-link">FAQ</a>
+    </nav>
+    <a href="https://app.swap-space.com/login" class="mobile-login-btn">Log in</a>
+  </div>
 
   <main class="guide-hero">
     <div class="guide-hero-media">
@@ -255,7 +290,7 @@
   <footer class="footer">
     <div class="footer-content">
       <div class="footer-brand">
-        <img src="../assets/Swapspace-logo-in-white.svg" alt="SwapSpace Logo"
+        <img src="../assets/Swapspace-wordmark-white.svg" alt="SwapSpace Logo"
           class="footer-logo" />
         <p class="footer-tagline">Built for those ready to explore the world</p>
       </div>
@@ -288,6 +323,18 @@
       </div>
     </div>
   </footer>
+
+  <script>
+    (function () {
+      var btn = document.getElementById('hamburgerBtn');
+      var menu = document.getElementById('mobileMenu');
+      var mobileLinks = menu.querySelectorAll('.mobile-nav-link');
+      function openMenu() { menu.classList.add('is-open'); btn.setAttribute('aria-expanded', 'true'); btn.classList.add('is-open'); document.body.style.overflow = 'hidden'; }
+      function closeMenu() { menu.classList.remove('is-open'); btn.setAttribute('aria-expanded', 'false'); btn.classList.remove('is-open'); document.body.style.overflow = ''; }
+      btn.addEventListener('click', function () { menu.classList.contains('is-open') ? closeMenu() : openMenu(); });
+      mobileLinks.forEach(function (link) { link.addEventListener('click', closeMenu); });
+    })();
+  </script>
 </body>
 
 </html>

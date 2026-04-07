@@ -1,0 +1,723 @@
+/* ============================================================
+   SWAP SPACE — Design System Tokens
+   Generated from Figma: SwapSpace Design System
+   Naming mirrors Figma paint styles, text styles & variables
+   ============================================================ */
+
+/* @import this file at the top of your global stylesheet:
+   @import './swap-space-tokens.css';
+
+   Usage examples:
+   color: var(--color-primary-500);
+   background: var(--surface-hero);
+   font-size: var(--text-heading-h1-size);
+   padding: var(--spacing-4);
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@100;200;300;400;500;600;700;800;900&family=Geist+Mono:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+/* ============================================================
+   1. PRIMITIVES — Raw Palette (mirrors Figma: 🎨 Primitives)
+   Naming: --color-{palette}-{shade}
+   Figma:  color/primary/500  →  var(--color-primary-500)
+   ============================================================ */
+
+:root {
+
+  /* Primary — Warm Forest Green */
+  --color-primary-50:  rgb(240, 252, 244);
+  --color-primary-100: rgb(215, 248, 230);
+  --color-primary-200: rgb(169, 239, 201);
+  --color-primary-300: rgb(107, 224, 163);
+  --color-primary-400: rgb(50,  200, 128);
+  --color-primary-500: rgb(7,   148, 85);   /* Brand primary #079455 */
+  --color-primary-600: rgb(6,   125, 74);
+  --color-primary-700: rgb(6,   99,  61);   /* Forest mid — feature surfaces */
+  --color-primary-800: rgb(6,   79,  50);
+  --color-primary-900: rgb(4,   63,  41);   /* Deep forest — hero surfaces */
+
+  /* Amber — Co-primary Warm Gold */
+  --color-amber-50:  rgb(255, 248, 235);
+  --color-amber-100: rgb(255, 239, 203);
+  --color-amber-200: rgb(253, 224, 153);
+  --color-amber-300: rgb(252, 203, 90);
+  --color-amber-400: rgb(251, 179, 30);     /* Bold gold — CTA on dark surfaces */
+  --color-amber-500: rgb(244, 150, 10);     /* Amber anchor */
+  --color-amber-600: rgb(216, 115, 7);
+  --color-amber-700: rgb(179, 84,  10);
+  --color-amber-800: rgb(146, 66,  14);
+  --color-amber-900: rgb(121, 55,  16);
+
+  /* Terra — Bold Warm Accent */
+  --color-terra-50:  rgb(255, 243, 240);
+  --color-terra-100: rgb(254, 229, 223);
+  --color-terra-200: rgb(252, 200, 187);
+  --color-terra-300: rgb(249, 162, 144);
+  --color-terra-400: rgb(244, 118, 96);
+  --color-terra-500: rgb(233, 79,  56);     /* Error / destructive */
+  --color-terra-600: rgb(196, 56,  38);
+  --color-terra-700: rgb(165, 46,  31);
+  --color-terra-800: rgb(135, 40,  28);
+  --color-terra-900: rgb(110, 38,  26);
+
+  /* Neutral — Warm Sand Base */
+  --color-neutral-0:   rgb(255, 255, 255);  /* Pure white */
+  --color-neutral-50:  rgb(250, 249, 247);  /* Warm cream */
+  --color-neutral-100: rgb(244, 242, 239);
+  --color-neutral-200: rgb(230, 227, 222);  /* Borders */
+  --color-neutral-300: rgb(206, 202, 196);
+  --color-neutral-400: rgb(163, 158, 151);  /* Placeholder / subtle */
+  --color-neutral-500: rgb(124, 119, 112);  /* Muted text */
+  --color-neutral-600: rgb(96,  92,  86);   /* Secondary text */
+  --color-neutral-700: rgb(71,  68,  64);   /* Body text */
+  --color-neutral-800: rgb(46,  44,  41);
+  --color-neutral-900: rgb(26,  25,  23);   /* Primary text / ink */
+  --color-neutral-950: rgb(16,  15,  14);   /* Near black */
+
+  /* Semantic — Figma: Semantic/* */
+  --color-semantic-success: rgb(7,   148, 85);
+  --color-semantic-warning:  rgb(244, 150, 10);
+  --color-semantic-error:    rgb(220, 50,  50);
+  --color-semantic-info:     rgb(59,  130, 246);
+
+
+  /* ============================================================
+     2. SEMANTIC COLOURS — Role-based tokens (mirrors Figma: 🧩 Semantic)
+     Naming: --{role}-{sub-role}
+     Figma:  surface/hero  →  var(--surface-hero)
+     ============================================================ */
+
+  /* Surfaces */
+  --surface-default:       var(--color-neutral-0);    /* White — default page bg */
+  --surface-subtle:        var(--color-neutral-50);   /* Warm cream — secondary sections */
+  --surface-hero:          var(--color-primary-900);  /* Deep forest — hero moments */
+  --surface-feature:       var(--color-primary-700);  /* Forest mid — trust sections */
+  --surface-warm:          var(--color-amber-50);     /* Amber warmth — credits/welcome */
+  --surface-dark:          var(--color-neutral-900);  /* Ink dark — footer */
+  --surface-overlay:       var(--color-neutral-800);
+  --surface-card:          var(--color-neutral-0);
+  --surface-card-subtle:   var(--color-neutral-50);
+  --surface-input:         var(--color-neutral-0);
+  --surface-input-focus:   var(--color-primary-50);
+
+  /* Text */
+  --text-primary:           var(--color-neutral-900);
+  --text-secondary:         var(--color-neutral-600);
+  --text-tertiary:          var(--color-neutral-500);
+  --text-disabled:          var(--color-neutral-300);
+  --text-placeholder:       var(--color-neutral-400);
+  --text-inverse:           var(--color-neutral-0);
+  --text-inverse-secondary: var(--color-primary-200);
+  --text-brand:             var(--color-primary-500);
+  --text-brand-on-dark:     var(--color-primary-200);
+  --text-amber:             var(--color-amber-600);
+  --text-on-amber:          var(--color-neutral-900);
+
+  /* Borders */
+  --border-default:  var(--color-neutral-200);
+  --border-strong:   var(--color-neutral-300);
+  --border-focus:    var(--color-primary-500);
+  --border-error:    var(--color-terra-500);
+  --border-inverse:  var(--color-primary-700);
+
+  /* Actions — Primary (green) */
+  --action-primary-bg:          var(--color-primary-500);
+  --action-primary-bg-hover:    var(--color-primary-600);
+  --action-primary-bg-pressed:  var(--color-primary-700);
+  --action-primary-text:        var(--color-neutral-0);
+  --action-primary-border:      var(--color-primary-500);
+
+  /* Actions — Primary on dark (amber — the bold pairing) */
+  --action-primary-on-dark-bg:          var(--color-amber-400);
+  --action-primary-on-dark-bg-hover:    var(--color-amber-300);
+  --action-primary-on-dark-bg-pressed:  var(--color-amber-500);
+  --action-primary-on-dark-text:        var(--color-neutral-900);
+
+  /* Actions — Secondary (outlined) */
+  --action-secondary-bg:          var(--color-neutral-0);
+  --action-secondary-bg-hover:    var(--color-primary-50);
+  --action-secondary-text:        var(--color-primary-600);
+  --action-secondary-border:      var(--color-primary-500);
+
+  /* Actions — Ghost on dark */
+  --action-ghost-on-dark-bg:          var(--color-primary-700);
+  --action-ghost-on-dark-bg-hover:    var(--color-primary-600);
+  --action-ghost-on-dark-text:        var(--color-neutral-0);
+  --action-ghost-on-dark-border:      var(--color-neutral-0);
+
+  /* Actions — Amber */
+  --action-amber-bg:          var(--color-amber-500);
+  --action-amber-bg-hover:    var(--color-amber-600);
+  --action-amber-bg-pressed:  var(--color-amber-700);
+  --action-amber-text:        var(--color-neutral-0);
+
+  /* Actions — Destructive */
+  --action-destructive-bg:        var(--color-terra-500);
+  --action-destructive-bg-hover:  var(--color-terra-600);
+  --action-destructive-text:      var(--color-neutral-0);
+
+  /* Status — Success */
+  --status-success-bg:     var(--color-primary-50);
+  --status-success-text:   var(--color-primary-700);
+  --status-success-border: var(--color-primary-200);
+  --status-success-icon:   var(--color-primary-500);
+
+  /* Status — Warning */
+  --status-warning-bg:     var(--color-amber-50);
+  --status-warning-text:   var(--color-amber-800);
+  --status-warning-border: var(--color-amber-200);
+  --status-warning-icon:   var(--color-amber-500);
+
+  /* Status — Error */
+  --status-error-bg:     var(--color-terra-50);
+  --status-error-text:   var(--color-terra-700);
+  --status-error-border: var(--color-terra-200);
+  --status-error-icon:   var(--color-terra-500);
+
+  /* Product — SwapCredits */
+  --product-swapcredit-bg:     var(--color-amber-50);
+  --product-swapcredit-text:   var(--color-amber-800);
+  --product-swapcredit-icon:   var(--color-amber-500);
+  --product-swapcredit-border: var(--color-amber-200);
+
+  /* Product — Verified */
+  --product-verified-bg:   var(--color-primary-50);
+  --product-verified-text: var(--color-primary-700);
+  --product-verified-icon: var(--color-primary-500);
+
+  /* Product — Listing Card */
+  --product-listing-card-bg:       var(--color-neutral-0);
+  --product-listing-card-border:   var(--color-neutral-200);
+  --product-listing-card-tag-bg:   var(--color-primary-50);
+  --product-listing-card-tag-text: var(--color-primary-700);
+
+
+  /* ============================================================
+     3. SPACING — 4pt base grid (mirrors Figma: spacing/*)
+     Naming: --spacing-{n}  where n = px value / 4
+     Figma:  spacing/4  →  var(--spacing-4)   (= 16px)
+     ============================================================ */
+
+  --spacing-1:  4px;
+  --spacing-2:  8px;
+  --spacing-3:  12px;
+  --spacing-4:  16px;
+  --spacing-5:  20px;
+  --spacing-6:  24px;
+  --spacing-7:  28px;
+  --spacing-8:  32px;
+  --spacing-9:  36px;
+  --spacing-10: 40px;
+  --spacing-11: 44px;
+  --spacing-12: 48px;
+  --spacing-14: 56px;
+  --spacing-16: 64px;
+  --spacing-20: 80px;
+  --spacing-24: 96px;
+  --spacing-28: 112px;
+  --spacing-32: 128px;
+  --spacing-40: 160px;
+  --spacing-48: 192px;
+  --spacing-56: 224px;
+  --spacing-64: 256px;
+
+  /* Semantic Spacing — Component padding (mirrors Figma: component/padding/*) */
+  --component-padding-xs: var(--spacing-1);
+  --component-padding-sm: var(--spacing-2);
+  --component-padding-md: var(--spacing-3);
+  --component-padding-lg: var(--spacing-4);
+  --component-padding-xl: var(--spacing-6);
+
+  /* Semantic Spacing — Component gap (mirrors Figma: component/gap/*) */
+  --component-gap-xs: var(--spacing-1);
+  --component-gap-sm: var(--spacing-2);
+  --component-gap-md: var(--spacing-3);
+  --component-gap-lg: var(--spacing-4);
+  --component-gap-xl: var(--spacing-6);
+
+  /* Semantic Spacing — Section padding (mirrors Figma: section/padding/*) */
+  --section-padding-sm: var(--spacing-12);
+  --section-padding-md: var(--spacing-20);
+  --section-padding-lg: var(--spacing-32);
+
+  /* Layout (mirrors Figma: layout/*) */
+  --layout-gutter-mobile:       16px;
+  --layout-gutter-tablet:       32px;
+  --layout-gutter-desktop:      40px;
+  --layout-column-gap-mobile:   16px;
+  --layout-column-gap-tablet:   24px;
+  --layout-column-gap-desktop:  24px;
+  --layout-max-width-sm:        640px;
+  --layout-max-width-md:        768px;
+  --layout-max-width-lg:        1024px;
+  --layout-max-width-xl:        1280px;
+  --layout-max-width-2xl:       1440px;
+
+
+  /* ============================================================
+     4. BORDER RADIUS (mirrors Figma: radius/*)
+     Figma:  radius/md  →  var(--radius-md)
+     ============================================================ */
+
+  --radius-none: 0px;
+  --radius-xs:   2px;
+  --radius-sm:   4px;
+  --radius-md:   6px;
+  --radius-lg:   8px;
+  --radius-xl:   12px;
+  --radius-2xl:  16px;
+  --radius-3xl:  24px;
+  --radius-full: 9999px;  /* Pills, avatars, buttons */
+
+
+  /* ============================================================
+     5. SIZING — Component heights (mirrors Figma: sizing/*)
+     Figma:  sizing/button-md  →  var(--sizing-button-md)
+     ============================================================ */
+
+  --sizing-button-sm:   32px;
+  --sizing-button-md:   40px;
+  --sizing-button-lg:   48px;
+  --sizing-input-sm:    32px;
+  --sizing-input-md:    40px;
+  --sizing-input-lg:    48px;
+  --sizing-icon-xs:     12px;
+  --sizing-icon-sm:     16px;
+  --sizing-icon-md:     20px;
+  --sizing-icon-lg:     24px;
+  --sizing-icon-xl:     32px;
+  --sizing-avatar-sm:   24px;
+  --sizing-avatar-md:   32px;
+  --sizing-avatar-lg:   40px;
+  --sizing-avatar-xl:   56px;
+  --sizing-avatar-2xl:  80px;
+
+}
+
+
+/* ============================================================
+   6. TYPOGRAPHY — Text styles (mirrors Figma text styles)
+   Figma style name  →  CSS class / utility
+   Display/2XL       →  .text-display-2xl
+   Heading/H1        →  .text-heading-h1  (or use h1 element style)
+   Body/MD Regular   →  .text-body-md-regular
+   Label/LG          →  .text-label-lg
+   ============================================================ */
+
+/* Font faces — Clash Display for headings, Geist for body */
+/* Note: Install Clash Display from fontshare.com and host locally,
+   or reference via @font-face below once self-hosted */
+
+/* Display styles — Clash Display (headings) */
+/* TODO: swap font-family to 'Clash Display' once font is available in code env */
+
+.text-display-2xl {
+  font-family: 'Clash Display', 'Geist', sans-serif;
+  font-weight: 700;
+  font-size: 72px;
+  line-height: 90px;
+  letter-spacing: -2px;
+}
+
+.text-display-xl {
+  font-family: 'Clash Display', 'Geist', sans-serif;
+  font-weight: 700;
+  font-size: 60px;
+  line-height: 72px;
+  letter-spacing: -1.5px;
+}
+
+.text-display-lg {
+  font-family: 'Clash Display', 'Geist', sans-serif;
+  font-weight: 700;
+  font-size: 48px;
+  line-height: 60px;
+  letter-spacing: -1px;
+}
+
+/* Heading styles — Clash Display */
+
+.text-heading-h1 {
+  font-family: 'Clash Display', 'Geist', sans-serif;
+  font-weight: 600;
+  font-size: 36px;
+  line-height: 44px;
+  letter-spacing: -0.75px;
+}
+
+.text-heading-h2 {
+  font-family: 'Clash Display', 'Geist', sans-serif;
+  font-weight: 600;
+  font-size: 30px;
+  line-height: 38px;
+  letter-spacing: -0.5px;
+}
+
+.text-heading-h3 {
+  font-family: 'Clash Display', 'Geist', sans-serif;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 32px;
+  letter-spacing: -0.25px;
+}
+
+.text-heading-h4 {
+  font-family: 'Clash Display', 'Geist', sans-serif;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 28px;
+  letter-spacing: 0px;
+}
+
+.text-heading-h5 {
+  font-family: 'Clash Display', 'Geist', sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 28px;
+  letter-spacing: 0px;
+}
+
+.text-heading-h6 {
+  font-family: 'Clash Display', 'Geist', sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0px;
+}
+
+/* Body styles — Geist */
+
+.text-body-xl-regular {
+  font-family: 'Geist', sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 30px;
+  letter-spacing: 0px;
+}
+
+.text-body-xl-medium {
+  font-family: 'Geist', sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 30px;
+  letter-spacing: 0px;
+}
+
+.text-body-lg-regular {
+  font-family: 'Geist', sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 28px;
+  letter-spacing: 0px;
+}
+
+.text-body-lg-medium {
+  font-family: 'Geist', sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 28px;
+  letter-spacing: 0px;
+}
+
+.text-body-md-regular {
+  font-family: 'Geist', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0px;
+}
+
+.text-body-md-medium {
+  font-family: 'Geist', sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0px;
+}
+
+.text-body-sm-regular {
+  font-family: 'Geist', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0px;
+}
+
+.text-body-sm-medium {
+  font-family: 'Geist', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0px;
+}
+
+/* Label styles — Geist SemiBold */
+
+.text-label-lg {
+  font-family: 'Geist', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.1px;
+}
+
+.text-label-md {
+  font-family: 'Geist', sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 18px;
+  letter-spacing: 0.1px;
+}
+
+.text-label-sm {
+  font-family: 'Geist', sans-serif;
+  font-weight: 600;
+  font-size: 11px;
+  line-height: 16px;
+  letter-spacing: 0.2px;
+}
+
+/* Caption styles — Geist Regular */
+
+.text-caption-md {
+  font-family: 'Geist', sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 18px;
+  letter-spacing: 0px;
+}
+
+.text-caption-sm {
+  font-family: 'Geist', sans-serif;
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 16px;
+  letter-spacing: 0px;
+}
+
+/* Code styles — Geist Mono */
+
+.text-code-md {
+  font-family: 'Geist Mono', monospace;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 22px;
+  letter-spacing: 0px;
+}
+
+.text-code-sm {
+  font-family: 'Geist Mono', monospace;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 20px;
+  letter-spacing: 0px;
+}
+
+
+/* ============================================================
+   7. BASE ELEMENT STYLES
+   Applies design tokens to standard HTML elements
+   ============================================================ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'Geist', sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--text-primary);
+  background-color: var(--surface-default);
+}
+
+h1 { @extend .text-heading-h1; }
+h2 { @extend .text-heading-h2; }
+h3 { @extend .text-heading-h3; }
+h4 { @extend .text-heading-h4; }
+h5 { @extend .text-heading-h5; }
+h6 { @extend .text-heading-h6; }
+
+/* If not using @extend (plain CSS), apply directly: */
+h1 {
+  font-family: 'Clash Display', 'Geist', sans-serif;
+  font-weight: 600;
+  font-size: 36px;
+  line-height: 44px;
+  letter-spacing: -0.75px;
+  color: var(--text-primary);
+}
+
+h2 {
+  font-family: 'Clash Display', 'Geist', sans-serif;
+  font-weight: 600;
+  font-size: 30px;
+  line-height: 38px;
+  letter-spacing: -0.5px;
+  color: var(--text-primary);
+}
+
+h3 {
+  font-family: 'Clash Display', 'Geist', sans-serif;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 32px;
+  letter-spacing: -0.25px;
+  color: var(--text-primary);
+}
+
+h4 {
+  font-family: 'Clash Display', 'Geist', sans-serif;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 28px;
+  color: var(--text-primary);
+}
+
+h5 {
+  font-family: 'Clash Display', 'Geist', sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 28px;
+  color: var(--text-primary);
+}
+
+h6 {
+  font-family: 'Clash Display', 'Geist', sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--text-primary);
+}
+
+p {
+  font-family: 'Geist', sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--text-secondary);
+}
+
+a {
+  color: var(--text-brand);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--color-primary-600);
+}
+
+code, pre {
+  font-family: 'Geist Mono', monospace;
+  font-size: 14px;
+  line-height: 22px;
+}
+
+
+/* ============================================================
+   8. BUTTON UTILITIES
+   Matches Figma Button component: Type / Size / State
+   ============================================================ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--component-gap-sm);
+  font-family: 'Geist', sans-serif;
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  border: none;
+  cursor: pointer;
+  transition: background-color 120ms ease, color 120ms ease, box-shadow 120ms ease;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(7, 148, 85, 0.35);
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  background-color: var(--color-neutral-100);
+  color: var(--color-neutral-300);
+  border-color: transparent;
+}
+
+/* Sizes — mirrors Figma: Size=SM / MD / LG */
+.btn-sm {
+  height: var(--sizing-button-sm);
+  padding: 0 var(--spacing-3);
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.btn-md {
+  height: var(--sizing-button-md);
+  padding: 0 var(--spacing-4);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.btn-lg {
+  height: var(--sizing-button-lg);
+  padding: 0 var(--spacing-5);
+  font-size: 15px;
+  line-height: 20px;
+}
+
+/* Primary — mirrors Figma: Type=Primary */
+.btn-primary {
+  background-color: var(--action-primary-bg);
+  color: var(--action-primary-text);
+}
+.btn-primary:hover  { background-color: var(--action-primary-bg-hover); }
+.btn-primary:active { background-color: var(--action-primary-bg-pressed); }
+
+/* Primary on dark — mirrors Figma amber pairing on forest surfaces */
+.btn-primary-on-dark {
+  background-color: var(--action-primary-on-dark-bg);
+  color: var(--action-primary-on-dark-text);
+}
+.btn-primary-on-dark:hover  { background-color: var(--action-primary-on-dark-bg-hover); }
+.btn-primary-on-dark:active { background-color: var(--action-primary-on-dark-bg-pressed); }
+
+/* Secondary — mirrors Figma: Type=Secondary */
+.btn-secondary {
+  background-color: var(--action-secondary-bg);
+  color: var(--action-secondary-text);
+  border: 1.5px solid var(--action-secondary-border);
+}
+.btn-secondary:hover  { background-color: var(--action-secondary-bg-hover); }
+
+/* Tertiary — mirrors Figma: Type=Tertiary */
+.btn-tertiary {
+  background-color: var(--color-neutral-50);
+  color: var(--color-neutral-700);
+  border: 1px solid var(--color-neutral-200);
+}
+.btn-tertiary:hover  { background-color: var(--color-neutral-100); color: var(--color-neutral-800); }
+.btn-tertiary:active { background-color: var(--color-neutral-200); color: var(--color-neutral-900); }
+
+/* Ghost — mirrors Figma: Type=Ghost */
+.btn-ghost {
+  background-color: transparent;
+  color: var(--color-neutral-600);
+  border: none;
+}
+.btn-ghost:hover  { background-color: var(--color-neutral-50);  color: var(--color-neutral-800); }
+.btn-ghost:active { background-color: var(--color-neutral-100); color: var(--color-neutral-900); }
+
+/* Ghost on dark surface */
+.btn-ghost-on-dark {
+  background-color: transparent;
+  color: var(--color-neutral-0);
+  border: 1.5px solid var(--color-neutral-0);
+}
+.btn-ghost-on-dark:hover { background-color: rgba(255,255,255,0.1); }
