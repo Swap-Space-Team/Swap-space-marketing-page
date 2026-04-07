@@ -131,6 +131,9 @@
         `;
       } else if (app.application_status === 'Photos Requested') {
         actionsHtml = `
+        <button class="btn btn-primary" id="approveBtn" onclick="approveApplication('${app.id}')">
+            Approve Application
+          </button>
           <button class="btn btn-secondary" id="resendBtn" onclick="resendPhotos('${app.id}')">
             Resend Photo Request
           </button>
