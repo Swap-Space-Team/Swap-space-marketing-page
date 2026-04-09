@@ -1030,11 +1030,72 @@
       .calc-cta-heading { font-size: 28px; }
     }
 
+    /* ── Trust signals ── */
+    .calc-trust-signals {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .calc-trust-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-family: 'Geist', sans-serif;
+      font-size: 12px;
+      color: var(--color-neutral-500);
+    }
+
+    .calc-trust-item svg {
+      color: var(--color-primary-500);
+      flex-shrink: 0;
+    }
+
+    /* ── Data source badge ── */
+    .calc-data-source {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 20px;
+      padding: 10px 14px;
+      background: var(--color-neutral-50);
+      border: 1px solid var(--color-neutral-200);
+      border-radius: 10px;
+      flex-wrap: wrap;
+    }
+
+    .calc-data-source-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: 'Geist', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-primary-700);
+      background: var(--color-primary-50);
+      border: 1px solid var(--color-primary-100);
+      border-radius: 99px;
+      padding: 2px 10px;
+      white-space: nowrap;
+    }
+
+    .calc-data-source-text {
+      font-family: 'Geist', sans-serif;
+      font-size: 12px;
+      color: var(--color-neutral-500);
+      line-height: 1.4;
+    }
+
     @media (max-width: 480px) {
       .calc-hero-heading { font-size: 30px; }
       .calc-card { margin: -40px 12px 0; }
       .calc-toggles { gap: 6px; }
-      .calc-toggle { font-size: 13px; }
+      /* On very small screens hide emoji from toggles so text has room */
+      .calc-toggle-emoji { display: none; }
+      .calc-toggle { font-size: 13px; padding: 0 8px; }
       .calc-total-amount { font-size: 34px; letter-spacing: -1px; }
     }
   </style>
@@ -1229,6 +1290,22 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           Calculate trip cost
         </button>
+
+        <!-- Trust signals -->
+        <div class="calc-trust-signals">
+          <span class="calc-trust-item">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            5,000+ cities covered
+          </span>
+          <span class="calc-trust-item">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+            No account needed
+          </span>
+          <span class="calc-trust-item">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Free forever
+          </span>
+        </div>
 
         <!-- Error -->
         <div class="calc-error" id="calcError"></div>
@@ -1800,8 +1877,22 @@
           </button>
         </div>
 
+        <!-- Data source / confidence badge -->
+        <div class="calc-data-source">
+          <span class="calc-data-source-badge">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            ${data.isRegionalFallback ? 'Regional estimate' : 'City data'}
+          </span>
+          <span class="calc-data-source-text">
+            ${data.isRegionalFallback
+              ? `No exact data found for this city — figures estimated from nearby cities in ${data.city.split(',').slice(-1)[0].trim() || 'the region'}.`
+              : `Based on <strong>Numbeo</strong> crowd-sourced prices for ${cityShort}. Exchange rates updated weekly.`
+            }
+          </span>
+        </div>
+
         <p class="calc-disclaimer">
-          Estimates based on Numbeo crowd-sourced data and typical travel patterns. Actual costs vary by time of year, booking lead time, and personal preferences. Exchange rates updated weekly.
+          Actual costs vary by time of year, booking lead time, and personal preferences.
         </p>
       `;
 
@@ -1870,15 +1961,8 @@
       try {
         const params = new URLSearchParams({ city: cityObj.name, country: cityObj.country || '', nights, travellers, style, currency });
 
-        // Fire costs + subscribe in parallel
-        const [res] = await Promise.all([
-          fetch('/api/calculator/costs?' + params.toString()),
-          fetch('/api/calculator/subscribe', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, city: cityObj.name, country: cityObj.country, currency, nights, travellers, style }),
-          }).catch(() => {}), // silent fail — don't block results if subscribe fails
-        ]);
+        // Fire costs first, then subscribe with full results so the email can include breakdown
+        const res = await fetch('/api/calculator/costs?' + params.toString());
 
         if (!res.ok) {
           const err = await res.json().catch(() => ({}));
@@ -1888,6 +1972,19 @@
         const data = await res.json();
         loadingEl.classList.remove('visible');
         renderResults(data);
+
+        // Send results email (non-blocking)
+        const perPersonPerDay = Math.round(data.total / Math.max(nights, 1) / Math.max(travellers, 1));
+        fetch('/api/calculator/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email, city: data.city, country: cityObj.country, currency, nights, travellers,
+            style, styleLabel: data.styleLabel,
+            total: data.total, breakdown: data.breakdown,
+            perPersonPerDay, shareUrl: window.location.href,
+          }),
+        }).catch(() => {});
 
         // Push shareable URL so this exact calculation can be shared or bookmarked
         (function () {
