@@ -84,7 +84,7 @@
     .calc-hero {
       background-color: var(--color-primary-900);
       margin-top: 80px;
-      padding: 72px 40px 110px;
+      padding: 72px 40px 72px;
       position: relative;
       overflow: hidden;
       text-align: center;
@@ -144,8 +144,8 @@
 
     /* ── Main section ── */
     .calc-section {
-      background: var(--color-neutral-50);
-      padding: 0 20px 100px;
+      background: rgb(250, 249, 247);
+      padding: 40px 20px 100px;
       min-height: 400px;
     }
 
@@ -155,7 +155,7 @@
       border-radius: 20px;
       box-shadow: 0 0 0 1px rgba(0,0,0,0.06), 0 4px 32px rgba(0,0,0,0.09);
       max-width: 720px;
-      margin: -56px auto 0;
+      margin: 0 auto 0;
       position: relative;
       z-index: 10;
       overflow: hidden;
@@ -1018,12 +1018,12 @@
 
     /* ── Responsive ── */
     @media (max-width: 768px) {
-      .calc-hero { padding: 56px 20px 90px; }
+      .calc-hero { padding: 56px 20px 56px; }
       .calc-hero-heading { font-size: 38px; letter-spacing: -0.8px; }
       .calc-hero-body { font-size: 16px; }
       .calc-form-area { padding: 28px 24px 24px; }
       .calc-results-area { padding: 0 24px 32px; }
-      .calc-card { margin: -48px 16px 0; }
+      .calc-card { margin: 0 16px 0; }
       .calc-row { grid-template-columns: 1fr; }
       .calc-total-amount { font-size: 40px; }
       .calc-cta-section { padding: 64px 24px; }
@@ -1091,7 +1091,7 @@
 
     @media (max-width: 480px) {
       .calc-hero-heading { font-size: 30px; }
-      .calc-card { margin: -40px 12px 0; }
+      .calc-card { margin: 0 12px 0; }
       .calc-toggles { gap: 6px; }
       /* On very small screens hide emoji from toggles so text has room */
       .calc-toggle-emoji { display: none; }
