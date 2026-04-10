@@ -135,7 +135,7 @@
       font-family: 'Geist', sans-serif;
       font-size: 17px;
       line-height: 1.65;
-      color: var(--color-primary-200);
+      color: #ffffff;
       margin: 0;
       max-width: 580px;
       margin-left: auto;
@@ -1621,7 +1621,7 @@
         if (!opt) return false;
         select.value = code;
         badge.style.display = 'flex';
-        text.textContent = 'Currency auto-detected from your location (' + code + ')';
+        text.textContent = 'Currency auto-detected (' + code + ')';
         return true;
       }
 
@@ -1896,21 +1896,8 @@
         loadingEl.classList.remove('visible');
         renderResults(data);
 
-        // Send results email (non-blocking)
-        const perPersonPerDay = Math.round(data.total / Math.max(nights, 1) / Math.max(travellers, 1));
-        fetch('/api/calculator/subscribe', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            email, city: data.city, country: cityObj.country, currency, nights, travellers,
-            style, styleLabel: data.styleLabel,
-            total: data.total, breakdown: data.breakdown,
-            perPersonPerDay, shareUrl: window.location.href,
-          }),
-        }).catch(() => {});
-
-        // Push shareable URL so this exact calculation can be shared or bookmarked
-        (function () {
+        // Build shareable URL with all params first, then push it to history
+        const shareUrl = (function () {
           const url = new URL(window.location.href);
           url.searchParams.set('city', cityObj.name);
           url.searchParams.set('country', cityObj.country || '');
@@ -1919,7 +1906,21 @@
           url.searchParams.set('style', style);
           url.searchParams.set('currency', currency);
           history.replaceState({}, '', url.toString());
+          return url.toString();
         })();
+
+        // Send results email (non-blocking) — uses the fully-qualified shareUrl with params
+        const perPersonPerDay = Math.round(data.total / Math.max(nights, 1) / Math.max(travellers, 1));
+        fetch('/api/calculator/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email, city: data.city, country: cityObj.country, currency, nights, travellers,
+            style, styleLabel: data.styleLabel,
+            total: data.total, breakdown: data.breakdown,
+            perPersonPerDay, shareUrl,
+          }),
+        }).catch(() => {});
 
         // Scroll to results smoothly
         document.getElementById('calcResults').scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -1970,6 +1971,34 @@
       // Restore currency (geo-detect is already skipped when this param is present)
       const currency = p.get('currency');
       if (currency) document.getElementById('currencySelect').value = currency;
+
+      // Auto-load results so the recipient sees the estimate immediately (no email required)
+      if (city) {
+        setTimeout(async function () {
+          const loadingEl = document.getElementById('calcLoading');
+          const errorEl   = document.getElementById('calcError');
+          const nights    = parseInt(p.get('nights')) || 7;
+          const travellers = parseInt(p.get('travellers')) || 2;
+          const style     = p.get('style') || 'mid-range';
+          const currency  = p.get('currency') || 'USD';
+          const country   = p.get('country') || '';
+
+          loadingEl.classList.add('visible');
+          try {
+            const params = new URLSearchParams({ city, country, nights, travellers, style, currency });
+            const res = await fetch('/api/calculator/costs?' + params.toString());
+            if (!res.ok) throw new Error();
+            const data = await res.json();
+            loadingEl.classList.remove('visible');
+            renderResults(data);
+            document.getElementById('calcResults').scrollIntoView({ behavior: 'smooth', block: 'start' });
+          } catch (_) {
+            loadingEl.classList.remove('visible');
+            errorEl.textContent = 'Could not load the shared estimate. Please fill in the form and calculate.';
+            errorEl.classList.add('visible');
+          }
+        }, 300);
+      }
     })();
   </script>
 
