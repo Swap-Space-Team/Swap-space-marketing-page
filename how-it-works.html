@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <!-- Preconnect to CDN for Geist fonts -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link rel="stylesheet" type="text/css" href="Style.css" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://www.swap-space.com/how-it-works" />
+    <title>How It Works | SwapSpace</title>
+    <meta name="description" content="Learn how SwapSpace home swapping works — list your home, find a swap, and travel for free." />
+    <link rel="stylesheet" href="ClashDisplay_Complete/Fonts/WEB/css/clash-display.css" />
+    <link rel="stylesheet" href="swap-space-tokens.css" />
+    <style>
+      @font-face {
+        font-family: 'Geist';
+        src: url('https://cdn.jsdelivr.net/npm/geist@1.3.0/dist/fonts/geist-sans/Geist-Regular.woff2') format('woff2');
+        font-weight: 400; font-style: normal; font-display: swap;
+      }
+      @font-face {
+        font-family: 'Geist';
+        src: url('https://cdn.jsdelivr.net/npm/geist@1.3.0/dist/fonts/geist-sans/Geist-Medium.woff2') format('woff2');
+        font-weight: 500; font-style: normal; font-display: swap;
+      }
+      @font-face {
+        font-family: 'Geist';
+        src: url('https://cdn.jsdelivr.net/npm/geist@1.3.0/dist/fonts/geist-sans/Geist-SemiBold.woff2') format('woff2');
+        font-weight: 600; font-style: normal; font-display: swap;
+      }
+      @font-face {
+        font-family: 'Geist';
+        src: url('https://cdn.jsdelivr.net/npm/geist@1.3.0/dist/fonts/geist-sans/Geist-Bold.woff2') format('woff2');
+        font-weight: 700; font-style: normal; font-display: swap;
+      }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body { font-family: 'Geist', sans-serif; background-color: #fff; }
+
+      .page-content {
+        min-height: calc(100vh - 80px);
+        margin-top: 80px;
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <!-- ============================================
+         MASTHEAD
+         ============================================ -->
+    <header class="masthead">
+      <a href="/" class="masthead-logo-link">
+        <img class="logo" src="assets/Swapspace-wordmark-white.svg" alt="SwapSpace" width="140" height="29">
+      </a>
+
+      <nav class="masthead-nav">
+        <a href="/how-it-works.html" class="nav-link">How it works</a>
+        <a href="#who-is-it-for" class="nav-link" style="display:none">Who is it for?</a>
+        <a href="guides.html" class="nav-link">Guides</a>
+        <a href="/#faq" class="nav-link">FAQ</a>
+      </nav>
+
+      <div class="masthead-actions">
+        <a href="/application.html" class="btn-cta-masthead">Can I swap my home?</a>
+        <a href="https://app.swap-space.com/login" class="btn-login-masthead">Log in</a>
+      </div>
+
+      <!-- Mobile: CTA + hamburger -->
+      <div class="masthead-mobile-right">
+        <a href="/application.html" class="btn-cta-masthead btn-cta-mobile">Can I swap my home?</a>
+        <button class="hamburger-btn" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Mobile menu overlay -->
+    <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+      <nav class="mobile-menu-nav">
+        <a href="/how-it-works.html" class="mobile-nav-link">How it works</a>
+        <a href="#who-is-it-for" class="mobile-nav-link" style="display:none">Who is it for?</a>
+        <a href="guides.html" class="mobile-nav-link">Guides</a>
+        <a href="/#faq" class="mobile-nav-link">FAQ</a>
+      </nav>
+      <a href="https://app.swap-space.com/login" class="mobile-login-btn">Log in</a>
+    </div>
+
+    <!-- ============================================
+         HERO SECTION
+         ============================================ -->
+    <section class="hiw-hero">
+      <!-- Background video -->
+      <video class="hiw-hero-video" autoplay muted loop playsinline preload="auto">
+        <source src="assets/videos/hiw-hero.mp4" type="video/mp4">
+      </video>
+      <!-- Dark overlay -->
+      <div class="hiw-hero-overlay"></div>
+      <!-- Content -->
+      <div class="hiw-hero-content">
+        <h1 class="hiw-hero-heading">How home swapping works on SwapSpace</h1>
+        <p class="hiw-hero-body">Members-only home exchange community. List your home, connect with verified members worldwide, and travel without paying for accommodation. Homeowners and renters welcome.</p>
+        <a href="/application.html" class="btn-cta-masthead hiw-hero-cta">Can I swap my home?</a>
+      </div>
+    </section>
+
+    <!-- ============================================
+         SWAP TYPE SECTION
+         ============================================ -->
+    <section class="swap-type-section">
+
+      <!-- Header -->
+      <div class="swap-type-header">
+        <div class="swap-type-heading-row">
+          <h2 class="swap-type-heading">Choose how you travel</h2>
+          <div class="swap-type-suitcase-wrapper">
+            <img class="swap-type-suitcase" src="assets/swap-type-suitcase.svg" alt="">
+          </div>
+        </div>
+        <p class="swap-type-subheading">Every SwapSpace member gets access to both swap types. Use whichever suits the trip.</p>
+      </div>
+
+      <!-- Cards -->
+      <div class="swap-type-cards">
+
+        <!-- Mutual Swap -->
+        <div class="swap-card">
+          <div class="swap-card-top">
+            <span class="swap-badge">Mutual Swap</span>
+            <h3 class="swap-card-heading">Swap homes directly<br>with another member</h3>
+            <p class="swap-card-body">You and another member agree to stay in each other's homes. Dates can be simultaneous or at different times, whatever works for both of you. No money changes hands for accommodation.</p>
+          </div>
+          <div class="swap-card-best-for">
+            <img class="swap-card-icon" src="assets/swap-type-icon.svg" alt="">
+            <p>Best for: Travellers who have a specific destination in mind and want to connect directly with a member there.</p>
+          </div>
+        </div>
+
+        <!-- SwapCredit Swap -->
+        <div class="swap-card">
+          <div class="swap-card-top">
+            <span class="swap-badge">SwapCredit Swap</span>
+            <h3 class="swap-card-heading">Host first, travel<br>whenever you are ready</h3>
+            <p class="swap-card-body">Earn SwapCredits by hosting a member in your home. Spend those credits to stay at any home in the SwapSpace community, whenever suits you. No need to find a perfectly timed match.</p>
+          </div>
+          <div class="swap-card-best-for">
+            <img class="swap-card-icon" src="assets/swap-type-icon.svg" alt="">
+            <div class="swap-card-best-for-text">
+              <p>Best for: Travellers who want flexibility over timing and destination.</p>
+              <p>Every new member starts with 7 SwapCredits, giving you 7 nights of travel before you need to host.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Bottom CTA -->
+      <div class="swap-type-bottom-cta">
+        <a href="/application.html" class="btn-swap-type-cta">Can I swap my home?</a>
+      </div>
+
+    </section>
+
+    <!-- ============================================
+         HOW TO GET STARTED STEPS
+         ============================================ -->
+    <section class="hiw-steps-section">
+
+      <!-- Section header -->
+      <div class="hiw-steps-header">
+        <p class="hiw-steps-eyebrow">How travelling works on SwapSpace</p>
+        <h2 class="hiw-steps-heading">How to get started</h2>
+        <p class="hiw-steps-body">SwapSpace is a members-only home exchange community where verified homeowners and renters swap homes to travel affordably and authentically.</p>
+      </div>
+
+      <!-- Step 1: Apply — image left -->
+      <div class="hiw-step">
+        <div class="hiw-step-image-wrap">
+          <img class="hiw-step-combined-img" src="assets/Become a member.png" alt="Become a member" width="794" height="1080" fetchpriority="high">
+        </div>
+        <div class="hiw-step-content">
+          <div>
+            <h3 class="hiw-step-title">Apply to become a member</h3>
+            <p class="hiw-step-desc">SwapSpace is members-only. Complete a short application so we can verify your home and confirm your place in the community. The application takes around 2 minutes and asks about your home, your travel style, and when you are available to host.</p>
+          </div>
+          <a href="/application.html" class="btn-hiw-step">Become a member</a>
+        </div>
+      </div>
+
+      <!-- Step 2: List your home — image right -->
+      <div class="hiw-step hiw-step--reverse hiw-step--stagger-1">
+        <div class="hiw-step-image-wrap">
+          <img class="hiw-step-combined-img" src="assets/List your home.png" alt="List your home" width="794" height="1080" loading="lazy">
+        </div>
+        <div class="hiw-step-content">
+          <div>
+            <h3 class="hiw-step-title">List your home</h3>
+            <p class="hiw-step-desc">Once accepted, create your listing. Add photos, a description of your space, and your available dates. A complete listing earns more swap requests and unlocks your welcome SwapCredits.</p>
+          </div>
+          <a href="/application.html" class="btn-hiw-step">Become a member</a>
+        </div>
+      </div>
+
+      <!-- Step 3: Start swapping — image left -->
+      <div class="hiw-step hiw-step--stagger-2">
+        <div class="hiw-step-image-wrap">
+          <img class="hiw-step-combined-img" src="assets/Start journey.png" alt="Start your swap journey" width="794" height="1080" loading="lazy">
+        </div>
+        <div class="hiw-step-content">
+          <div>
+            <h3 class="hiw-step-title">Start your home swap journey</h3>
+            <p class="hiw-step-desc">Search member listings by destination, dates, and home type. Every listing belongs to a verified member. Send a swap request for a mutual exchange, or use your SwapCredits to book a flexible stay at any available home.</p>
+          </div>
+          <a href="/application.html" class="btn-hiw-step">Become a member</a>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ============================================
+         FAQ SECTION
+         ============================================ -->
+    <section class="faq-section">
+      <div class="faq-header-block">
+        <h2 class="faq-heading">Frequently Asked Questions</h2>
+        <p class="faq-subheading">Got questions, we have answers.</p>
+      </div>
+
+      <div class="faq-container">
+        <div class="faq-accordion">
+
+          <div class="faq-item active">
+            <div class="faq-divider"></div>
+            <button type="button" class="faq-trigger" aria-expanded="true">
+              <span class="faq-question">Do I need to own my home to join?</span>
+              <span class="faq-icon">−</span>
+            </button>
+            <div class="faq-content" style="display: block;">
+              <p class="faq-answer">No. Renters are welcome on SwapSpace, provided they have permission from their landlord to host guests. If you have a home worth sharing, you have everything you need to start swapping.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-divider"></div>
+            <button type="button" class="faq-trigger" aria-expanded="false">
+              <span class="faq-question">What are SwapCredits and how do they work?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-content" style="display: none;">
+              <p class="faq-answer">SwapCredits are SwapSpace's flexible travel currency. One credit equals one night of travel. You earn credits by hosting members in your home and spend them to stay at any home in the community. Every new member starts with 7 SwapCredits so you can travel before you host anyone.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-divider"></div>
+            <button type="button" class="faq-trigger" aria-expanded="false">
+              <span class="faq-question">What if my dates do not match anyone else?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-content" style="display: none;">
+              <p class="faq-answer">That is exactly what SwapCredits are designed for. Host when your home is available, bank the credits, and travel whenever suits you. You are never dependent on finding a perfectly timed match with a single member.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-divider"></div>
+            <button type="button" class="faq-trigger" aria-expanded="false">
+              <span class="faq-question">Is home swapping safe?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-content" style="display: none;">
+              <p class="faq-answer">Yes. Every SwapSpace member is verified before they can list or swap a home. Because both parties are opening their own homes, there is a mutual accountability that paid accommodation cannot replicate. Members look after each other's homes the way they would want theirs looked after.</p>
+            </div>
+          </div>
+
+        </div>
+        <div class="faq-bottom-divider"></div>
+      </div>
+    </section>
+
+    <!-- ============================================
+         FOOTER
+         ============================================ -->
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <img src="assets/Swapspace-wordmark-white.svg" alt="SwapSpace Logo" class="footer-logo" />
+          <p class="footer-tagline">Built for those ready to explore the world</p>
+        </div>
+
+        <div class="footer-column">
+          <h4 class="footer-heading">Socials</h4>
+          <div class="footer-links">
+            <a href="https://www.facebook.com/people/Swap-Space/61573070484976/" class="footer-link">Facebook</a>
+            <a href="https://www.instagram.com/swapspaceapp?igsh=MWQzZmN5d2dhaG1yeg%3D%3D&utm_source=qr" class="footer-link">Instagram</a>
+            <a href="https://x.com/SwapSpaceapp" class="footer-link">X</a>
+          </div>
+        </div>
+
+        <div class="footer-column">
+          <h4 class="footer-heading">Company</h4>
+          <div class="footer-links">
+            <a href="guides.html" class="footer-link">Guides</a>
+            <a href="https://blog.swap-space.com/" class="footer-link">Blog</a>
+            <a href="https://www.notion.so/Privacy-policy-for-Swap-Space-1fae94969a8980e29e02ef5a3051e927?pvs=4" class="footer-link">Privacy policy</a>
+          </div>
+        </div>
+
+        <div class="footer-column">
+          <h4 class="footer-heading">Contact</h4>
+          <div class="footer-links">
+            <a href="mailto:Hello@Swap-space.com" class="footer-link">Hello@swap-space.com</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Hamburger menu toggle -->
+    <script>
+      (function () {
+        var btn = document.getElementById('hamburgerBtn');
+        var menu = document.getElementById('mobileMenu');
+        var mobileLinks = menu.querySelectorAll('.mobile-nav-link');
+
+        function openMenu() {
+          menu.classList.add('is-open');
+          btn.setAttribute('aria-expanded', 'true');
+          btn.classList.add('is-open');
+          document.body.style.overflow = 'hidden';
+        }
+
+        function closeMenu() {
+          menu.classList.remove('is-open');
+          btn.setAttribute('aria-expanded', 'false');
+          btn.classList.remove('is-open');
+          document.body.style.overflow = '';
+        }
+
+        btn.addEventListener('click', function () {
+          menu.classList.contains('is-open') ? closeMenu() : openMenu();
+        });
+
+        mobileLinks.forEach(function (link) {
+          link.addEventListener('click', closeMenu);
+        });
+      })();
+    </script>
+
+    <script>
+      // FAQ Accordion
+      document.querySelectorAll('.faq-trigger').forEach(function(trigger) {
+        trigger.addEventListener('click', function() {
+          var faqItem = this.closest('.faq-item');
+          var isActive = faqItem.classList.contains('active');
+
+          document.querySelectorAll('.faq-item').forEach(function(item) {
+            item.classList.remove('active');
+            item.querySelector('.faq-content').style.display = 'none';
+            item.querySelector('.faq-trigger').setAttribute('aria-expanded', 'false');
+            item.querySelector('.faq-icon').textContent = '+';
+          });
+
+          if (!isActive) {
+            faqItem.classList.add('active');
+            faqItem.querySelector('.faq-content').style.display = 'block';
+            this.setAttribute('aria-expanded', 'true');
+            faqItem.querySelector('.faq-icon').textContent = '−';
+          }
+        });
+      });
+    </script>
+
+  </body>
+</html>

@@ -4,14 +4,14 @@
        HEAD SECTION
        ============================================ -->
   <head>
-    <!-- Stylesheet -->
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="Style.css"
-    />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <!-- Preconnect to key third-party origins -->
+    <link rel="preconnect" href="https://www.googletagmanager.com" />
+    <link rel="preconnect" href="https://events.swap-space.com" />
+    <!-- Stylesheet -->
+    <link rel="stylesheet" type="text/css" href="Style.css" />
+    <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://www.swap-space.com/" />
     <script
       async=""
@@ -20,8 +20,8 @@
     <script src="https://analytics.ahrefs.com/analytics.js" data-key="fJ4AiZNP8FwaiDl+rw+mhA" async></script>
     <meta property="og:url" content="https://www.swap-space.com/" />
     <title>
-      SwapSpace | Simplest and most trusted home swapping and exchange platform
-    </title>
+      SwapSpace | Trusted home swapping and exchange platform
+</title>
     <meta
       property="og:title"
       content="Simplest and most trusted home swapping platform | SwapSpace "
@@ -104,17 +104,10 @@
         fbq("init", "2324029631392103");
         fbq("track", "PageView");
 
-        // Google Ads tag
-        var gadsScript = document.createElement('script');
-        gadsScript.async = true;
-        gadsScript.src = 'https://www.googletagmanager.com/gtag/js?id=AW-18015994151';
-        document.head.appendChild(gadsScript);
-        gadsScript.onload = function() {
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'AW-18015994151');
-        };
+        // Google Ads tag — gtag.js already loaded in head, just configure the additional ID
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('config', 'AW-18015994151');
       });
     </script>
   </head>
@@ -126,372 +119,280 @@
     <!-- ============================================
          HEADER / MASTHEAD SECTION
          ============================================ -->
-    <div class="masthead">
-      <img class="logo" src="assets/Swapspace-logo-in-white.svg" alt="Swap-space-logo">
+    <header class="masthead">
+      <a href="/" class="masthead-logo-link">
+        <img class="logo" src="assets/Swapspace-wordmark-white.svg" alt="SwapSpace" width="140" height="29">
+      </a>
 
-      <a href="https://app.swap-space.com/login" class="secondary-button">Log in</a>
+      <nav class="masthead-nav">
+        <a href="/how-it-works.html" class="nav-link">How it works</a>
+        <a href="#who-is-it-for" class="nav-link" style="display:none">Who is it for?</a>
+        <a href="guides.html" class="nav-link">Guides</a>
+        <a href="/travel-cost-calculator" class="nav-link">Trip calculator</a>
+        <a href="/#faq" class="nav-link">FAQ</a>
+      </nav>
+
+      <div class="masthead-actions">
+        <a href="/application.html" class="btn-cta-masthead">Can I swap my home?</a>
+        <a href="https://app.swap-space.com/login" class="btn-login-masthead">Log in</a>
+      </div>
+
+      <!-- Mobile: CTA + hamburger -->
+      <div class="masthead-mobile-right">
+        <a href="/application.html" class="btn-cta-masthead btn-cta-mobile">Can I swap my home?</a>
+        <button class="hamburger-btn" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Mobile menu overlay -->
+    <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+      <nav class="mobile-menu-nav">
+        <a href="/how-it-works.html" class="mobile-nav-link">How it works</a>
+        <a href="#who-is-it-for" class="mobile-nav-link" style="display:none">Who is it for?</a>
+        <a href="#guides" class="mobile-nav-link">Guides</a>
+        <a href="/travel-cost-calculator" class="mobile-nav-link">Trip calculator</a>
+        <a href="/#faq" class="mobile-nav-link">FAQ</a>
+      </nav>
+      <a href="https://app.swap-space.com/login" class="mobile-login-btn">Log in</a>
     </div>
 
     <!-- ============================================
          HERO SECTION
          ============================================ -->
     <section class="hero">
-      <h1 class="h1-text hero-animate">
-        Travel more, <span class="swap-text">swap</span> the space you already have.
-      </h1>
-      <p class="body-text">
-        SwapSpace is a members-only community of verified homeowners and renters exchanging homes to explore the world in simpler, and more personal way. We’re opening spots for 100 founding members.   
-      </p>
-      <p class="highlight-text"> Travel 7 nights for free with SwapCredits before you host</p>
-      <button class="button-primary hero-animate hero-animate-delay-3">See if your home qualifies
-      </button>
-      
-      <!-- Featured In Section -->
-      <div class="featured-in-section hero-animate hero-animate-delay-4">
-        <p class="featured-in-label">AS SEEN IN</p>
-        <div class="featured-in-logos">
-          <img src="assets/City news logo white .svg" alt="City News" class="featured-in-logo">
+      <!-- Content -->
+      <div class="hero-content">
+        <h1 class="hero-heading">The home swap community<br>built for travellers.</h1>
+        <p class="hero-body">Flexible home exchange platform where you swap directly with other members and earn SwapCredits to travel on your own schedule. Homeowners and renters welcome.</p>
+        <a href="/application.html" class="hero-cta">Can I swap my home?</a>
+
+        <div class="featured-in-section">
+          <p class="featured-in-label">AS SEEN IN</p>
+          <div class="featured-in-logos">
+            <img src="assets/City news logo white .svg" alt="City News" class="featured-in-logo" width="120" height="32" loading="lazy">
+          </div>
         </div>
       </div>
-     
-      <!-- Hero Background Image -->
-      <div class="hero-video-container">
-        <img class="hero-video" src="assets/hero-image.webp" alt="SwapSpace hero background" fetchpriority="high">
-        <div class="hero-video-overlay"></div>
-      </div>
+
     </section>
 
-    <!-- This where the listed homes section starts -->
     <!-- ============================================
-         LISTED HOMES SECTION
+         BROWSE HOMES SECTION
          ============================================ -->
-    <section class="listed-homes">
-      <p class="highlight-text animate-on-scroll">
-        Browse homes listed by other home-swappers
-      </p>
-      <div class="works-wrapper">
-        <h2 class="h2-texts animate-on-scroll animate-delay-1">
-        Travel meaningfully through homeswapping
-        </h2>
-        <button class="button-primary animate-on-scroll animate-delay-2">See if your home qualifies
-        </button>
+    <section class="browse-homes">
+      <div class="browse-homes-header">
+        <div class="browse-homes-header-text">
+          <h2 class="browse-homes-heading">Browse homes available for home swapping worldwide.</h2>
+          <p class="browse-homes-body">From flats in London to coastal retreats abroad, our members list their homes for direct house swaps or SwapCredit stays. Every listing is from a real member in our verified community, so you always know exactly who you are swapping with. <a href="/application.html" class="browse-homes-link">Become a member to browse all homes</a></p>
+        </div>
+        <a href="/application.html" class="btn-browse-all">Browse all member homes</a>
       </div>
-      <div class="listed-homes-wrapper">
 
-      </div>
-    </section>
-    <!-- This where the listed homes section ends -->
-
-    <!-- ============================================
-         HOME SECTION
-         ============================================ -->
-    <section class="home-section">
-
-      <h2 class="h2-text animate-on-scroll">
-            Your home already holds the key.
-      </h2>
-      <p class="body-text animate-on-scroll animate-delay-1">
-        The answer to travelling more affordably is right where you live. By swapping homes with like-minded people, you save on costs and unlock authentic experiences wherever you go.
-      </p>
-      <button class="button-primary animate-on-scroll animate-delay-2">See if your home qualifies
-      </button>
-      <div class="img-wrapper">
-        <img class="carousel-img animate-scale" src="assets/img-1-kseniya.webp" loading="lazy" alt="Home interior for swapping">
-
-        <img class="carousel-img animate-scale animate-delay-1" src="assets/img-2-kseniya.webp" loading="lazy">
-
-        <img class="carousel-img animate-scale animate-delay-2" src="assets/img-3-kseniya.webp" loading="lazy">
+      <div class="listing-cards" id="listingCards">
+        <!-- Skeleton loaders shown while fetching -->
+        <div class="listing-card listing-card--skeleton"></div>
+        <div class="listing-card listing-card--skeleton"></div>
+        <div class="listing-card listing-card--skeleton"></div>
+        <div class="listing-card listing-card--skeleton"></div>
       </div>
     </section>
 
     <!-- ============================================
-         HOW IT WORKS SECTION
+         TRAVEL SECTION
          ============================================ -->
-    <section class="how-it-works">
-      <p class="highlight-text animate-on-scroll">
-        How it works
-      </p>
-      <div class="works-wrapper">
-      <h2 class="h2-texts animate-on-scroll animate-delay-1">
-        It starts with one connection
-      </h2>
-      <button class="button-primary animate-on-scroll animate-delay-2">See if your home qualifies
-      </button>
-    </div>
- <!-- The first how it works card starts here -->
-    <div class="col-wrapper-3">
-      <div class="column animate-on-scroll">
-        <img class="col-img-3" src="assets/how-it-works-1.webp" loading="lazy" alt="Apply to list your home on SwapSpace">
-
-      <h4 class="h4-text">
-        Apply to list your home
-      </h4>
-      <p class="body-text-text">
-        SwapSpace is an invite-only community. Start by applying to list your home. We’re currently accepting a small number of founding members who value meaningful, affordable travel.
-      </p>
-      </div>
-        <!-- The second how it works card starts here -->
-      <div class="column animate-on-scroll animate-delay-1">
-        <img class="col-img-3" src="assets/how-it-works-2.webp" loading="lazy" alt="Book home swaps using SwapCredits">
-
-      <h4 class="h4-text">
-        Book mutual or one-way stays using SwapCredits
-      </h4>
-      <p class="body-text-text">
-        Once accepted, you can book unlimited mutual swaps with other members or use your 7 welcome SwapCredits to book one-way swaps and travel freely, even before you’ve hosted anyone.
-      </p>
-      </div>
- <!-- The third how it works card starts here -->
-      <div class="column animate-on-scroll animate-delay-2">
-        <img class="col-img-3" src="assets/how-it-works-3.webp" loading="lazy" alt="Host guests and earn SwapCredits">
-
-      <h4 class="h4-text">
-        Host and earn more SwapCredits
-      </h4>
-      <p class="body-text-text">
-        When you host, you earn SwapCredits each time someone stays in your home. Use them to unlock more destinations, travel more often, and help grow the SwapSpace community.
-      </p>
-      </div>
-    </div>
-     <!--This is the end of the how it works card -->
-    </section>
-
-    <!-- ============================================
-         PRICING SECTION
-         ============================================ -->
-    <section class="pricing-section">
-      <div class="pricing-background">
-        <div class="pricing-content-left">
-          <h2 class="pricing-text">
-            SwapSpace is designed to make travel more personal, connected, and affordable.
-          </h2>
-          <div class="body-text-white">
-            By exchanging homes, members discover a more personal and affordable way to travel that is built on trust, connection and shared experiences.
-          </div>
-          <button class="button-primary">See if your home qualifies
-          </button>
-        </div>
-        
-        <div class="price-comparison">
-        <!-- Mutual Swaps Card -->
-        <div class="comparison-card active" id="mutualCard">
-          <h3 class="card-title">Unlimited mutual swaps</h3>
-          <p class="card-description">Swap with homes with other members without using any SwapCredits. Travel freely with mutual swaps.</p>
-          <p class="comparison-label">Comparison if you're staying for 7 nights</p>
-          <div class="comparison-boxes">
-            <div class="comparison-box-left">
-              <p class="box-label">Swap with SwapSpace</p>
-              <p class="box-value-green">Free & unlimited</p>
-            </div>
-            <div class="comparison-box-right">
-              <p class="box-label">Hotels or Airbnb</p>
-              <p class="box-value">£1,000</p>
-            </div>
-          </div>
-          <div class="toggle-group" data-active="mutual">
-            <button class="toggle-btn active" data-switch="mutual">Mutual swap</button>
-            <button class="toggle-btn" data-switch="swapcredits">One way Swap</button>
-          </div>
-        </div>
-
-        <!-- SwapCredits Card -->
-        <div class="comparison-card" id="swapcreditsCard">
-          <h3 class="card-title">Swap with SwapCredits</h3>
-          <p class="card-description">When you host, you earn SwapCredits that you can use for one-way stays. The more you host, the more you can travel</p>
-          <p class="comparison-label">Comparison if you're staying for 7 nights</p>
-          <div class="comparison-boxes">
-            <div class="comparison-box-left swapcredits">
-              <p class="box-label">Swap with SwapSpace</p>
-              <p class="box-value-green">7 SwapCredits</p>
-            </div>
-            <div class="comparison-box-right swapcredits">
-              <p class="box-label">Hotels or Airbnb</p>
-              <p class="box-value">£1,000</p>
-            </div>
-          </div>
-          <div class="toggle-group" data-active="swapcredits">
-            <button class="toggle-btn" data-switch="mutual">Mutual swap</button>
-            <button class="toggle-btn active" data-switch="swapcredits">One way Swap</button>
-          </div>
-        </div>
-        </div>
+    <section class="travel-section">
+      <div class="travel-content">
+        <h2 class="travel-heading">Home swapping is the smarter way to travel affordably.</h2>
+        <p class="travel-body">The answer to travelling more is already where you live. By joining the SwapSpace community, you swap homes with like-minded members worldwide, cut the cost of accommodation entirely, and experience destinations the way locals actually live them.</p>
+        <a href="/application.html" class="btn-travel-cta">Can I swap my home?</a>
       </div>
     </section>
 
     <!-- ============================================
-         SWAP LOCATION SECTION
+         DIFFERENCE SECTION
          ============================================ -->
-    <section class="swap-location">
-      <h2 class="h2-text animate-on-scroll">
-        Ready to swap your home?
-      </h2>
-      <p class="body-text animate-on-scroll animate-delay-1">
-        Owned or rented, cosy flat or spacious house, Swap Space is for people who care for their homes and love to explore the world.
-      </p>
-
-      <div class="col-wrapper-3">
-<!-- The first Swap-location card starts here -->
-<div class="col-wrapper-3">
-  <div class="column animate-on-scroll">
-    <img class="col-img-3" src="assets/london.webp" loading="lazy" alt="Homes available in the United Kingdom">
-
-  <h4 class="h4-text">
-    United Kingdom
-  </h4>
-
-  </div>
-    <!-- The second Swap-location card starts here -->
-  <div class="column animate-on-scroll animate-delay-1">
-    <img class="col-img-3" src="assets/united-states.webp" loading="lazy" alt="Homes available in the United States">
-
-  <h4 class="h4-text">
-   United States
-  </h4>
-  </div>
-<!-- The third swap-location card starts here -->
-  <div class="column animate-on-scroll animate-delay-2">
-    <img class="col-img-3" src="assets/europe.webp" loading="lazy" alt="Homes available across Europe">
-
-  <h4 class="h4-text">
-   Europe
-  </h4>
-  </div>
-</div>
- <!--This is the end of the how it works card -->
- 
+    <section class="difference-section">
+      <div class="difference-header">
+        <p class="difference-eyebrow">The SwapSpace difference</p>
+        <h2 class="difference-heading">Home swapping done right.</h2>
+        <p class="difference-body">SwapSpace is a members-only home exchange community where verified homeowners and renters swap homes to travel affordably and authentically.</p>
       </div>
-      <p class="highlight-text">
-        We’re now welcoming applications from homeowners and renters in the United Kingdom, the United States, and across Europe. 
-        <br>Submit your application and we’ll review it to see if your home’s a fit for the community.      
-      </p>
-      <button class="button-primary">See if your home qualifies
-      </button>
-     
+
+      <div class="difference-features">
+        <div class="difference-feature">
+          <img src="assets/Verified members icon.svg" alt="Verified members" class="difference-feature-icon" width="56" height="39" loading="lazy">
+          <div class="difference-feature-text">
+            <h3 class="difference-feature-title">Verified members only</h3>
+            <p class="difference-feature-body">Every home on SwapSpace belongs to a real, verified member. You always know who you are swapping with before you confirm anything.</p>
+          </div>
+        </div>
+        <div class="difference-feature">
+          <img src="assets/Host and earn coins icon.svg" alt="SwapCredits" class="difference-feature-icon" width="56" height="56" loading="lazy">
+          <div class="difference-feature-text">
+            <h3 class="difference-feature-title">Host and earn SwapCredits</h3>
+            <p class="difference-feature-body">Swap homes directly with another member and earn SwapCredits when you host. Travel on your schedule with SwapCredits.</p>
+          </div>
+        </div>
+        <div class="difference-feature">
+          <img src="assets/membership icon.svg" alt="No fees" class="difference-feature-icon" width="56" height="56" loading="lazy">
+          <div class="difference-feature-text">
+            <h3 class="difference-feature-title">No service fee or cleaning fee</h3>
+            <p class="difference-feature-body">One annual or quarterly membership unlocks unlimited home swaps. No service fees, no cleaning fees, just show up and enjoy where you are.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="difference-actions">
+        <a href="/application.html" class="btn-difference-primary">Can I swap my home?</a>
+        <a href="/how-it-works.html" class="btn-difference-ghost">Learn more about how it works</a>
+      </div>
+    </section>
+
+    <!-- ============================================
+         SWAPCREDITS SECTION
+         ============================================ -->
+    <section class="swapcredits-section">
+      <div class="swapcredits-content">
+        <h2 class="swapcredits-heading">Earn 7 SwapCredits when you list your home</h2>
+        <p class="swapcredits-body">Every new member starts with 7 SwapCredits, giving you 7 nights of travel at any home in our community before you need to host anyone.</p>
+      </div>
+      <div class="swapcredits-actions">
+        <a href="/application.html" class="btn-swapcredits-primary">Can I swap my home?</a>
+        <a href="/how-it-works.html" class="btn-swapcredits-ghost">Learn more</a>
+      </div>
+    </section>
+
+    <!-- ============================================
+         TRAVELLER SECTION (Figma 7459-848)
+         ============================================ -->
+    <section class="traveller-section">
+      <div class="traveller-left">
+        <h2 class="traveller-heading">Home swapping for every kind of traveller. <img src="assets/Explorer icon.svg" class="traveller-explorer-icon" alt="" width="40" height="40" loading="lazy"></h2>
+        <p class="traveller-body">Whether you are a solo explorer, a family looking for more space, a remote worker chasing a change of scenery, or a retiree with the time to finally see the world, SwapSpace was built for you. If you have a home worth sharing, you have everything you need to start swapping.</p>
+        <a href="/application.html" class="btn-traveller-primary">Can I swap my home?</a>
+      </div>
+      <div class="traveller-right">
+        <div class="traveller-video-container">
+          <video class="traveller-video active" autoplay muted loop playsinline preload="metadata">
+            <source src="assets/videos/solo-travel.mp4" type="video/mp4">
+          </video>
+          <video class="traveller-video" muted loop playsinline preload="none">
+            <source src="assets/videos/family-travel.mp4" type="video/mp4">
+          </video>
+          <video class="traveller-video" muted loop playsinline preload="none">
+            <source src="assets/videos/retiree.mp4" type="video/mp4">
+          </video>
+          <video class="traveller-video" muted loop playsinline preload="none">
+            <source src="assets/videos/remote-worker.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="traveller-tabs">
+          <button class="traveller-tab active">Solo traveller</button>
+          <button class="traveller-tab">Families</button>
+          <button class="traveller-tab">Retirees</button>
+          <button class="traveller-tab">Remote workers</button>
+        </div>
+      </div>
     </section>
 
   <!-- ============================================
        FAQ SECTION
        ============================================ -->
-  <section class="faq-section">
-      <h2 class="h2-text animate-on-scroll">
-        Frequently asked questions
-      </h2>
-      <p class="body-text animate-on-scroll animate-delay-1">
-        Got questions, we have answers.
-      </p>
-      
-      <div class="faq-container animate-on-scroll animate-delay-2">
-        <div class="faq-accordion">
-          <!-- FAQ Item 1 -->
-          <div class="faq-item active">
-            <h3 class="faq-header">
-              <button type="button" class="faq-trigger" aria-expanded="true">
-                <span class="faq-question">What is Swap Space?</span>
-                <span class="faq-icon">+</span>
-              </button>
-            </h3>
-            <div class="faq-content" style="display: block;">
-              <p class="faq-answer">
-                <strong>Our mission is simple: Travel can be better and cheaper.</strong><br><br>
-                Swap Space is a home exchange platform that allows members to swap their homes with others worldwide, enabling affordable and immersive travel experiences.
-              </p>
-            </div>
-          </div>
+  <section class="faq-section" id="faq">
+    <div class="faq-header-block">
+      <h2 class="faq-heading">Frequently Asked Questions</h2>
+      <p class="faq-subheading">Got questions, we have answers.</p>
+    </div>
 
-          <!-- FAQ Item 2 -->
-          <div class="faq-item">
-            <h3 class="faq-header">
-              <button type="button" class="faq-trigger" aria-expanded="false">
-                <span class="faq-question">How does home swapping work on Swap Space?</span>
-                <span class="faq-icon">+</span>
-              </button>
-            </h3>
-            <div class="faq-content" style="display: none;">
-              <p class="faq-answer">
-             You can swap homes in two ways: through mutual swaps, where you and another member stay in each other’s homes, or one-way swaps using SwapCredits you earn from hosting others in your home. 
-              </p>
-            </div>
-          </div>
+    <div class="faq-container">
+      <div class="faq-accordion">
 
-          <!-- FAQ Item 3 -->
-          <div class="faq-item">
-            <h3 class="faq-header">
-              <button type="button" class="faq-trigger" aria-expanded="false">
-                <span class="faq-question">Can I use Swap Space if I don't own my home?</span>
-                <span class="faq-icon">+</span>
-              </button>
-            </h3>
-            <div class="faq-content" style="display: none;">
-              <p class="faq-answer">
-                Absolutely. Renters are welcome to list their homes on Swap Space, since swaps are about exchanging stays rather than money. It works much like hosting a friend while you’re away. 
-                To be safe, we suggest reviewing your tenancy agreement or checking with your landlord first.
-              </p>
-            </div>
-          </div>
-
-          <!-- FAQ Item 3a-->
-          <div class="faq-item">
-            <h3 class="faq-header">
-              <button type="button" class="faq-trigger" aria-expanded="false">
-                <span class="faq-question">What are SwapCredits?</span>
-                <span class="faq-icon">+</span>
-              </button>
-            </h3>
-            <div class="faq-content" style="display: none;">
-              <p class="faq-answer">
-                SwapCredits are the currency of the SwapSpace community. You earn them by hosting other members in your home, and you can use them to book one-way swaps in destinations that inspire you. Every new member also receives 7 welcome SwapCredits after listing their home, so you can start travelling even before hosting your first guest.
-
-              </p>
-            </div>
-          </div>
-
-          <!-- FAQ Item 4 -->
-          <div class="faq-item">
-            <h3 class="faq-header">
-              <button type="button" class="faq-trigger" aria-expanded="false">
-                <span class="faq-question">How do I list my home on Swap Space?</span>
-                <span class="faq-icon">+</span>
-              </button>
-            </h3>
-            <div class="faq-content" style="display: none;">
-              <p class="faq-answer">
-                Everyone in the SwapSpace community lists their home. Since SwapSpace is invite-only, the first step is to apply. Once you’re accepted, you’ll be able to create your home listing and start exploring beautiful spaces in destinations that inspire you.
-              </p>
-            </div>
-          </div>
-
-          <!-- FAQ Item 5 -->
-          <div class="faq-item">
-            <h3 class="faq-header">
-              <button type="button" class="faq-trigger" aria-expanded="false">
-                <span class="faq-question">Are members verified?</span>
-                <span class="faq-icon">+</span>
-              </button>
-            </h3>
-            <div class="faq-content" style="display: none;">
-              <p class="faq-answer">
-                Your safety matters. Every member verifies their identity with a government ID, so you know you’re connecting with real, trusted people. Once verified, you’ll get a badge on your profile that shows you’re ready to swap with confidence.
-              </p>
-            </div>
-          </div>
-
-          <!-- FAQ Item 6 -->
-          <div class="faq-item">
-            <h3 class="faq-header">
-              <button type="button" class="faq-trigger" aria-expanded="false">
-                <span class="faq-question">How does pricing work? Is it free to Swap?</span>
-                <span class="faq-icon">+</span>
-              </button>
-            </h3>
-            <div class="faq-content" style="display: none;">
-              <p class="faq-answer">
-                SwapSpace is completely free to use for now. You can apply, list your home, and start swapping without any cost. In the future, we’ll introduce a membership fee to support platform maintenance and continued improvements.
-              </p>
-            </div>
+        <div class="faq-item active">
+          <div class="faq-divider"></div>
+          <button type="button" class="faq-trigger" aria-expanded="true">
+            <span class="faq-question">What is SwapSpace?</span>
+            <span class="faq-icon">−</span>
+          </button>
+          <div class="faq-content" style="display: block;">
+            <p class="faq-answer">Our mission is simple: Travel can be better and cheaper. SwapSpace is a home exchange platform that allows members to swap their homes with others worldwide, enabling affordable and immersive travel experiences.</p>
           </div>
         </div>
+
+        <div class="faq-item">
+          <div class="faq-divider"></div>
+          <button type="button" class="faq-trigger" aria-expanded="false">
+            <span class="faq-question">How does home swapping work?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-content" style="display: none;">
+            <p class="faq-answer">You can swap homes in two ways: through mutual swaps, where you and another member stay in each other’s homes, or one-way swaps using SwapCredits you earn from hosting others in your home.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-divider"></div>
+          <button type="button" class="faq-trigger" aria-expanded="false">
+            <span class="faq-question">Can I use SwapSpace if I don’t own my home?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-content" style="display: none;">
+            <p class="faq-answer">Absolutely. Renters are welcome to list their homes on SwapSpace, since swaps are about exchanging stays rather than money. It works much like hosting a friend while you’re away. To be safe, we suggest reviewing your tenancy agreement or checking with your landlord first.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-divider"></div>
+          <button type="button" class="faq-trigger" aria-expanded="false">
+            <span class="faq-question">What are SwapCredits?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-content" style="display: none;">
+            <p class="faq-answer">SwapCredits are the currency of the SwapSpace community. You earn them by hosting other members in your home, and you can use them to book one-way swaps in destinations that inspire you. Every new member also receives 7 welcome SwapCredits after listing their home, so you can start travelling even before hosting your first guest.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-divider"></div>
+          <button type="button" class="faq-trigger" aria-expanded="false">
+            <span class="faq-question">How do I list my home on SwapSpace?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-content" style="display: none;">
+            <p class="faq-answer">Everyone in the SwapSpace community lists their home. Since SwapSpace is invite-only, the first step is to apply. Once you’re accepted, you’ll be able to create your home listing and start exploring beautiful spaces in destinations that inspire you.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-divider"></div>
+          <button type="button" class="faq-trigger" aria-expanded="false">
+            <span class="faq-question">Are members verified?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-content" style="display: none;">
+            <p class="faq-answer">Your safety matters. Every member verifies their identity with a government ID, so you know you’re connecting with real, trusted people. Once verified, you’ll get a badge on your profile that shows you’re ready to swap with confidence.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-divider"></div>
+          <button type="button" class="faq-trigger" aria-expanded="false">
+            <span class="faq-question">How does pricing work? Is it free to swap?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-content" style="display: none;">
+            <p class="faq-answer">SwapSpace is completely free to use for now. You can apply, list your home, and start swapping without any cost. In the future, we’ll introduce a membership fee to support platform maintenance and continued improvements.</p>
+          </div>
+        </div>
+
       </div>
-    </section>
+      <div class="faq-bottom-divider"></div>
+      <a href="/faq" class="btn-faq-more" style="display:none">More FAQs</a>
+    </div>
+  </section>
 
     <!-- ============================================
          FOOTER SECTION
@@ -500,7 +401,7 @@
       <div class="footer-content animate-on-scroll">
         <div class="footer-brand">
           <img 
-            src="assets/Swapspace-logo-in-white.svg" 
+            src="assets/Swapspace-wordmark-white.svg" 
             alt="SwapSpace Logo" 
             class="footer-logo"
           />
@@ -655,80 +556,32 @@
         });
 
 
-        // Price comparison toggle functionality
-        const toggleButtons = document.querySelectorAll('.toggle-btn');
-        const toggleGroups = document.querySelectorAll('.toggle-group');
-        const mutualCard = document.getElementById('mutualCard');
-        const swapcreditsCard = document.getElementById('swapcreditsCard');
-
-        function updateToggleState(switchType) {
-          // Remove active class from all buttons and cards
-          toggleButtons.forEach(function(btn) {
-            btn.classList.remove('active');
-          });
-          mutualCard.classList.remove('active');
-          swapcreditsCard.classList.remove('active');
-          
-          // Update toggle groups
-          toggleGroups.forEach(function(group) {
-            group.setAttribute('data-active', switchType);
-          });
-
-          // Update card visibility
-          if (switchType === 'mutual') {
-            mutualCard.classList.add('active');
-          } else if (switchType === 'swapcredits') {
-            swapcreditsCard.classList.add('active');
-          }
-
-          // Update all toggle buttons to match the active card
-          toggleButtons.forEach(function(btn) {
-            if (btn.getAttribute('data-switch') === switchType) {
-              btn.classList.add('active');
-            }
-          });
-        }
-
-        toggleButtons.forEach(function(button) {
-          button.addEventListener('click', function() {
-            const switchType = this.getAttribute('data-switch');
-            updateToggleState(switchType);
-          });
-        });
-
         // FAQ Accordion functionality
-        const faqTriggers = document.querySelectorAll('.faq-trigger');
-        faqTriggers.forEach(function(trigger) {
+        document.querySelectorAll('.faq-trigger').forEach(function(trigger) {
           trigger.addEventListener('click', function() {
-            const faqItem = this.closest('.faq-item');
-            const isActive = faqItem.classList.contains('active');
-            const content = faqItem.querySelector('.faq-content');
-            const icon = faqItem.querySelector('.faq-icon');
-            
-            // Close all other FAQ items
+            var faqItem = this.closest('.faq-item');
+            var isActive = faqItem.classList.contains('active');
+
+            // Close all items
             document.querySelectorAll('.faq-item').forEach(function(item) {
-              if (item !== faqItem) {
-                item.classList.remove('active');
-                item.querySelector('.faq-content').style.display = 'none';
-                item.querySelector('.faq-trigger').setAttribute('aria-expanded', 'false');
-              }
+              item.classList.remove('active');
+              item.querySelector('.faq-content').style.display = 'none';
+              item.querySelector('.faq-trigger').setAttribute('aria-expanded', 'false');
+              item.querySelector('.faq-icon').textContent = '+';
             });
-            
-            // Toggle current item
-            if (isActive) {
-              faqItem.classList.remove('active');
-              content.style.display = 'none';
-              this.setAttribute('aria-expanded', 'false');
-            } else {
+
+            // Open clicked item if it was closed
+            if (!isActive) {
               faqItem.classList.add('active');
-              content.style.display = 'block';
+              faqItem.querySelector('.faq-content').style.display = 'block';
               this.setAttribute('aria-expanded', 'true');
+              faqItem.querySelector('.faq-icon').textContent = '−';
             }
           });
         });
 
         // Fetch and render listings from backend
-        const listedHomesWrapper = document.querySelector('.listed-homes-wrapper');
+        const listingCardsEl = document.getElementById('listingCards');
         
         // ============================================
         // LISTING CARDS API INTEGRATION
@@ -806,303 +659,71 @@
           });
         }
 
+        function makeAmenity(iconSrc, iconAlt, text) {
+          return `<span class="listing-amenity"><img src="${iconSrc}" alt="${iconAlt}" class="listing-amenity-icon">${text}</span>`;
+        }
+
         function createListingCard(listing) {
-          const card = document.createElement('div');
-          card.className = 'listing-card';
-          card.dataset.listingId = listing.id || listing.propertyId;
+          const propertyId = listing.id;
+          const imageUrl = listing.images && listing.images.length > 0 ? listing.images[0] : '';
+          const avatarUrl = listing.host && listing.host.avatar ? listing.host.avatar : '';
 
-          // Host overlay
-          const hostOverlay = document.createElement('div');
-          hostOverlay.className = 'listing-host-overlay';
-          if (listing.host) {
-            const avatar = document.createElement('img');
-            avatar.className = 'listing-host-avatar';
-            avatar.src = listing.host.avatar || '';
-            avatar.alt = 'Member avatar';
-            avatar.loading = 'lazy';
-            avatar.onerror = function() { 
-              this.style.display = 'none';
-            };
-            
-            const hostName = document.createElement('p');
-            hostName.className = 'listing-host-name';
-            hostName.textContent = "Member's home";
-            
-            hostOverlay.appendChild(avatar);
-            hostOverlay.appendChild(hostName);
-          } else if (listing.hostName) {
-            // Fallback for direct hostName property
-            const hostName = document.createElement('p');
-            hostName.className = 'listing-host-name';
-            hostName.textContent = "Member's home";
-            hostOverlay.appendChild(hostName);
-          }
+          const bedrooms = listing.amenities?.bedrooms || 0;
+          const bathrooms = listing.amenities?.bathrooms || 0;
+          const livingRooms = listing.amenities?.livingRooms || 0;
 
-          // Image container with carousel
-          const imageContainer = document.createElement('div');
-          imageContainer.className = 'listing-image-container';
-          
-          const imageCarousel = document.createElement('div');
-          imageCarousel.className = 'listing-image-carousel';
-          
-          // Handle images - can be array of URLs or array of objects with imageUrl
-          let images = listing.images || [];
-          let imageUrls = [];
-          if (images.length > 0 && typeof images[0] === 'object' && images[0].imageUrl) {
-            imageUrls = images.map(img => img.imageUrl).filter(url => url);
-            images = imageUrls;
-          } else {
-            imageUrls = images.filter(url => url);
-          }
-          
-          const imageCount = imageUrls.length;
-          
-          if (imageCount === 0) {
-            const defaultImg = document.createElement('div');
-            defaultImg.className = 'listing-image-item';
-            const img = document.createElement('img');
-            img.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="432" height="254"%3E%3Crect fill="%23E5E7EB" width="432" height="254"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" fill="%236B7280" font-family="Arial" font-size="16"%3EImage%3C/text%3E%3C/svg%3E';
-            img.alt = listing.title || 'Home';
-            defaultImg.appendChild(img);
-            imageCarousel.appendChild(defaultImg);
-          } else {
-            imageUrls.forEach((imageUrl, index) => {
-              const imageItem = document.createElement('div');
-              imageItem.className = 'listing-image-item';
-              const img = document.createElement('img');
-              img.src = imageUrl;
-              img.alt = `${listing.title || 'Home'} - Image ${index + 1}`;
-              img.loading = 'lazy';
-              img.onerror = function() {
-                this.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="432" height="254"%3E%3Crect fill="%23E5E7EB" width="432" height="254"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" fill="%236B7280" font-family="Arial" font-size="16"%3EImage%3C/text%3E%3C/svg%3E';
-              };
-              imageItem.appendChild(img);
-              imageCarousel.appendChild(imageItem);
-            });
-          }
+          const amenitiesHtml = [
+            livingRooms > 0 ? makeAmenity('assets/icon-sofa.svg', 'Sofa', `${livingRooms} Living room${livingRooms > 1 ? 's' : ''}`) : '',
+            bedrooms > 0    ? makeAmenity('assets/icon-bed.svg',  'Bed',  `${bedrooms} Bed${bedrooms > 1 ? 's' : ''}`) : '',
+            bathrooms > 0   ? makeAmenity('assets/icon-bath.svg', 'Bath', `${bathrooms} Bath${bathrooms > 1 ? 's' : ''}`) : '',
+          ].filter(Boolean).join('');
 
-          // Image dots indicator
-          const imageDots = document.createElement('div');
-          imageDots.className = 'listing-image-dots';
-          if (imageCount > 1) {
-            imageUrls.forEach((_, index) => {
-              const dot = document.createElement('div');
-              dot.className = 'image-dot' + (index === 0 ? ' active' : '');
-              dot.dataset.index = index;
-              dot.addEventListener('click', function() {
-                const carousel = imageCarousel;
-                const itemWidth = carousel.offsetWidth;
-                carousel.scrollTo({ left: itemWidth * index, behavior: 'smooth' });
-                updateImageDots(carousel, imageDots);
-              });
-              imageDots.appendChild(dot);
-            });
-          }
+          const monthsHtml = (listing.availableMonths || [])
+            .map(m => `<span class="listing-month">${m}</span>`)
+            .join('');
+          const availabilityHtml = monthsHtml
+            ? `<div class="listing-card-availability">
+                <span class="listing-availability-label">Swap available:</span>
+                <div class="listing-months">${monthsHtml}</div>
+               </div>`
+            : '';
 
-          // Update dots on scroll
-          imageCarousel.addEventListener('scroll', function() {
-            updateImageDots(imageCarousel, imageDots);
-          });
+          const avatarHtml = avatarUrl
+            ? `<img src="${avatarUrl}" alt="Member avatar" class="listing-card-avatar" loading="lazy">`
+            : '';
 
-          imageContainer.appendChild(imageCarousel);
-          if (imageCount > 1) {
-            imageContainer.appendChild(imageDots);
-          }
-          if (hostOverlay.children.length > 0) {
-            imageContainer.appendChild(hostOverlay);
-          }
+          const wrapper = document.createElement('div');
+          wrapper.innerHTML = `
+            <div class="listing-card" style="cursor:pointer">
+              <div class="listing-card-image">
+                <img src="${imageUrl}" alt="${listing.title}" class="listing-card-photo" loading="lazy">
+                <div class="listing-card-avatar-row">
+                  ${avatarHtml}
+                  <span class="listing-card-avatar-label">Member's home</span>
+                </div>
+                <div class="listing-card-dots">
+                  <span class="listing-dot listing-dot--active"></span>
+                  <span class="listing-dot"></span>
+                  <span class="listing-dot"></span>
+                </div>
+              </div>
+              <div class="listing-card-body">
+                <h3 class="listing-card-title">${listing.title}</h3>
+                <p class="listing-card-location">${listing.location}</p>
+                <div class="listing-card-amenities">${amenitiesHtml}</div>
+                ${availabilityHtml}
+              </div>
+            </div>`;
 
-          // Property info - matching Figma structure exactly
-          const propertyInfo = document.createElement('div');
-          propertyInfo.className = 'listing-property-info';
-
-          // Outer stack container (gap-12px)
-          const outerStack = document.createElement('div');
-          outerStack.className = 'listing-info-stack';
-          
-          // Inner stack container (gap-12px)
-          const innerStack = document.createElement('div');
-          innerStack.className = 'listing-info-stack';
-
-          // Title
-          const titleContainer = document.createElement('div');
-          titleContainer.className = 'listing-title-container';
-          const title = document.createElement('h3');
-          title.className = 'listing-title';
-          title.textContent = listing.title || 'Untitled Listing';
-          titleContainer.appendChild(title);
-
-          // Location
-          const location = document.createElement('p');
-          location.className = 'listing-location';
-          location.textContent = listing.location || 'Location not specified';
-
-          // Amenities
-          const amenities = document.createElement('div');
-          amenities.className = 'listing-amenities';
-          
-          // Get amenities from nested object or direct properties
-          const livingRooms = listing.amenities?.livingRooms ?? listing.livingRoomNumber ?? 0;
-          let bedrooms = listing.amenities?.bedrooms ?? listing.bedroomNumber ?? 0;
-          const bathrooms = listing.amenities?.bathrooms ?? listing.bathroomNumber ?? 0;
-          
-          // If bedrooms is 0 or null, try to calculate from bed counts
-          if (!bedrooms || bedrooms === 0) {
-            const singleBeds = listing.singleBedNumber || 0;
-            const doubleBeds = listing.doubleBedNumber || 0;
-            const largeDoubleBeds = listing.largeDoubleBedNumber || 0;
-            const totalBeds = singleBeds + doubleBeds + largeDoubleBeds;
-            
-            if (totalBeds > 0) {
-              // Estimate: each double/large double = 1 bedroom, singles can share (2 per room)
-              bedrooms = Math.max(
-                largeDoubleBeds + doubleBeds,
-                Math.ceil(singleBeds / 2)
-              );
-              // If we have beds but calculated 0, default to 1
-              if (bedrooms === 0 && totalBeds > 0) {
-                bedrooms = 1;
-              }
-            }
-          }
-          
-          if (livingRooms > 0) {
-            const livingRoom = document.createElement('div');
-            livingRoom.className = 'listing-amenity';
-            const livingIcon = document.createElement('div');
-            livingIcon.className = 'listing-amenity-icon';
-            const livingIconImg = document.createElement('img');
-            livingIconImg.src = 'assets/sofa-icon.svg';
-            livingIconImg.alt = 'Living room';
-            livingIconImg.onerror = function() {
-              // Fallback to inline SVG if file doesn't exist
-              this.style.display = 'none';
-              livingIcon.innerHTML = `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 12H21M3 12V20H21V12M3 12L12 4L21 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-            };
-            livingIcon.appendChild(livingIconImg);
-            const livingText = document.createElement('span');
-            livingText.className = 'listing-amenity-text';
-            livingText.textContent = `${livingRooms} Living room${livingRooms > 1 ? 's' : ''}`;
-            livingRoom.appendChild(livingIcon);
-            livingRoom.appendChild(livingText);
-            amenities.appendChild(livingRoom);
-          }
-
-          if (bedrooms > 0) {
-            const bedroomsEl = document.createElement('div');
-            bedroomsEl.className = 'listing-amenity';
-            const bedIcon = document.createElement('div');
-            bedIcon.className = 'listing-amenity-icon';
-            const bedIconImg = document.createElement('img');
-            bedIconImg.src = 'assets/bed-icon.svg';
-            bedIconImg.alt = 'Bed';
-            bedIconImg.onerror = function() {
-              // Fallback to inline SVG if file doesn't exist
-              this.style.display = 'none';
-              bedIcon.innerHTML = `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 9V7C3 5.89543 3.89543 5 5 5H19C20.1046 5 21 5.89543 21 7V9M3 9H21M3 9V19H21V9M7 13H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-            };
-            bedIcon.appendChild(bedIconImg);
-            const bedText = document.createElement('span');
-            bedText.className = 'listing-amenity-text';
-            bedText.textContent = `${bedrooms} Bed${bedrooms > 1 ? 's' : ''}`;
-            bedroomsEl.appendChild(bedIcon);
-            bedroomsEl.appendChild(bedText);
-            amenities.appendChild(bedroomsEl);
-          }
-
-          if (bathrooms > 0) {
-            const bathroomsEl = document.createElement('div');
-            bathroomsEl.className = 'listing-amenity';
-            const bathIcon = document.createElement('div');
-            bathIcon.className = 'listing-amenity-icon';
-            const bathIconImg = document.createElement('img');
-            bathIconImg.src = 'assets/bath-icon.svg';
-            bathIconImg.alt = 'Bath';
-            bathIconImg.onerror = function() {
-              // Fallback to inline SVG if file doesn't exist
-              this.style.display = 'none';
-              bathIcon.innerHTML = `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 12H21M3 12V20H21V12M3 12L12 4L21 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-            };
-            bathIcon.appendChild(bathIconImg);
-            const bathText = document.createElement('span');
-            bathText.className = 'listing-amenity-text';
-            bathText.textContent = `${bathrooms} Bath${bathrooms > 1 ? 's' : ''}`;
-            bathroomsEl.appendChild(bathIcon);
-            bathroomsEl.appendChild(bathText);
-            amenities.appendChild(bathroomsEl);
-          }
-
-          // Build inner stack (title, location, amenities)
-          innerStack.appendChild(titleContainer);
-          innerStack.appendChild(location);
-          innerStack.appendChild(amenities);
-
-          // Availability section - separate container with gap-4px
-          const availability = document.createElement('div');
-          availability.className = 'listing-availability';
-          
-          if (listing.availableMonths && listing.availableMonths.length > 0) {
-            const availabilityWrapper = document.createElement('div');
-            availabilityWrapper.className = 'listing-availability-wrapper';
-            
-            const availabilityLabel = document.createElement('span');
-            availabilityLabel.className = 'listing-availability-label';
-            availabilityLabel.textContent = 'Swap available:';
-            availabilityWrapper.appendChild(availabilityLabel);
-
-            listing.availableMonths.forEach(month => {
-              const badge = document.createElement('span');
-              badge.className = 'listing-availability-badge';
-              badge.textContent = month;
-              availabilityWrapper.appendChild(badge);
-            });
-            
-            availability.appendChild(availabilityWrapper);
-          }
-
-          // Build outer stack (inner stack + availability)
-          outerStack.appendChild(innerStack);
-          if (listing.availableMonths && listing.availableMonths.length > 0) {
-            outerStack.appendChild(availability);
-          }
-
-          propertyInfo.appendChild(outerStack);
-
-          card.appendChild(imageContainer);
-          card.appendChild(propertyInfo);
-
-          // Add click handler to navigate to property details page
-          card.style.cursor = 'pointer';
+          const card = wrapper.firstElementChild;
           card.addEventListener('click', function() {
-            const propertyId = listing.id || listing.propertyId;
-            if (propertyId) {
-              window.location.href = `Propertydetails.html?id=${propertyId}`;
-            }
+            if (propertyId) window.location.href = `Propertydetails.html?id=${propertyId}`;
           });
-
           return card;
         }
 
-        function updateImageDots(carousel, dotsContainer) {
-          const dots = dotsContainer.querySelectorAll('.image-dot');
-          const scrollLeft = carousel.scrollLeft;
-          const itemWidth = carousel.offsetWidth;
-          const currentIndex = Math.round(scrollLeft / itemWidth);
-          
-          dots.forEach((dot, index) => {
-            if (index === currentIndex) {
-              dot.classList.add('active');
-            } else {
-              dot.classList.remove('active');
-            }
-          });
-        }
-
         async function fetchListings() {
-          if (!listedHomesWrapper) return;
-
-          // Show loading state
-          listedHomesWrapper.innerHTML = '<div class="listing-loading">Loading homes...</div>';
+          if (!listingCardsEl) return;
 
           try {
             // Check if API_ENDPOINT is set
@@ -1231,24 +852,23 @@
             renderListings({ listings: transformedData });
           } catch (error) {
             console.error('Error fetching listings:', error);
-            listedHomesWrapper.innerHTML = '<div class="listing-error">Failed to load homes. Please try again later.</div>';
+            listingCardsEl.innerHTML = '';
           }
         }
 
         function renderListings(data) {
-          if (!listedHomesWrapper) return;
+          if (!listingCardsEl) return;
 
-          const listings = data.listings || data || [];
-          
+          const listings = (data.listings || data || []).slice(0, 4);
+
           if (listings.length === 0) {
-            listedHomesWrapper.innerHTML = '<div class="listing-empty">No homes available at the moment.</div>';
+            listingCardsEl.innerHTML = '';
             return;
           }
 
-          listedHomesWrapper.innerHTML = '';
+          listingCardsEl.innerHTML = '';
           listings.forEach(listing => {
-            const card = createListingCard(listing);
-            listedHomesWrapper.appendChild(card);
+            listingCardsEl.appendChild(createListingCard(listing));
           });
         }
 
@@ -1340,24 +960,6 @@
             }
           }
           
-          // Section parallax - subtle lift effect as sections enter view
-          sections.forEach((section, index) => {
-            if (section.classList.contains('hero')) return; // Skip hero
-            
-            const rect = section.getBoundingClientRect();
-            const windowHeight = window.innerHeight;
-            
-            // Calculate how far into viewport the section is
-            const viewportProgress = (windowHeight - rect.top) / (windowHeight + rect.height);
-            
-            if (viewportProgress > 0 && viewportProgress < 1) {
-              // Subtle upward movement as section enters (no opacity change)
-              const translateY = Math.max(0, (1 - viewportProgress) * 30);
-              section.style.transform = `translate3d(0, ${translateY}px, 0)`;
-            } else if (viewportProgress >= 1) {
-              section.style.transform = 'translate3d(0, 0, 0)';
-            }
-          });
           
           requestAnimationFrame(updateParallax);
         }
@@ -1376,13 +978,72 @@
           if (heroBackground) {
             heroBackground.style.willChange = 'transform';
           }
-          sections.forEach(section => {
-            if (!section.classList.contains('hero')) {
-              section.style.willChange = 'transform';
-            }
-          });
           
           updateParallax();
+        });
+      })();
+    </script>
+
+    <script>
+      (function () {
+        var tabs   = Array.from(document.querySelectorAll('.traveller-tab'));
+        var videos = Array.from(document.querySelectorAll('.traveller-video'));
+        var current = 0;
+        var timer;
+
+        function switchTo(index) {
+          videos[current].classList.remove('active');
+          tabs[current].classList.remove('active');
+          current = (index + videos.length) % videos.length;
+          videos[current].classList.add('active');
+          videos[current].play();
+          tabs[current].classList.add('active');
+        }
+
+        function startTimer() {
+          clearInterval(timer);
+          timer = setInterval(function () { switchTo(current + 1); }, 4000);
+        }
+
+        tabs.forEach(function (tab, i) {
+          tab.addEventListener('click', function () {
+            switchTo(i);
+            startTimer(); // reset the 4-second window after a manual pick
+          });
+        });
+
+        // Kick off auto-rotation
+        startTimer();
+      })();
+    </script>
+
+    <!-- Hamburger menu toggle -->
+    <script>
+      (function () {
+        var btn = document.getElementById('hamburgerBtn');
+        var menu = document.getElementById('mobileMenu');
+        var mobileLinks = menu.querySelectorAll('.mobile-nav-link');
+
+        function openMenu() {
+          menu.classList.add('is-open');
+          btn.setAttribute('aria-expanded', 'true');
+          btn.classList.add('is-open');
+          document.body.style.overflow = 'hidden';
+        }
+
+        function closeMenu() {
+          menu.classList.remove('is-open');
+          btn.setAttribute('aria-expanded', 'false');
+          btn.classList.remove('is-open');
+          document.body.style.overflow = '';
+        }
+
+        btn.addEventListener('click', function () {
+          menu.classList.contains('is-open') ? closeMenu() : openMenu();
+        });
+
+        mobileLinks.forEach(function (link) {
+          link.addEventListener('click', closeMenu);
         });
       })();
     </script>

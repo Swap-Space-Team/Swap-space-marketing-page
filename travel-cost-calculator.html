@@ -1,0 +1,1977 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Travel Cost Calculator — How Much Does Your Trip Really Cost? | SwapSpace</title>
+  <meta name="description" content="Free travel cost calculator. Get a realistic estimate of your trip budget — accommodation, food, transport, entertainment and drinks — for any city in the world." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://www.swap-space.com/travel-cost-calculator" />
+  <meta property="og:title" content="Travel Cost Calculator | SwapSpace" />
+  <meta property="og:description" content="Find out how much your next trip will really cost. Instant estimates for accommodation, food, transport, entertainment and drinks worldwide." />
+  <meta property="og:url" content="https://www.swap-space.com/travel-cost-calculator" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="SwapSpace" />
+  <link rel="icon" href="assets/Swap-space_favicon_g6hAj61Zg_Rij2PQiQbR6.svg" />
+  <link rel="stylesheet" href="/Style.css" />
+
+  <!-- Structured data: WebApplication -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Travel Cost Calculator",
+    "description": "Free travel cost calculator. Get a realistic estimate of your trip budget — accommodation, food, transport, entertainment and drinks — for any city in the world.",
+    "url": "https://www.swap-space.com/travel-cost-calculator",
+    "applicationCategory": "TravelApplication",
+    "operatingSystem": "Web",
+    "browserRequirements": "Requires JavaScript",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "publisher": { "@type": "Organization", "name": "SwapSpace", "url": "https://www.swap-space.com" }
+  }
+  </script>
+
+  <!-- Structured data: FAQPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How accurate is this travel cost calculator?",
+        "acceptedAnswer": { "@type": "Answer", "text": "The calculator uses crowd-sourced price data from Numbeo, covering 5,000+ cities worldwide. Prices are stored in USD and converted using exchange rates updated weekly. It is designed as a realistic budget guide — not a quote. Accommodation costs in particular can vary significantly by season, location within the city, and how far in advance you book." }
+      },
+      {
+        "@type": "Question",
+        "name": "What does a mid-range travel budget include?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Mid-range covers a 3–4★ hotel or equivalent, a mix of restaurant meals (cheaper lunches, one sit-down dinner per day), 2–3 coffees and drinks, local public transport for most journeys, and occasional cultural activities. Budget style uses hostels and street food; Comfortable covers 4–5★ hotels and fine dining throughout." }
+      },
+      {
+        "@type": "Question",
+        "name": "What is typically the biggest expense when travelling?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Accommodation. Across most destinations and travel styles, it accounts for 35–50% of a typical trip budget — making it by far the single largest cost. It is also the one expense that SwapSpace members can eliminate entirely by swapping homes with verified members at their destination." }
+      },
+      {
+        "@type": "Question",
+        "name": "How can I reduce my accommodation costs when travelling?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Home swapping is the most effective approach — SwapSpace members stay in each other's homes for free, cutting the largest single travel expense to zero. Other options include booking well in advance, travelling in shoulder season, and choosing apartments over hotels for longer stays." }
+      },
+      {
+        "@type": "Question",
+        "name": "How much should I budget for food when travelling?",
+        "acceptedAnswer": { "@type": "Answer", "text": "As a rough guide: budget travellers spend £15–30 per person per day on food; mid-range travellers £35–65 per person per day; and comfortable travellers £70–150+ per person per day. Costs vary considerably by destination — Southeast Asia is far cheaper than Scandinavia." }
+      },
+      {
+        "@type": "Question",
+        "name": "Does this travel cost calculator work for any city?",
+        "acceptedAnswer": { "@type": "Answer", "text": "The calculator covers 5,000+ cities and towns globally. For smaller destinations not directly in the dataset, it automatically falls back to an average based on other cities in the same country, giving a reasonable regional estimate." }
+      },
+      {
+        "@type": "Question",
+        "name": "When is the best time to book to save money on travel?",
+        "acceptedAnswer": { "@type": "Answer", "text": "For flights, booking 6–8 weeks ahead tends to hit the sweet spot for European routes; 3–4 months ahead for long-haul. Travelling in shoulder season can cut accommodation costs by 20–40% and reduce crowds significantly." }
+      }
+    ]
+  }
+  </script>
+  <style>
+    /* ================================================
+       TRAVEL COST CALCULATOR — PAGE-SPECIFIC STYLES
+       ================================================ */
+
+    /* ── Hero ── */
+    .calc-hero {
+      background-color: var(--color-primary-900);
+      margin-top: 80px;
+      padding: 72px 40px 72px;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    .calc-hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.09;
+      pointer-events: none;
+    }
+
+    .calc-hero-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .calc-eyebrow {
+      display: inline-block;
+      font-family: 'Geist', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-amber-400);
+      background: rgba(251, 179, 30, 0.12);
+      border: 1px solid rgba(251, 179, 30, 0.28);
+      padding: 4px 14px;
+      border-radius: 9999px;
+      margin-bottom: 22px;
+    }
+
+    .calc-hero-heading {
+      font-family: 'Clash Display', 'Geist', sans-serif;
+      font-size: 54px;
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -1.2px;
+      color: #fff;
+      margin: 0 0 18px;
+    }
+
+    .calc-hero-body {
+      font-family: 'Geist', sans-serif;
+      font-size: 17px;
+      line-height: 1.65;
+      color: var(--color-primary-200);
+      margin: 0;
+      max-width: 580px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* ── Main section ── */
+    .calc-section {
+      background: rgb(250, 249, 247);
+      padding: 40px 20px 100px;
+      min-height: 400px;
+    }
+
+    /* ── Card ── */
+    .calc-card {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.06), 0 4px 32px rgba(0,0,0,0.09);
+      max-width: 720px;
+      margin: 0 auto 0;
+      position: relative;
+      z-index: 10;
+      overflow: hidden;
+    }
+
+    .calc-form-area {
+      padding: 40px 40px 32px;
+    }
+
+    .calc-form-title {
+      font-family: 'Clash Display', 'Geist', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 0 0 28px;
+    }
+
+    /* ── Form fields ── */
+    .calc-field {
+      margin-bottom: 22px;
+    }
+
+    .calc-label {
+      display: block;
+      font-family: 'Geist', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-neutral-600);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 8px;
+    }
+
+    .calc-input {
+      width: 100%;
+      height: 48px;
+      padding: 0 16px;
+      font-family: 'Geist', sans-serif;
+      font-size: 15px;
+      color: var(--text-primary);
+      background: #fff;
+      border: 1.5px solid var(--color-neutral-200);
+      border-radius: 10px;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      box-sizing: border-box;
+    }
+
+    .calc-input:focus {
+      border-color: var(--color-primary-500);
+      box-shadow: 0 0 0 3px rgba(7, 148, 85, 0.1);
+    }
+
+    /* ── City autocomplete ── */
+    .calc-city-wrap {
+      position: relative;
+    }
+
+    .calc-city-dropdown {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      right: 0;
+      background: #fff;
+      border: 1.5px solid var(--color-neutral-200);
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      max-height: 220px;
+      overflow-y: auto;
+      z-index: 200;
+      display: none;
+    }
+
+    .calc-city-dropdown.open { display: block; }
+
+    .calc-city-option {
+      padding: 10px 16px;
+      font-family: 'Geist', sans-serif;
+      font-size: 14px;
+      color: var(--text-primary);
+      cursor: pointer;
+      border-bottom: 1px solid var(--color-neutral-100);
+      transition: background 0.1s;
+    }
+
+    .calc-city-option:last-child { border-bottom: none; }
+    .calc-city-option:hover, .calc-city-option.focused { background: var(--color-neutral-50); }
+
+    .calc-city-option .city-country {
+      color: var(--color-neutral-400);
+      margin-left: 4px;
+    }
+
+    /* ── Two-column row ── */
+    .calc-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    /* ── Stepper (nights & travellers) ── */
+    .calc-stepper {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      height: 48px;
+      border: 1.5px solid var(--color-neutral-200);
+      border-radius: 10px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .calc-stepper:focus-within {
+      border-color: var(--color-primary-500);
+      box-shadow: 0 0 0 3px rgba(7, 148, 85, 0.1);
+    }
+
+    .calc-stepper-btn {
+      width: 44px;
+      height: 100%;
+      background: var(--color-neutral-50);
+      border: none;
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--color-neutral-600);
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background 0.1s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+
+    .calc-stepper-btn:hover { background: var(--color-neutral-100); color: var(--text-primary); }
+
+    .calc-stepper-input {
+      flex: 1;
+      height: 100%;
+      border: none;
+      outline: none;
+      text-align: center;
+      font-family: 'Geist', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-primary);
+      background: transparent;
+    }
+
+    /* ── Toggle button group ── */
+    .calc-toggles {
+      display: flex;
+      gap: 8px;
+    }
+
+    .calc-toggle {
+      flex: 1;
+      height: 48px;
+      border: 1.5px solid var(--color-neutral-200);
+      border-radius: 10px;
+      background: #fff;
+      font-family: 'Geist', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-neutral-500);
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .calc-toggle:hover {
+      border-color: var(--color-primary-400);
+      color: var(--color-primary-700);
+      background: var(--color-primary-50);
+    }
+
+    .calc-toggle.active {
+      background: var(--color-primary-900);
+      border-color: var(--color-primary-900);
+      color: #fff;
+    }
+
+    .calc-toggle-emoji {
+      font-size: 15px;
+    }
+
+    /* ── Currency select ── */
+    .calc-select-wrap {
+      position: relative;
+    }
+
+    .calc-select {
+      width: 100%;
+      height: 48px;
+      padding: 0 40px 0 16px;
+      font-family: 'Geist', sans-serif;
+      font-size: 15px;
+      color: var(--text-primary);
+      background: #fff;
+      border: 1.5px solid var(--color-neutral-200);
+      border-radius: 10px;
+      outline: none;
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      transition: border-color 0.15s;
+      box-sizing: border-box;
+    }
+
+    .calc-select:focus {
+      border-color: var(--color-primary-500);
+      box-shadow: 0 0 0 3px rgba(7, 148, 85, 0.1);
+    }
+
+    .calc-select-chevron {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      color: var(--color-neutral-400);
+    }
+
+    /* ── Detected currency badge ── */
+    .calc-currency-detected {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Geist', sans-serif;
+      font-size: 12px;
+      color: var(--color-neutral-500);
+      margin-top: 6px;
+    }
+
+    .calc-currency-detected-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--color-primary-400);
+      flex-shrink: 0;
+    }
+
+    /* ── Submit button ── */
+    .calc-submit {
+      width: 100%;
+      height: 52px;
+      background: var(--color-primary-900);
+      color: #fff;
+      font-family: 'Geist', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .calc-submit:hover { background: var(--color-primary-700); }
+    .calc-submit:disabled { background: var(--color-neutral-200); color: var(--color-neutral-400); cursor: not-allowed; }
+
+    /* ── Results area ── */
+    .calc-results-area {
+      display: none;
+      padding: 0 40px 40px;
+      border-top: 1px solid var(--color-neutral-100);
+      margin-top: 4px;
+      animation: resultsFadeIn 0.5s cubic-bezier(0.16,1,0.3,1) both;
+    }
+
+    .calc-results-area.visible { display: block; }
+
+    @keyframes resultsFadeIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Total header */
+    .calc-total-header {
+      padding: 32px 0 24px;
+    }
+
+    .calc-total-eyebrow {
+      font-family: 'Geist', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-neutral-400);
+      margin-bottom: 8px;
+    }
+
+    .calc-total-amount {
+      font-family: 'Clash Display', 'Geist', sans-serif;
+      font-size: 52px;
+      font-weight: 700;
+      letter-spacing: -2px;
+      color: var(--color-primary-900);
+      line-height: 1;
+    }
+
+    .calc-total-sub {
+      font-family: 'Geist', sans-serif;
+      font-size: 14px;
+      color: var(--color-neutral-500);
+      margin-top: 6px;
+    }
+
+    .calc-per-day {
+      display: inline-block;
+      margin-top: 10px;
+      font-family: 'Geist', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-primary-700);
+      background: var(--color-primary-50);
+      border: 1px solid var(--color-primary-100);
+      border-radius: 99px;
+      padding: 3px 12px;
+    }
+
+    /* ── Quick city picks ── */
+    .calc-quick-picks {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 10px;
+    }
+
+    .calc-quick-city {
+      font-family: 'Geist', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-neutral-600);
+      background: var(--color-neutral-100);
+      border: 1.5px solid var(--color-neutral-200);
+      border-radius: 99px;
+      padding: 5px 13px;
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+      line-height: 1.4;
+    }
+
+    .calc-quick-city:hover {
+      background: var(--color-primary-50);
+      border-color: var(--color-primary-300);
+      color: var(--color-primary-700);
+    }
+
+    .calc-quick-city.active {
+      background: var(--color-primary-900);
+      border-color: var(--color-primary-900);
+      color: #fff;
+    }
+
+    /* ── Dynamic FAQ in results ── */
+    .calc-dynamic-faq {
+      margin-top: 28px;
+      border-top: 1px solid var(--color-neutral-100);
+      padding-top: 24px;
+    }
+
+    .calc-dynamic-faq-eyebrow {
+      font-family: 'Geist', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--color-neutral-400);
+      margin: 0 0 16px;
+    }
+
+    .calc-dynamic-faq-item {
+      margin-bottom: 16px;
+    }
+
+    .calc-dynamic-faq-item:last-child { margin-bottom: 0; }
+
+    .calc-dynamic-faq-q {
+      font-family: 'Geist', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-primary-900);
+      margin: 0 0 3px;
+    }
+
+    .calc-dynamic-faq-a {
+      font-family: 'Geist', sans-serif;
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--color-neutral-600);
+      margin: 0;
+    }
+
+    /* ── Share buttons ── */
+    .calc-share {
+      margin-top: 24px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .calc-share-label {
+      font-family: 'Geist', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-neutral-400);
+      margin: 0 4px 0 0;
+    }
+
+    .calc-share-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Geist', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 7px 14px;
+      border-radius: 99px;
+      text-decoration: none;
+      transition: opacity 0.15s;
+      cursor: pointer;
+      border: 1.5px solid transparent;
+    }
+
+    .calc-share-btn:hover { opacity: 0.78; }
+
+    .calc-share-btn--x {
+      background: #000;
+      color: #fff;
+    }
+
+    .calc-share-btn--whatsapp {
+      background: #25D366;
+      color: #fff;
+    }
+
+    .calc-share-btn--copy {
+      background: #fff;
+      color: var(--color-primary-900);
+      border-color: var(--color-neutral-200);
+    }
+
+    /* ── Static FAQ section ── */
+    .calc-faq-section {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 72px 20px 80px;
+    }
+
+    .calc-faq-heading {
+      font-family: 'Clash Display', 'Geist', sans-serif;
+      font-size: 30px;
+      font-weight: 700;
+      letter-spacing: -0.6px;
+      color: var(--color-primary-900);
+      margin: 0 0 6px;
+    }
+
+    .calc-faq-subhead {
+      font-family: 'Geist', sans-serif;
+      font-size: 15px;
+      color: var(--color-neutral-500);
+      margin: 0 0 32px;
+    }
+
+    .calc-faq-item {
+      border-bottom: 1px solid var(--color-neutral-200);
+    }
+
+    .calc-faq-item:first-of-type {
+      border-top: 1px solid var(--color-neutral-200);
+    }
+
+    .calc-faq-q {
+      font-family: 'Geist', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-primary-900);
+      padding: 18px 36px 18px 0;
+      cursor: pointer;
+      list-style: none;
+      position: relative;
+      user-select: none;
+      line-height: 1.4;
+    }
+
+    .calc-faq-q::-webkit-details-marker { display: none; }
+
+    .calc-faq-q::after {
+      content: '+';
+      position: absolute;
+      right: 4px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 22px;
+      font-weight: 300;
+      color: var(--color-neutral-400);
+      line-height: 1;
+    }
+
+    details[open] > .calc-faq-q::after { content: '−'; }
+
+    .calc-faq-a {
+      font-family: 'Geist', sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--color-neutral-600);
+      padding-bottom: 20px;
+    }
+
+    .calc-faq-a p { margin: 0; }
+
+    /* ── Regional fallback note ── */
+    .calc-regional-note {
+      font-family: 'Geist', sans-serif;
+      font-size: 13px;
+      color: var(--color-neutral-500);
+      background: var(--color-neutral-50);
+      border: 1px solid var(--color-neutral-200);
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin-top: 16px;
+    }
+
+    /* Breakdown bars */
+    .calc-breakdown {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .calc-breakdown-item {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .calc-breakdown-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .calc-breakdown-name {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Geist', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .calc-breakdown-icon {
+      font-size: 15px;
+      line-height: 1;
+    }
+
+    .calc-breakdown-amount {
+      font-family: 'Geist', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .calc-breakdown-pct {
+      font-size: 12px;
+      color: var(--color-neutral-400);
+      font-weight: 400;
+      margin-left: 4px;
+    }
+
+    .calc-bar-track {
+      height: 7px;
+      background: var(--color-neutral-100);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .calc-bar-fill {
+      height: 100%;
+      border-radius: 99px;
+      width: 0%;
+      transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .calc-bar-fill--accommodation { background: var(--color-amber-400); }
+    .calc-bar-fill--food          { background: var(--color-primary-400); }
+    .calc-bar-fill--transport     { background: var(--color-primary-300); }
+    .calc-bar-fill--drinks        { background: var(--color-primary-200); }
+    .calc-bar-fill--entertainment { background: var(--color-neutral-300); }
+
+    /* Accommodation highlight */
+    .calc-accom-highlight {
+      margin-top: 28px;
+      background: linear-gradient(135deg, var(--color-primary-50) 0%, var(--color-amber-50) 100%);
+      border: 1px solid var(--color-primary-100);
+      border-radius: 14px;
+      padding: 22px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .calc-accom-icon {
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      background: var(--color-primary-100);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .calc-accom-text { flex: 1; }
+
+    .calc-accom-title {
+      font-family: 'Clash Display', 'Geist', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-primary-900);
+      margin: 0 0 4px;
+    }
+
+    .calc-accom-body {
+      font-family: 'Geist', sans-serif;
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--color-primary-800);
+      margin: 0 0 10px;
+    }
+
+    .calc-accom-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: 'Geist', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-primary-600);
+      text-decoration: none;
+      border-bottom: 1px solid var(--color-primary-300);
+      padding-bottom: 1px;
+      transition: color 0.15s;
+    }
+
+    .calc-accom-cta:hover { color: var(--color-primary-900); }
+
+    .calc-disclaimer {
+      margin-top: 20px;
+      font-family: 'Geist', sans-serif;
+      font-size: 12px;
+      color: var(--color-neutral-400);
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    /* ── Email capture ── */
+    .calc-email-block {
+      margin-top: 24px;
+      background: var(--color-neutral-50);
+      border: 1px solid var(--color-neutral-200);
+      border-radius: 14px;
+      padding: 22px;
+    }
+
+    .calc-email-title {
+      font-family: 'Clash Display', 'Geist', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 0 0 4px;
+    }
+
+    .calc-email-body {
+      font-family: 'Geist', sans-serif;
+      font-size: 13px;
+      color: var(--color-neutral-500);
+      margin: 0 0 14px;
+      line-height: 1.5;
+    }
+
+    .calc-email-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .calc-email-input {
+      flex: 1;
+      height: 42px;
+      padding: 0 14px;
+      font-family: 'Geist', sans-serif;
+      font-size: 14px;
+      color: var(--text-primary);
+      background: #fff;
+      border: 1.5px solid var(--color-neutral-200);
+      border-radius: 8px;
+      outline: none;
+      transition: border-color 0.15s;
+      min-width: 0;
+    }
+
+    .calc-email-input:focus {
+      border-color: var(--color-primary-500);
+      box-shadow: 0 0 0 3px rgba(7,148,85,0.1);
+    }
+
+    .calc-email-btn {
+      height: 42px;
+      padding: 0 18px;
+      background: var(--color-primary-900);
+      color: #fff;
+      font-family: 'Geist', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.15s;
+      flex-shrink: 0;
+    }
+
+    .calc-email-btn:hover { background: var(--color-primary-700); }
+    .calc-email-btn:disabled { background: var(--color-neutral-300); cursor: not-allowed; }
+
+    .calc-email-success {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Geist', sans-serif;
+      font-size: 13px;
+      color: var(--color-primary-700);
+      font-weight: 500;
+    }
+
+    .calc-email-error {
+      margin-top: 8px;
+      font-family: 'Geist', sans-serif;
+      font-size: 12px;
+      color: var(--color-terra-600);
+    }
+
+    @media (max-width: 480px) {
+      .calc-email-row { flex-direction: column; }
+      .calc-email-btn { width: 100%; }
+    }
+
+    /* ── Loading state ── */
+    .calc-loading {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 32px 0;
+      font-family: 'Geist', sans-serif;
+      font-size: 14px;
+      color: var(--color-neutral-500);
+    }
+
+    .calc-loading.visible { display: flex; }
+
+    .calc-spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid var(--color-neutral-200);
+      border-top-color: var(--color-primary-500);
+      border-radius: 50%;
+      animation: calcSpin 0.65s linear infinite;
+    }
+
+    @keyframes calcSpin { to { transform: rotate(360deg); } }
+
+    /* ── Error state ── */
+    .calc-error {
+      display: none;
+      background: var(--color-terra-50);
+      border: 1px solid var(--color-terra-200);
+      border-radius: 10px;
+      padding: 14px 18px;
+      font-family: 'Geist', sans-serif;
+      font-size: 13px;
+      color: var(--color-terra-700);
+      margin-top: 16px;
+    }
+
+    .calc-error.visible { display: block; }
+
+    /* ── CTA Section ── */
+    .calc-cta-section {
+      background: var(--color-primary-900);
+      padding: 88px 40px;
+      text-align: center;
+    }
+
+    .calc-cta-eyebrow {
+      font-family: 'Geist', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-amber-400);
+      margin-bottom: 18px;
+    }
+
+    .calc-cta-heading {
+      font-family: 'Clash Display', 'Geist', sans-serif;
+      font-size: 38px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.75px;
+      line-height: 1.15;
+      max-width: 580px;
+      margin: 0 auto 16px;
+    }
+
+    .calc-cta-body {
+      font-family: 'Geist', sans-serif;
+      font-size: 17px;
+      color: var(--color-primary-200);
+      max-width: 500px;
+      margin: 0 auto 36px;
+      line-height: 1.65;
+    }
+
+    .calc-cta-btn {
+      display: inline-flex;
+      align-items: center;
+      height: 52px;
+      padding: 0 32px;
+      background: var(--color-amber-400);
+      color: var(--color-neutral-900);
+      font-family: 'Geist', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      border-radius: 9999px;
+      text-decoration: none;
+      transition: background 0.15s, transform 0.15s;
+    }
+
+    .calc-cta-btn:hover {
+      background: var(--color-amber-300);
+      color: var(--color-neutral-900);
+      transform: translateY(-1px);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .calc-hero { padding: 56px 20px 56px; }
+      .calc-hero-heading { font-size: 38px; letter-spacing: -0.8px; }
+      .calc-hero-body { font-size: 16px; }
+      .calc-form-area { padding: 28px 24px 24px; }
+      .calc-results-area { padding: 0 24px 32px; }
+      .calc-card { margin: 0 16px 0; }
+      .calc-row { grid-template-columns: 1fr; }
+      .calc-total-amount { font-size: 40px; }
+      .calc-cta-section { padding: 64px 24px; }
+      .calc-cta-heading { font-size: 28px; }
+    }
+
+    /* ── Trust signals ── */
+    .calc-trust-signals {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .calc-trust-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-family: 'Geist', sans-serif;
+      font-size: 12px;
+      color: var(--color-neutral-500);
+    }
+
+    .calc-trust-item svg {
+      color: var(--color-primary-500);
+      flex-shrink: 0;
+    }
+
+    /* ── Data source badge ── */
+    .calc-data-source {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 20px;
+      padding: 10px 14px;
+      background: var(--color-neutral-50);
+      border: 1px solid var(--color-neutral-200);
+      border-radius: 10px;
+      flex-wrap: wrap;
+    }
+
+    .calc-data-source-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: 'Geist', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-primary-700);
+      background: var(--color-primary-50);
+      border: 1px solid var(--color-primary-100);
+      border-radius: 99px;
+      padding: 2px 10px;
+      white-space: nowrap;
+    }
+
+    .calc-data-source-text {
+      font-family: 'Geist', sans-serif;
+      font-size: 12px;
+      color: var(--color-neutral-500);
+      line-height: 1.4;
+    }
+
+    @media (max-width: 480px) {
+      .calc-hero-heading { font-size: 30px; }
+      .calc-card { margin: 0 12px 0; }
+      .calc-toggles { gap: 6px; }
+      /* On very small screens hide emoji from toggles so text has room */
+      .calc-toggle-emoji { display: none; }
+      .calc-toggle { font-size: 13px; padding: 0 8px; }
+      .calc-total-amount { font-size: 34px; letter-spacing: -1px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ============================================================
+       MASTHEAD
+       ============================================================ -->
+  <header class="masthead">
+    <a href="/" class="masthead-logo-link">
+      <img class="logo" src="assets/Swapspace-wordmark-white.svg" alt="SwapSpace" width="140" height="29">
+    </a>
+
+    <nav class="masthead-nav">
+      <a href="/how-it-works.html" class="nav-link">How it works</a>
+      <a href="/guides.html" class="nav-link">Guides</a>
+      <a href="/#faq" class="nav-link">FAQ</a>
+    </nav>
+
+    <div class="masthead-actions">
+      <a href="/application.html" class="btn-cta-masthead">Can I swap my home?</a>
+      <a href="https://app.swap-space.com/login" class="btn-login-masthead">Log in</a>
+    </div>
+
+    <div class="masthead-mobile-right">
+      <a href="/application.html" class="btn-cta-masthead btn-cta-mobile">Can I swap my home?</a>
+      <button class="hamburger-btn" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile menu -->
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <nav class="mobile-menu-nav">
+      <a href="/how-it-works.html" class="mobile-nav-link">How it works</a>
+      <a href="/guides.html" class="mobile-nav-link">Guides</a>
+      <a href="/#faq" class="mobile-nav-link">FAQ</a>
+    </nav>
+    <a href="https://app.swap-space.com/login" class="mobile-login-btn">Log in</a>
+  </div>
+
+
+  <!-- ============================================================
+       HERO
+       ============================================================ -->
+  <section class="calc-hero">
+    <div class="calc-hero-inner">
+      <span class="calc-eyebrow">Free Travel Tool</span>
+      <h1 class="calc-hero-heading hero-animate">How much does travel<br>really cost?</h1>
+      <p class="calc-hero-body hero-animate hero-animate-delay-1">Get a realistic estimate of your trip expenses — accommodation, food, transport, entertainment and drinks — for any destination in the world.</p>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       CALCULATOR
+       ============================================================ -->
+  <section class="calc-section">
+    <div class="calc-card">
+
+      <!-- Form -->
+      <div class="calc-form-area">
+        <p class="calc-form-title">Plan your trip</p>
+
+        <!-- City -->
+        <div class="calc-field">
+          <label class="calc-label" for="cityInput">Destination city</label>
+          <div class="calc-city-wrap">
+            <input
+              type="text"
+              id="cityInput"
+              class="calc-input"
+              placeholder="e.g. Paris, Tokyo, New York…"
+              autocomplete="off"
+              spellcheck="false"
+            />
+            <div class="calc-city-dropdown" id="cityDropdown"></div>
+          </div>
+          <!-- Popular quick-picks -->
+          <div class="calc-quick-picks" id="quickCities">
+            <button class="calc-quick-city" data-name="Paris" data-country="France" type="button">🗼 Paris</button>
+            <button class="calc-quick-city" data-name="London" data-country="United Kingdom" type="button">🎡 London</button>
+            <button class="calc-quick-city" data-name="New York" data-country="United States" type="button">🗽 New York</button>
+            <button class="calc-quick-city" data-name="Tokyo" data-country="Japan" type="button">🏯 Tokyo</button>
+            <button class="calc-quick-city" data-name="Bangkok" data-country="Thailand" type="button">🌴 Bangkok</button>
+            <button class="calc-quick-city" data-name="Dubai" data-country="UAE" type="button">🇦🇪 Dubai</button>
+            <button class="calc-quick-city" data-name="Barcelona" data-country="Spain" type="button">⛱️ Barcelona</button>
+            <button class="calc-quick-city" data-name="Sydney" data-country="Australia" type="button">🦘 Sydney</button>
+          </div>
+        </div>
+
+        <!-- Nights + Travellers -->
+        <div class="calc-row">
+          <div class="calc-field">
+            <label class="calc-label">Nights</label>
+            <div class="calc-stepper" id="nightsStepper">
+              <button class="calc-stepper-btn" id="nightsMinus" type="button" aria-label="Decrease nights">−</button>
+              <input class="calc-stepper-input" id="nightsInput" type="number" value="7" min="1" max="365" inputmode="numeric" />
+              <button class="calc-stepper-btn" id="nightsPlus" type="button" aria-label="Increase nights">+</button>
+            </div>
+          </div>
+
+          <div class="calc-field">
+            <label class="calc-label">Travellers</label>
+            <div class="calc-stepper" id="travellersStepper">
+              <button class="calc-stepper-btn" id="travellersMinus" type="button" aria-label="Decrease travellers">−</button>
+              <input class="calc-stepper-input" id="travellersInput" type="number" value="2" min="1" max="20" inputmode="numeric" />
+              <button class="calc-stepper-btn" id="travellersPlus" type="button" aria-label="Increase travellers">+</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Travel style -->
+        <div class="calc-field">
+          <label class="calc-label">Travel style</label>
+          <div class="calc-toggles" id="styleToggles">
+            <button class="calc-toggle" data-style="budget" type="button">
+              <span class="calc-toggle-emoji">🎒</span> Budget
+            </button>
+            <button class="calc-toggle active" data-style="mid-range" type="button">
+              <span class="calc-toggle-emoji">⭐</span> Mid-range
+            </button>
+            <button class="calc-toggle" data-style="comfortable" type="button">
+              <span class="calc-toggle-emoji">✨</span> Comfortable
+            </button>
+          </div>
+        </div>
+
+        <!-- Currency -->
+        <div class="calc-field">
+          <label class="calc-label" for="currencySelect">Currency</label>
+          <div class="calc-select-wrap">
+            <select class="calc-select" id="currencySelect">
+              <option value="USD">🇺🇸 USD — US Dollar</option>
+              <option value="EUR">🇪🇺 EUR — Euro</option>
+              <option value="GBP">🇬🇧 GBP — British Pound</option>
+              <option value="CAD">🇨🇦 CAD — Canadian Dollar</option>
+              <option value="AUD">🇦🇺 AUD — Australian Dollar</option>
+              <option value="CHF">🇨🇭 CHF — Swiss Franc</option>
+              <option value="JPY">🇯🇵 JPY — Japanese Yen</option>
+              <option value="SGD">🇸🇬 SGD — Singapore Dollar</option>
+              <option value="HKD">🇭🇰 HKD — Hong Kong Dollar</option>
+              <option value="NZD">🇳🇿 NZD — New Zealand Dollar</option>
+              <option value="SEK">🇸🇪 SEK — Swedish Krona</option>
+              <option value="NOK">🇳🇴 NOK — Norwegian Krone</option>
+              <option value="DKK">🇩🇰 DKK — Danish Krone</option>
+              <option value="MXN">🇲🇽 MXN — Mexican Peso</option>
+              <option value="BRL">🇧🇷 BRL — Brazilian Real</option>
+              <option value="ARS">🇦🇷 ARS — Argentine Peso</option>
+              <option value="ZAR">🇿🇦 ZAR — South African Rand</option>
+              <option value="AED">🇦🇪 AED — UAE Dirham</option>
+              <option value="THB">🇹🇭 THB — Thai Baht</option>
+              <option value="INR">🇮🇳 INR — Indian Rupee</option>
+              <option value="KRW">🇰🇷 KRW — South Korean Won</option>
+              <option value="IDR">🇮🇩 IDR — Indonesian Rupiah</option>
+              <option value="MYR">🇲🇾 MYR — Malaysian Ringgit</option>
+              <option value="PHP">🇵🇭 PHP — Philippine Peso</option>
+              <option value="TRY">🇹🇷 TRY — Turkish Lira</option>
+              <option value="PLN">🇵🇱 PLN — Polish Zloty</option>
+              <option value="CZK">🇨🇿 CZK — Czech Koruna</option>
+              <option value="HUF">🇭🇺 HUF — Hungarian Forint</option>
+            </select>
+            <svg class="calc-select-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="calc-currency-detected" id="currencyDetected" style="display:none">
+            <span class="calc-currency-detected-dot"></span>
+            <span id="currencyDetectedText"></span>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="calc-field">
+          <label class="calc-label" for="userEmail">Your email address</label>
+          <input
+            type="email"
+            id="userEmail"
+            class="calc-input"
+            placeholder="your@email.com"
+          />
+          <div style="margin-top:6px; font-family:'Geist',sans-serif; font-size:12px; color:var(--color-neutral-400);">
+            We'll send you a copy of these results and travel tips. No spam.
+          </div>
+        </div>
+
+        <!-- Submit -->
+        <button class="calc-submit" id="calcSubmit" type="button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Calculate trip cost
+        </button>
+
+        <!-- Trust signals -->
+        <div class="calc-trust-signals">
+          <span class="calc-trust-item">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            5,000+ cities covered
+          </span>
+          <span class="calc-trust-item">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+            No account needed
+          </span>
+          <span class="calc-trust-item">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Free forever
+          </span>
+        </div>
+
+        <!-- Error -->
+        <div class="calc-error" id="calcError"></div>
+      </div>
+
+      <!-- Loading -->
+      <div class="calc-loading" id="calcLoading">
+        <div class="calc-spinner"></div>
+        Fetching live cost data…
+      </div>
+
+      <!-- Results -->
+      <div class="calc-results-area" id="calcResults">
+        <!-- Injected by JS -->
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       CTA SECTION
+       ============================================================ -->
+  <section class="calc-cta-section animate-on-scroll">
+    <p class="calc-cta-eyebrow">The SwapSpace way</p>
+    <h2 class="calc-cta-heading">What if your biggest travel expense was zero?</h2>
+    <p class="calc-cta-body">Accommodation typically accounts for the largest portion of any trip budget. SwapSpace members eliminate that cost entirely — by swapping homes with verified members worldwide.</p>
+    <a href="/application.html" class="calc-cta-btn">See if I can swap my home →</a>
+  </section>
+
+
+  <!-- ============================================================
+       STATIC FAQ SECTION
+       ============================================================ -->
+  <div class="calc-faq-section" id="faq">
+    <h2 class="calc-faq-heading">Travel cost FAQs</h2>
+    <p class="calc-faq-subhead">Everything you need to know about budgeting for travel</p>
+
+    <details class="calc-faq-item" open>
+      <summary class="calc-faq-q">How accurate is this travel cost calculator?</summary>
+      <div class="calc-faq-a">
+        <p>The calculator uses crowd-sourced price data from Numbeo, covering 5,000+ cities worldwide. Prices are stored in USD and converted using exchange rates updated weekly. It's designed as a realistic budget guide — not a quote. Accommodation in particular can vary significantly by season, location within the city, and how far in advance you book.</p>
+      </div>
+    </details>
+
+    <details class="calc-faq-item">
+      <summary class="calc-faq-q">What does a "mid-range" travel budget include?</summary>
+      <div class="calc-faq-a">
+        <p>Mid-range covers a 3–4★ hotel or equivalent, a mix of restaurant meals (cheaper lunches, one sit-down dinner per day), 2–3 coffees and drinks, local public transport for most journeys, and occasional entertainment. Budget style uses hostels and street food; Comfortable covers 4–5★ hotels and fine dining throughout.</p>
+      </div>
+    </details>
+
+    <details class="calc-faq-item">
+      <summary class="calc-faq-q">What's typically the biggest expense when travelling?</summary>
+      <div class="calc-faq-a">
+        <p>Accommodation. Across most destinations and travel styles, it accounts for 35–50% of a typical trip budget — making it the single largest cost for the majority of trips. It's also the one expense SwapSpace members can eliminate entirely, by swapping homes with verified members at their destination.</p>
+      </div>
+    </details>
+
+    <details class="calc-faq-item">
+      <summary class="calc-faq-q">How can I reduce my accommodation costs when travelling?</summary>
+      <div class="calc-faq-a">
+        <p>Home swapping is the most effective approach — SwapSpace members stay in each other's homes for free, cutting the largest single travel expense to zero. Other options include booking 6–8 weeks ahead for European routes (3–4 months for long-haul), travelling in shoulder season, and choosing apartments over hotels for stays longer than 5 nights.</p>
+      </div>
+    </details>
+
+    <details class="calc-faq-item">
+      <summary class="calc-faq-q">How much should I budget for food when travelling?</summary>
+      <div class="calc-faq-a">
+        <p>As a rough guide: budget travellers typically spend £15–30 per person per day on food; mid-range travellers £35–65; and comfortable travellers £70–150+. Costs vary enormously by destination — Southeast Asia is far cheaper than Scandinavia. The calculator uses real local prices for each city rather than generic estimates.</p>
+      </div>
+    </details>
+
+    <details class="calc-faq-item">
+      <summary class="calc-faq-q">How do exchange rates affect my travel budget?</summary>
+      <div class="calc-faq-a">
+        <p>All prices in the dataset are stored in USD and converted to your chosen currency using rates refreshed weekly. Exchange rates can shift 5–15% over weeks or months, so it's worth re-running the calculator closer to your departure date. For long trips, a zero-fee travel card can protect you from adverse rate movements at the point of spending.</p>
+      </div>
+    </details>
+
+    <details class="calc-faq-item">
+      <summary class="calc-faq-q">Does this calculator work for any city in the world?</summary>
+      <div class="calc-faq-a">
+        <p>It covers 5,000+ cities and towns globally. For smaller destinations not directly in the dataset, it automatically falls back to an average of nearby cities in the same country — so you'll always get a reasonable estimate rather than an error. Coverage is strongest in Europe, North America, and Southeast Asia.</p>
+      </div>
+    </details>
+
+    <details class="calc-faq-item">
+      <summary class="calc-faq-q">When is the best time to book to save money on travel?</summary>
+      <div class="calc-faq-a">
+        <p>For flights, 6–8 weeks ahead tends to hit the sweet spot for European routes; 3–4 months for long-haul. For accommodation, booking early locks in lower rates — but always check the cancellation policy. Travelling in shoulder season (e.g. Paris in October rather than July) can cut accommodation costs by 20–40% and significantly reduce crowds.</p>
+      </div>
+    </details>
+  </div>
+
+
+  <!-- ============================================================
+       FOOTER
+       ============================================================ -->
+  <footer class="footer">
+    <div class="footer-content animate-on-scroll">
+      <div class="footer-brand">
+        <img src="assets/Swapspace-wordmark-white.svg" alt="SwapSpace Logo" class="footer-logo" />
+        <p class="footer-tagline">Built for those ready to explore the world</p>
+      </div>
+      <div class="footer-column">
+        <h4 class="footer-heading">Socials</h4>
+        <div class="footer-links">
+          <a href="https://www.facebook.com/people/Swap-Space/61573070484976/" class="footer-link">Facebook</a>
+          <a href="https://www.instagram.com/swapspaceapp?igsh=MWQzZmN5d2dhaG1yeg%3D%3D&utm_source=qr" class="footer-link">Instagram</a>
+          <a href="https://x.com/SwapSpaceapp" class="footer-link">X</a>
+        </div>
+      </div>
+      <div class="footer-column">
+        <h4 class="footer-heading">Company</h4>
+        <div class="footer-links">
+          <a href="guides.html" class="footer-link">Guides</a>
+          <a href="https://blog.swap-space.com/" class="footer-link">Blog</a>
+          <a href="https://www.notion.so/Privacy-policy-for-Swap-Space-1fae94969a8980e29e02ef5a3051e927?pvs=4" class="footer-link">Privacy policy</a>
+        </div>
+      </div>
+      <div class="footer-column">
+        <h4 class="footer-heading">Contact</h4>
+        <div class="footer-links">
+          <a href="mailto:Hello@Swap-space.com" class="footer-link">Hello@swap-space.com</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ============================================================
+       SCRIPTS
+       ============================================================ -->
+  <script>
+    /* ── Hamburger menu ── */
+    (function () {
+      const btn = document.getElementById('hamburgerBtn');
+      const menu = document.getElementById('mobileMenu');
+      if (!btn || !menu) return;
+      btn.addEventListener('click', function () {
+        const isOpen = btn.classList.toggle('is-open');
+        btn.setAttribute('aria-expanded', String(isOpen));
+        menu.style.display = isOpen ? 'flex' : 'none';
+        menu.setAttribute('aria-hidden', String(!isOpen));
+      });
+    })();
+
+    /* ── Scroll animations ── */
+    (function () {
+      const els = document.querySelectorAll('.animate-on-scroll');
+      if (!els.length) return;
+      const obs = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('is-visible'); obs.unobserve(e.target); } });
+      }, { threshold: 0.12 });
+      els.forEach(function (el) { obs.observe(el); });
+    })();
+
+    /* ── City autocomplete (DB-backed) ── */
+    (function () {
+      const input    = document.getElementById('cityInput');
+      const dropdown = document.getElementById('cityDropdown');
+      let focusedIdx   = -1;
+      let selectedCity = null;
+      let debounceTimer = null;
+      let activeQuery   = '';
+
+      function renderDropdown(cities) {
+        if (!cities.length) { dropdown.classList.remove('open'); return; }
+        focusedIdx = -1;
+        dropdown.innerHTML = cities.map((c, i) =>
+          `<div class="calc-city-option" data-idx="${i}" data-name="${c.name}" data-country="${c.country}">
+            ${c.name}<span class="city-country">${c.country}</span>
+          </div>`
+        ).join('');
+        dropdown.classList.add('open');
+      }
+
+      function selectCity(name, country) {
+        selectedCity = { name, country };
+        input.value  = name + (country ? ', ' + country : '');
+        dropdown.classList.remove('open');
+      }
+
+      async function search(q) {
+        if (!q || q.length < 2) { dropdown.classList.remove('open'); return; }
+
+        // Show searching state immediately
+        dropdown.innerHTML = '<div class="calc-city-option" style="color:var(--color-neutral-400);pointer-events:none;">Searching…</div>';
+        dropdown.classList.add('open');
+
+        try {
+          const res = await fetch('/api/calculator/autocomplete?q=' + encodeURIComponent(q));
+          if (q !== activeQuery) return; // stale — user kept typing
+          if (!res.ok) { dropdown.classList.remove('open'); return; }
+          const cities = await res.json();
+          if (q !== activeQuery) return;
+          renderDropdown(cities);
+        } catch (_) {
+          if (q === activeQuery) dropdown.classList.remove('open');
+        }
+      }
+
+      input.addEventListener('input', function () {
+        selectedCity  = null;
+        activeQuery   = this.value.trim();
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(function () { search(activeQuery); }, 280);
+      });
+
+      input.addEventListener('keydown', function (e) {
+        const items = dropdown.querySelectorAll('.calc-city-option');
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          focusedIdx = Math.min(focusedIdx + 1, items.length - 1);
+          items.forEach(function (el, i) { el.classList.toggle('focused', i === focusedIdx); });
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          focusedIdx = Math.max(focusedIdx - 1, 0);
+          items.forEach(function (el, i) { el.classList.toggle('focused', i === focusedIdx); });
+        } else if (e.key === 'Enter' && focusedIdx >= 0) {
+          e.preventDefault();
+          const el = items[focusedIdx];
+          if (el) selectCity(el.dataset.name, el.dataset.country);
+        } else if (e.key === 'Escape') {
+          dropdown.classList.remove('open');
+        }
+      });
+
+      dropdown.addEventListener('mousedown', function (e) {
+        const opt = e.target.closest('.calc-city-option');
+        if (opt) selectCity(opt.dataset.name, opt.dataset.country);
+      });
+
+      document.addEventListener('click', function (e) {
+        if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+          dropdown.classList.remove('open');
+        }
+      });
+
+      // Export selected city getter (returns { name, country } or null)
+      window._getSelectedCity = function () {
+        if (selectedCity) return selectedCity;
+        const val = input.value.trim();
+        if (!val) return null;
+        const parts = val.split(',');
+        return { name: parts[0].trim(), country: (parts[1] || '').trim() };
+      };
+
+      // Export city setter for quick-picks and URL pre-fill
+      window._selectCity = function (name, country) { selectCity(name, country); };
+    })();
+
+    /* ── Popular city quick-picks ── */
+    document.getElementById('quickCities').addEventListener('click', function (e) {
+      const btn = e.target.closest('.calc-quick-city');
+      if (!btn) return;
+      window._selectCity(btn.dataset.name, btn.dataset.country);
+      document.querySelectorAll('.calc-quick-city').forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+    });
+
+    /* ── Steppers ── */
+    function setupStepper(minusId, plusId, inputId, min, max) {
+      const minus = document.getElementById(minusId);
+      const plus  = document.getElementById(plusId);
+      const inp   = document.getElementById(inputId);
+
+      minus.addEventListener('click', function () {
+        const v = parseInt(inp.value) || min;
+        if (v > min) inp.value = v - 1;
+      });
+
+      plus.addEventListener('click', function () {
+        const v = parseInt(inp.value) || min;
+        if (v < max) inp.value = v + 1;
+      });
+
+      inp.addEventListener('change', function () {
+        let v = parseInt(this.value);
+        if (isNaN(v) || v < min) v = min;
+        if (v > max) v = max;
+        this.value = v;
+      });
+    }
+
+    setupStepper('nightsMinus', 'nightsPlus', 'nightsInput', 1, 365);
+    setupStepper('travellersMinus', 'travellersPlus', 'travellersInput', 1, 20);
+
+    /* ── Style toggles ── */
+    let selectedStyle = 'mid-range';
+    document.getElementById('styleToggles').addEventListener('click', function (e) {
+      const btn = e.target.closest('.calc-toggle');
+      if (!btn) return;
+      document.querySelectorAll('.calc-toggle').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedStyle = btn.dataset.style;
+    });
+
+    /* ── Currency auto-detect ── */
+    (function () {
+      const select = document.getElementById('currencySelect');
+      const badge  = document.getElementById('currencyDetected');
+      const text   = document.getElementById('currencyDetectedText');
+
+      // Don't override a currency that came in via shared URL
+      if (new URLSearchParams(window.location.search).get('currency')) return;
+
+      function applyCurrency(code, source) {
+        code = (code || '').trim().toUpperCase();
+        if (!code || code.length !== 3) return false;
+        const opt = Array.from(select.options).find(o => o.value === code);
+        if (!opt) return false;
+        select.value = code;
+        badge.style.display = 'flex';
+        text.textContent = 'Currency auto-detected from your location (' + code + ')';
+        return true;
+      }
+
+      // Locale-based fallback: derive currency from browser language tag (e.g. en-GB → GBP)
+      function tryLocaleFallback() {
+        try {
+          const locales = navigator.languages || [navigator.language];
+          for (const locale of locales) {
+            // Intl.NumberFormat resolvedOptions gives us the currency for the locale
+            const fmt = new Intl.NumberFormat(locale, { style: 'currency', currency: 'USD' });
+            // We can't directly get the "local" currency from Intl, so use a country→currency map
+            const region = (locale.split('-')[1] || '').toUpperCase();
+            const map = {
+              GB:'GBP', AU:'AUD', CA:'CAD', NZ:'NZD', JP:'JPY', CH:'CHF',
+              SE:'SEK', NO:'NOK', DK:'DKK', MX:'MXN', BR:'BRL', ZA:'ZAR',
+              AE:'AED', TH:'THB', IN:'INR', KR:'KRW', SG:'SGD', HK:'HKD',
+              ID:'IDR', MY:'MYR', PH:'PHP', TR:'TRY', PL:'PLN', CZ:'CZK',
+              HU:'HUF', AR:'ARS', DE:'EUR', FR:'EUR', IT:'EUR', ES:'EUR',
+              NL:'EUR', PT:'EUR', BE:'EUR', AT:'EUR', FI:'EUR', IE:'EUR',
+              GR:'EUR', SK:'EUR', SI:'EUR', EE:'EUR', LV:'EUR', LT:'EUR',
+              LU:'EUR', MT:'EUR', CY:'EUR',
+            };
+            if (region && map[region]) { applyCurrency(map[region], 'locale'); return; }
+          }
+        } catch (_) {}
+      }
+
+      // Primary: our own proxy endpoint (avoids CORS issues with third-party geo APIs)
+      fetch('/api/calculator/geo')
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          if (!applyCurrency(data.currency)) tryLocaleFallback();
+        })
+        .catch(function () { tryLocaleFallback(); });
+    })();
+
+    /* ── Formatting helpers ── */
+    function formatCurrency(amount, currency) {
+      try {
+        return new Intl.NumberFormat(undefined, {
+          style: 'currency',
+          currency: currency,
+          maximumFractionDigits: 0,
+          minimumFractionDigits: 0,
+        }).format(amount);
+      } catch (_) {
+        return currency + ' ' + Math.round(amount).toLocaleString();
+      }
+    }
+
+    /* ── Animated counter ── */
+    function animateCount(el, target, currency) {
+      const duration = 900;
+      const start = performance.now();
+      function step(now) {
+        const progress = Math.min((now - start) / duration, 1);
+        // ease-out
+        const eased = 1 - Math.pow(1 - progress, 3);
+        el.textContent = formatCurrency(Math.round(eased * target), currency);
+        if (progress < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+
+    /* ── Render results ── */
+    function renderResults(data) {
+      const el = document.getElementById('calcResults');
+      const currency = data.currency;
+
+      const categories = [
+        { key: 'accommodation', label: 'Accommodation', icon: '🏨', barClass: 'accommodation' },
+        { key: 'food',          label: 'Food & dining',  icon: '🍽️', barClass: 'food' },
+        { key: 'transport',     label: 'Transport',       icon: '🚇', barClass: 'transport' },
+        { key: 'drinks',        label: 'Drinks & coffee', icon: '☕', barClass: 'drinks' },
+        { key: 'entertainment', label: 'Entertainment',   icon: '🎭', barClass: 'entertainment' },
+      ];
+
+      const breakdown = data.breakdown;
+      const total = data.total;
+      const nights = data.nights;
+      const travellers = data.travellers;
+
+      // Per-person per-day stat
+      const perPersonPerDay = Math.round(total / Math.max(nights, 1) / Math.max(travellers, 1));
+
+      // Find the actual biggest category dynamically
+      const biggestCat = categories.reduce(function (a, b) {
+        return (breakdown[a.key] || 0) >= (breakdown[b.key] || 0) ? a : b;
+      });
+      const biggestPct  = Math.round(((breakdown[biggestCat.key] || 0) / total) * 100);
+      const accomPct    = Math.round((breakdown.accommodation / total) * 100);
+
+      // Dynamic FAQ + social share vars
+      const cityShort      = data.city.split(',')[0].trim();
+      const hotelPerNight  = Math.round(breakdown.accommodation / Math.max(nights, 1));
+      const costLevel      = perPersonPerDay > 150 ? 'one of the pricier destinations'
+                           : perPersonPerDay > 80  ? 'a moderately priced destination'
+                           : 'a very affordable destination';
+      const shareText = `A ${data.styleLabel.toLowerCase()} trip to ${data.city} for ${travellers} traveller${travellers !== 1 ? 's' : ''} (${nights} nights) costs ${formatCurrency(total, currency)}. Plan yours with SwapSpace's free travel calculator 👇`;
+      const shareUrl  = window.location.href;
+      const twitterShareUrl  = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(shareText) + '&url=' + encodeURIComponent(shareUrl) + '&via=SwapSpaceapp';
+      const whatsappShareUrl = 'https://wa.me/?text=' + encodeURIComponent(shareText + '\n' + shareUrl);
+
+      el.innerHTML = `
+        <div class="calc-total-header">
+          <div class="calc-total-eyebrow">Estimated total cost</div>
+          <div class="calc-total-amount" id="totalCounter">${formatCurrency(0, currency)}</div>
+          <div class="calc-total-sub">for ${nights} night${nights !== 1 ? 's' : ''}, ${travellers} traveller${travellers !== 1 ? 's' : ''} · ${data.styleLabel} style · ${data.city}</div>
+          <div class="calc-per-day">≈ ${formatCurrency(perPersonPerDay, currency)} per person, per day</div>
+        </div>
+
+        <div class="calc-breakdown">
+          ${categories.map(cat => {
+            const amount = breakdown[cat.key] || 0;
+            const pct = total > 0 ? Math.round((amount / total) * 100) : 0;
+            return `
+              <div class="calc-breakdown-item">
+                <div class="calc-breakdown-row">
+                  <span class="calc-breakdown-name">
+                    <span class="calc-breakdown-icon">${cat.icon}</span>
+                    ${cat.label}
+                  </span>
+                  <span class="calc-breakdown-amount">
+                    ${formatCurrency(amount, currency)}<span class="calc-breakdown-pct"> · ${pct}%</span>
+                  </span>
+                </div>
+                <div class="calc-bar-track">
+                  <div class="calc-bar-fill calc-bar-fill--${cat.barClass}" data-width="${pct}" style="width:0%"></div>
+                </div>
+              </div>`;
+          }).join('')}
+        </div>
+
+        <div class="calc-accom-highlight">
+          <div class="calc-accom-icon">🏠</div>
+          <div class="calc-accom-text">
+            <p class="calc-accom-title">Save ${formatCurrency(breakdown.accommodation, currency)} on this trip — that's ${accomPct}% back in your pocket</p>
+            <p class="calc-accom-body">Your biggest expense is ${biggestCat.label.toLowerCase()} at ${biggestPct}% of the total. But accommodation — ${formatCurrency(breakdown.accommodation, currency)} of this trip — is the one cost SwapSpace members eliminate entirely, by swapping homes with verified members worldwide.</p>
+            <a href="/application.html" class="calc-accom-cta">See if you can swap your home →</a>
+          </div>
+        </div>
+
+        ${data.isRegionalFallback ? '<p class="calc-regional-note">ℹ️ We couldn\'t find exact data for that city — these figures are estimated from nearby cities in the same region.</p>' : ''}
+
+        <!-- Dynamic city FAQ -->
+        <div class="calc-dynamic-faq">
+          <p class="calc-dynamic-faq-eyebrow">About your ${cityShort} trip</p>
+          <div class="calc-dynamic-faq-item">
+            <p class="calc-dynamic-faq-q">Is ${cityShort} expensive for tourists?</p>
+            <p class="calc-dynamic-faq-a">On a ${data.styleLabel.toLowerCase()} trip, ${cityShort} is ${costLevel} — roughly ${formatCurrency(perPersonPerDay, currency)} per person per day. Accommodation makes up ${accomPct}% of the total, ${accomPct > 45 ? 'which is above average and the biggest lever to pull if you want to reduce costs' : 'which is typical for this type of destination'}.</p>
+          </div>
+          <div class="calc-dynamic-faq-item">
+            <p class="calc-dynamic-faq-q">How much does a hotel in ${cityShort} cost per night?</p>
+            <p class="calc-dynamic-faq-a">Based on current data, a ${data.styleLabel.toLowerCase()}-style hotel in ${cityShort} costs roughly ${formatCurrency(hotelPerNight, currency)} per room per night. Prices vary by neighbourhood and season — central locations typically run 30–50% higher than the city average.</p>
+          </div>
+          <div class="calc-dynamic-faq-item">
+            <p class="calc-dynamic-faq-q">What's the cheapest way to visit ${cityShort}?</p>
+            <p class="calc-dynamic-faq-a">Accommodation is your biggest controllable cost at ${accomPct}% of this budget. Switching to budget style typically cuts the total by 30–40%. Better still, SwapSpace members swap homes with verified hosts in ${cityShort}, eliminating accommodation costs entirely — the single most effective way to travel cheaper.</p>
+          </div>
+        </div>
+
+        <!-- Share -->
+        <div class="calc-share">
+          <span class="calc-share-label">Share</span>
+          <a class="calc-share-btn calc-share-btn--x" href="${twitterShareUrl}" target="_blank" rel="noopener">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.852L1.254 2.25H8.08l4.259 5.631L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/></svg>
+            Share on X
+          </a>
+          <a class="calc-share-btn calc-share-btn--whatsapp" href="${whatsappShareUrl}" target="_blank" rel="noopener">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            WhatsApp
+          </a>
+          <button class="calc-share-btn calc-share-btn--copy" id="copyLinkBtn" type="button">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            Copy link
+          </button>
+        </div>
+
+        <!-- Data source / confidence badge -->
+        <div class="calc-data-source">
+          <span class="calc-data-source-badge">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            ${data.isRegionalFallback ? 'Regional estimate' : 'City data'}
+          </span>
+          <span class="calc-data-source-text">
+            ${data.isRegionalFallback
+              ? `No exact data found for this city — figures estimated from nearby cities in ${data.city.split(',').slice(-1)[0].trim() || 'the region'}.`
+              : `Based on <strong>Numbeo</strong> crowd-sourced prices for ${cityShort}. Exchange rates updated weekly.`
+            }
+          </span>
+        </div>
+
+        <p class="calc-disclaimer">
+          Actual costs vary by time of year, booking lead time, and personal preferences.
+        </p>
+      `;
+
+      el.classList.add('visible');
+
+      // Animate total counter
+      animateCount(document.getElementById('totalCounter'), total, currency);
+
+      // Animate bars with a short delay
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          document.querySelectorAll('.calc-bar-fill[data-width]').forEach(function (bar) {
+            bar.style.width = bar.dataset.width + '%';
+          });
+        });
+      });
+
+      // Copy link button
+      var copyBtn = document.getElementById('copyLinkBtn');
+      if (copyBtn) {
+        copyBtn.addEventListener('click', function () {
+          navigator.clipboard.writeText(window.location.href).then(function () {
+            copyBtn.textContent = '✓ Copied!';
+            setTimeout(function () { copyBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy link'; }, 2000);
+          }).catch(function () {
+            copyBtn.textContent = 'Link: ' + window.location.href;
+          });
+        });
+      }
+    }
+
+    /* ── Calculate ── */
+    document.getElementById('calcSubmit').addEventListener('click', async function () {
+      const cityObj = window._getSelectedCity();
+      const nights = parseInt(document.getElementById('nightsInput').value) || 7;
+      const travellers = parseInt(document.getElementById('travellersInput').value) || 2;
+      const currency = document.getElementById('currencySelect').value;
+      const style = selectedStyle;
+      const email = document.getElementById('userEmail').value.trim();
+      const errorEl = document.getElementById('calcError');
+      const loadingEl = document.getElementById('calcLoading');
+      const resultsEl = document.getElementById('calcResults');
+      const submitBtn = document.getElementById('calcSubmit');
+
+      // Validate
+      errorEl.className = 'calc-error';
+      if (!cityObj || !cityObj.name) {
+        errorEl.textContent = 'Please enter a destination city.';
+        errorEl.classList.add('visible');
+        document.getElementById('cityInput').focus();
+        return;
+      }
+      if (!email || !email.includes('@')) {
+        errorEl.textContent = 'Please enter your email address to receive your results.';
+        errorEl.classList.add('visible');
+        document.getElementById('userEmail').focus();
+        return;
+      }
+
+      // Show loading
+      resultsEl.className = 'calc-results-area';
+      loadingEl.classList.add('visible');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Calculating…';
+
+      try {
+        const params = new URLSearchParams({ city: cityObj.name, country: cityObj.country || '', nights, travellers, style, currency });
+
+        // Fire costs first, then subscribe with full results so the email can include breakdown
+        const res = await fetch('/api/calculator/costs?' + params.toString());
+
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.error || 'Something went wrong. Please try again.');
+        }
+
+        const data = await res.json();
+        loadingEl.classList.remove('visible');
+        renderResults(data);
+
+        // Send results email (non-blocking)
+        const perPersonPerDay = Math.round(data.total / Math.max(nights, 1) / Math.max(travellers, 1));
+        fetch('/api/calculator/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email, city: data.city, country: cityObj.country, currency, nights, travellers,
+            style, styleLabel: data.styleLabel,
+            total: data.total, breakdown: data.breakdown,
+            perPersonPerDay, shareUrl: window.location.href,
+          }),
+        }).catch(() => {});
+
+        // Push shareable URL so this exact calculation can be shared or bookmarked
+        (function () {
+          const url = new URL(window.location.href);
+          url.searchParams.set('city', cityObj.name);
+          url.searchParams.set('country', cityObj.country || '');
+          url.searchParams.set('nights', nights);
+          url.searchParams.set('travellers', travellers);
+          url.searchParams.set('style', style);
+          url.searchParams.set('currency', currency);
+          history.replaceState({}, '', url.toString());
+        })();
+
+        // Scroll to results smoothly
+        document.getElementById('calcResults').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      } catch (err) {
+        loadingEl.classList.remove('visible');
+        errorEl.textContent = err.message || 'Could not fetch cost data. Please try again.';
+        errorEl.classList.add('visible');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Calculate trip cost`;
+      }
+    });
+    /* ── Pre-fill form from shared URL ── */
+    (function () {
+      const p = new URLSearchParams(window.location.search);
+      const city = p.get('city');
+      if (!city) return;
+
+      // Restore city
+      if (typeof window._selectCity === 'function') {
+        window._selectCity(city, p.get('country') || '');
+      }
+      // Highlight matching quick-pick if present
+      document.querySelectorAll('.calc-quick-city').forEach(function (b) {
+        b.classList.toggle('active', b.dataset.name === city);
+      });
+
+      // Restore nights
+      const nights = parseInt(p.get('nights'));
+      if (nights > 0) document.getElementById('nightsInput').value = nights;
+
+      // Restore travellers
+      const travellers = parseInt(p.get('travellers'));
+      if (travellers > 0) document.getElementById('travellersInput').value = travellers;
+
+      // Restore style
+      const style = p.get('style');
+      if (style && ['budget', 'mid-range', 'comfortable'].includes(style)) {
+        document.querySelectorAll('.calc-toggle').forEach(function (b) {
+          b.classList.toggle('active', b.dataset.style === style);
+        });
+        selectedStyle = style;
+      }
+
+      // Restore currency (geo-detect is already skipped when this param is present)
+      const currency = p.get('currency');
+      if (currency) document.getElementById('currencySelect').value = currency;
+    })();
+  </script>
+
+</body>
+</html>

@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import supabase from './lib/supabase.js';
+import supabase from '../lib/supabase.js';
 
 export default async function handler(req, res) {
   // CORS headers
@@ -83,7 +83,7 @@ export default async function handler(req, res) {
 
                   <p style="font-size: 16px;">Hi ${firstName},</p>
 
-                  <p>You're in! Well, almost. Thank you for applying to Swap Space. We'll review your application and get back to you within 24 hours.</p>
+                  <p>You're in! Well, almost. Thank you for applying to SwapSpace. We'll review your application and get back to you within 24 hours.</p>
 
                   <p>While you wait, there's one small thing you can do to get ahead. Start putting together at least 5 photos of your home. These are the photos you'll use to create your listing once you're approved, so it's worth getting them ready now.</p>
 
@@ -102,7 +102,7 @@ export default async function handler(req, res) {
 
                   <p style="margin-top: 30px;">
                     Best,<br>
-                    <strong>The Swap Space team</strong>
+                    <strong>The SwapSpace team</strong>
                   </p>
 
                   <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
@@ -126,7 +126,7 @@ export default async function handler(req, res) {
 
                   <p style="font-size: 16px;">Hi ${firstName},</p>
 
-                  <p>Thank you for applying to Swap Space. We review applications on a rolling basis, so we'll be in touch once your application has been accepted.</p>
+                  <p>Thank you for applying to SwapSpace. We review applications on a rolling basis, so we'll be in touch once your application has been accepted.</p>
 
                   <p>Whenever you're ready to list your home, we'll be here. If you change your mind in the meantime and want to get started sooner, just drop us an email at <a href="mailto:hello@swap-space.com" style="color: #079455;">hello@swap-space.com</a> and we'll take it from there.</p>
 
@@ -134,7 +134,7 @@ export default async function handler(req, res) {
 
                   <p style="margin-top: 30px;">
                     Best,<br>
-                    <strong>The Swap Space team</strong>
+                    <strong>The SwapSpace team</strong>
                   </p>
 
                   <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">

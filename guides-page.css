@@ -4,9 +4,9 @@
    GUIDES PAGE STYLES
    ============================================ */
 
-/* Body background - gradient wash */
+/* Body */
 body {
-  background-color: #F5F5F5;
+  background-color: #fff8eb;
   position: relative;
   min-height: 100vh;
   overflow-x: hidden;
@@ -115,36 +115,36 @@ main,
   justify-content: center;
   align-items: center;
   width: 100%;
-  padding: 48px 40px 60px 40px;
-  background: transparent;
+  padding: 80px 40px 80px 40px;
+  background: var(--surface-hero);
 }
 
 .guides-hero-content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
-  max-width: 467px;
+  gap: 16px;
+  max-width: 620px;
   text-align: center;
 }
 
 .guides-hero-title {
-  font-family: 'General Sans', sans-serif;
+  font-family: 'Clash Display', sans-serif;
   font-size: 72px;
-  font-weight: 700;
-  color: #202939;
+  font-weight: 600;
+  color: #fff;
   letter-spacing: -1.44px;
   margin: 0;
-  line-height: 90px;
+  line-height: 88px;
   width: 100%;
 }
 
 .guides-hero-description {
-  font-family: 'General Sans', sans-serif;
+  font-family: 'Geist', sans-serif;
   font-size: 18px;
   font-weight: 400;
-  color: #4B5565;
-  letter-spacing: -0.4px;
+  color: rgba(255,255,255,0.8);
+  letter-spacing: -0.2px;
   line-height: 28px;
   margin: 0;
   width: 100%;
@@ -152,8 +152,8 @@ main,
 
 /* Guides Grid Section */
 .guides-grid-section {
-  background-color: #F5F5F5;
-  padding: 0 40px 80px 40px;
+  background-color: #fff8eb;
+  padding: 48px 40px 80px 40px;
   width: 100%;
   box-sizing: border-box;
 }
@@ -217,13 +217,13 @@ main,
 }
 
 .guide-card-title {
-  font-family: 'General Sans', sans-serif;
+  font-family: 'Clash Display', sans-serif;
   font-size: 20px;
-  font-weight: 700;
-  color: #364152;
+  font-weight: 600;
+  color: #1a1917;
   letter-spacing: -0.4px;
   margin: 0;
-  line-height: 30px;
+  line-height: 28px;
   width: 100%;
 }
 

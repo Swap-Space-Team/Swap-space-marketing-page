@@ -19,12 +19,25 @@
   "functions": {
     "api/upload-images.js": {
       "maxDuration": 60
+    },
+    "api/cron/refresh-city-costs.js": {
+      "maxDuration": 300
     }
   },
+  "crons": [
+    {
+      "path": "/api/cron/refresh-city-costs",
+      "schedule": "0 3 * * 1"
+    }
+  ],
   "rewrites": [
     {
       "source": "/",
       "destination": "/index.html"
+    },
+    {
+      "source": "/travel-cost-calculator",
+      "destination": "/travel-cost-calculator.html"
     }
   ],
   "images": {

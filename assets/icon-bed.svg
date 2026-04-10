@@ -1,0 +1,10 @@
+<svg preserveAspectRatio="none" width="100%" height="100%" overflow="visible" style="display: block;" viewBox="0 0 24 21.6" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="bed-icon.svg" clip-path="url(#clip0_0_5)">
+<path id="Vector" fill-rule="evenodd" clip-rule="evenodd" d="M21.6 21.3V20.4H1.8V21.3H0V13.954L1.8 8.55395V2.1C1.8 0.940202 2.7402 0 3.9 0H19.5C20.6598 0 21.6 0.940202 21.6 2.1V8.55395L23.4 13.954V21.3H21.6ZM3.9 1.8C3.73432 1.8 3.6 1.93432 3.6 2.1V8.4H4.8V5.7C4.8 4.5402 5.7402 3.6 6.9 3.6H16.5C17.6598 3.6 18.6 4.5402 18.6 5.7V8.4H19.8V2.1C19.8 1.93432 19.6657 1.8 19.5 1.8H3.9ZM16.8 8.4V5.7C16.8 5.53432 16.6657 5.4 16.5 5.4H12.6V8.4H16.8ZM10.8 8.4V5.4H6.9C6.73432 5.4 6.6 5.53432 6.6 5.7V8.4H10.8ZM2.14868 13.2L3.14868 10.2H20.2513L21.2513 13.2H2.14868ZM1.8 18.6V15H21.6V18.6H1.8Z" fill="var(--fill-0, #414651)"/>
+</g>
+<defs>
+<clipPath id="clip0_0_5">
+<rect width="24" height="21.6" fill="white"/>
+</clipPath>
+</defs>
+</svg>

@@ -15,6 +15,26 @@ const EXCLUDES = new Set([
   'setup-localhost.sh'
 ]);
 
+const MAX_FILE_SIZE = 25 * 1024 * 1024; // 25MB Cloudflare Workers Sites limit
+
+function copyDir(src, dest) {
+  fs.mkdirSync(dest, { recursive: true });
+  for (const entry of fs.readdirSync(src)) {
+    const srcPath = path.join(src, entry);
+    const destPath = path.join(dest, entry);
+    const stats = fs.statSync(srcPath);
+    if (stats.isDirectory()) {
+      copyDir(srcPath, destPath);
+    } else if (stats.isFile()) {
+      if (stats.size > MAX_FILE_SIZE) {
+        console.warn(`Skipping ${srcPath.replace(ROOT + '/', '')} (${(stats.size / 1024 / 1024).toFixed(1)}MB > 25MB limit)`);
+      } else {
+        fs.copyFileSync(srcPath, destPath);
+      }
+    }
+  }
+}
+
 function copyEntry(entryName) {
   if (EXCLUDES.has(entryName)) {
     return;
@@ -29,10 +49,13 @@ function copyEntry(entryName) {
 
   const stats = fs.statSync(src);
   if (stats.isDirectory()) {
-    fs.mkdirSync(dest, { recursive: true });
-    fs.cpSync(src, dest, { recursive: true });
+    copyDir(src, dest);
   } else if (stats.isFile()) {
-    fs.copyFileSync(src, dest);
+    if (stats.size > MAX_FILE_SIZE) {
+      console.warn(`Skipping ${entryName} (${(stats.size / 1024 / 1024).toFixed(1)}MB > 25MB limit)`);
+    } else {
+      fs.copyFileSync(src, dest);
+    }
   }
 }
 
@@ -44,4 +67,3 @@ function main() {
 }
 
 main();
-
