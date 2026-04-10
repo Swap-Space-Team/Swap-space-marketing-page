@@ -327,7 +327,7 @@
 
       btn.disabled = true;
 
-      const response = await adminFetch('/api/admin/delete-photo', {
+      const response = await adminFetch('/api/admin?action=delete-photo', {
         method: 'POST',
         body: JSON.stringify({ photoId, storagePath }),
       });
@@ -352,7 +352,7 @@
       btn.textContent = 'Rejecting...';
 
       try {
-        const response = await adminFetch('/api/admin/reject', {
+        const response = await adminFetch('/api/admin?action=reject', {
           method: 'POST',
           body: JSON.stringify({ applicationId: id }),
         });
@@ -380,7 +380,7 @@
       btn.textContent = 'Approving...';
 
       try {
-        const response = await adminFetch('/api/admin/approve', {
+        const response = await adminFetch('/api/admin?action=approve', {
           method: 'POST',
           body: JSON.stringify({ applicationId: id }),
         });
@@ -412,7 +412,7 @@
       btn.textContent = 'Sending...';
 
       try {
-        const response = await adminFetch('/api/admin/resend-photos', {
+        const response = await adminFetch('/api/admin?action=resend-photos', {
           method: 'POST',
           body: JSON.stringify({ applicationId: id }),
         });

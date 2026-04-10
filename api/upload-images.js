@@ -1,6 +1,6 @@
 import multiparty from 'multiparty';
 import fs from 'fs';
-import supabase from './lib/supabase.js';
+import supabase from '../lib/supabase.js';
 
 export const config = {
     api: {
