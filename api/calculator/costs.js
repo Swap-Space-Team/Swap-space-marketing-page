@@ -1,5 +1,5 @@
 import https from 'https';
-import supabase from '../lib/supabase.js';
+import supabase from '../../lib/supabase.js';
 
 // Node.js 16-safe JSON fetch (no global fetch/Headers required)
 function httpsGetJSON(url) {

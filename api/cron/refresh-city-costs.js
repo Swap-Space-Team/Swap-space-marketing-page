@@ -12,7 +12,7 @@
  */
 
 import https from 'https';
-import supabase from '../lib/supabase.js';
+import supabase from '../../lib/supabase.js';
 
 function httpsGetJSON(url) {
   return new Promise((resolve, reject) => {

@@ -267,7 +267,7 @@
       })) return;
       btn.disabled = true;
 
-      const response = await adminFetch('/api/admin/delete-application', {
+      const response = await adminFetch('/api/admin?action=delete-application', {
         method: 'POST',
         body: JSON.stringify({ applicationId: appId }),
       });
