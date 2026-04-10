@@ -1464,110 +1464,14 @@
       els.forEach(function (el) { obs.observe(el); });
     })();
 
-    /* ── City data ── */
-    const CITIES = [
-      { name: 'Amsterdam', country: 'Netherlands' },
-      { name: 'Athens', country: 'Greece' },
-      { name: 'Auckland', country: 'New Zealand' },
-      { name: 'Bangkok', country: 'Thailand' },
-      { name: 'Barcelona', country: 'Spain' },
-      { name: 'Beijing', country: 'China' },
-      { name: 'Berlin', country: 'Germany' },
-      { name: 'Bogota', country: 'Colombia' },
-      { name: 'Brisbane', country: 'Australia' },
-      { name: 'Brussels', country: 'Belgium' },
-      { name: 'Budapest', country: 'Hungary' },
-      { name: 'Buenos Aires', country: 'Argentina' },
-      { name: 'Cairo', country: 'Egypt' },
-      { name: 'Cape Town', country: 'South Africa' },
-      { name: 'Chiang Mai', country: 'Thailand' },
-      { name: 'Chicago', country: 'United States' },
-      { name: 'Copenhagen', country: 'Denmark' },
-      { name: 'Dallas', country: 'United States' },
-      { name: 'Delhi', country: 'India' },
-      { name: 'Dubai', country: 'UAE' },
-      { name: 'Dublin', country: 'Ireland' },
-      { name: 'Edinburgh', country: 'United Kingdom' },
-      { name: 'Florence', country: 'Italy' },
-      { name: 'Frankfurt', country: 'Germany' },
-      { name: 'Geneva', country: 'Switzerland' },
-      { name: 'Hamburg', country: 'Germany' },
-      { name: 'Helsinki', country: 'Finland' },
-      { name: 'Ho Chi Minh City', country: 'Vietnam' },
-      { name: 'Hong Kong', country: 'Hong Kong' },
-      { name: 'Honolulu', country: 'United States' },
-      { name: 'Istanbul', country: 'Turkey' },
-      { name: 'Jakarta', country: 'Indonesia' },
-      { name: 'Johannesburg', country: 'South Africa' },
-      { name: 'Kuala Lumpur', country: 'Malaysia' },
-      { name: 'Kyoto', country: 'Japan' },
-      { name: 'Lagos', country: 'Nigeria' },
-      { name: 'Las Vegas', country: 'United States' },
-      { name: 'Lima', country: 'Peru' },
-      { name: 'Lisbon', country: 'Portugal' },
-      { name: 'London', country: 'United Kingdom' },
-      { name: 'Los Angeles', country: 'United States' },
-      { name: 'Lyon', country: 'France' },
-      { name: 'Madrid', country: 'Spain' },
-      { name: 'Manchester', country: 'United Kingdom' },
-      { name: 'Manila', country: 'Philippines' },
-      { name: 'Marrakech', country: 'Morocco' },
-      { name: 'Melbourne', country: 'Australia' },
-      { name: 'Mexico City', country: 'Mexico' },
-      { name: 'Miami', country: 'United States' },
-      { name: 'Milan', country: 'Italy' },
-      { name: 'Montreal', country: 'Canada' },
-      { name: 'Moscow', country: 'Russia' },
-      { name: 'Mumbai', country: 'India' },
-      { name: 'Munich', country: 'Germany' },
-      { name: 'Nairobi', country: 'Kenya' },
-      { name: 'Naples', country: 'Italy' },
-      { name: 'New York', country: 'United States' },
-      { name: 'Nice', country: 'France' },
-      { name: 'Oslo', country: 'Norway' },
-      { name: 'Paris', country: 'France' },
-      { name: 'Perth', country: 'Australia' },
-      { name: 'Phuket', country: 'Thailand' },
-      { name: 'Porto', country: 'Portugal' },
-      { name: 'Prague', country: 'Czech Republic' },
-      { name: 'Rio de Janeiro', country: 'Brazil' },
-      { name: 'Rome', country: 'Italy' },
-      { name: 'San Francisco', country: 'United States' },
-      { name: 'Santiago', country: 'Chile' },
-      { name: 'Sao Paulo', country: 'Brazil' },
-      { name: 'Seoul', country: 'South Korea' },
-      { name: 'Seville', country: 'Spain' },
-      { name: 'Shanghai', country: 'China' },
-      { name: 'Singapore', country: 'Singapore' },
-      { name: 'Stockholm', country: 'Sweden' },
-      { name: 'Sydney', country: 'Australia' },
-      { name: 'Taipei', country: 'Taiwan' },
-      { name: 'Tokyo', country: 'Japan' },
-      { name: 'Toronto', country: 'Canada' },
-      { name: 'Tunis', country: 'Tunisia' },
-      { name: 'Valencia', country: 'Spain' },
-      { name: 'Vancouver', country: 'Canada' },
-      { name: 'Venice', country: 'Italy' },
-      { name: 'Vienna', country: 'Austria' },
-      { name: 'Warsaw', country: 'Poland' },
-      { name: 'Washington DC', country: 'United States' },
-      { name: 'Zurich', country: 'Switzerland' },
-    ];
-
-    /* ── City autocomplete ── */
+    /* ── City autocomplete (DB-backed) ── */
     (function () {
       const input    = document.getElementById('cityInput');
       const dropdown = document.getElementById('cityDropdown');
-      let focusedIdx = -1;
+      let focusedIdx   = -1;
       let selectedCity = null;
-
-      function filterCities(q) {
-        if (!q || q.length < 2) return [];
-        const lq = q.toLowerCase();
-        return CITIES.filter(c =>
-          c.name.toLowerCase().includes(lq) || c.country.toLowerCase().includes(lq)
-        ).slice(0, 8);
-      }
+      let debounceTimer = null;
+      let activeQuery   = '';
 
       function renderDropdown(cities) {
         if (!cities.length) { dropdown.classList.remove('open'); return; }
@@ -1582,13 +1486,34 @@
 
       function selectCity(name, country) {
         selectedCity = { name, country };
-        input.value = name + ', ' + country;
+        input.value  = name + (country ? ', ' + country : '');
         dropdown.classList.remove('open');
       }
 
+      async function search(q) {
+        if (!q || q.length < 2) { dropdown.classList.remove('open'); return; }
+
+        // Show searching state immediately
+        dropdown.innerHTML = '<div class="calc-city-option" style="color:var(--color-neutral-400);pointer-events:none;">Searching…</div>';
+        dropdown.classList.add('open');
+
+        try {
+          const res = await fetch('/api/calculator/autocomplete?q=' + encodeURIComponent(q));
+          if (q !== activeQuery) return; // stale — user kept typing
+          if (!res.ok) { dropdown.classList.remove('open'); return; }
+          const cities = await res.json();
+          if (q !== activeQuery) return;
+          renderDropdown(cities);
+        } catch (_) {
+          if (q === activeQuery) dropdown.classList.remove('open');
+        }
+      }
+
       input.addEventListener('input', function () {
-        selectedCity = null;
-        renderDropdown(filterCities(this.value));
+        selectedCity  = null;
+        activeQuery   = this.value.trim();
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(function () { search(activeQuery); }, 280);
       });
 
       input.addEventListener('keydown', function (e) {
@@ -1596,11 +1521,11 @@
         if (e.key === 'ArrowDown') {
           e.preventDefault();
           focusedIdx = Math.min(focusedIdx + 1, items.length - 1);
-          items.forEach((el, i) => el.classList.toggle('focused', i === focusedIdx));
+          items.forEach(function (el, i) { el.classList.toggle('focused', i === focusedIdx); });
         } else if (e.key === 'ArrowUp') {
           e.preventDefault();
           focusedIdx = Math.max(focusedIdx - 1, 0);
-          items.forEach((el, i) => el.classList.toggle('focused', i === focusedIdx));
+          items.forEach(function (el, i) { el.classList.toggle('focused', i === focusedIdx); });
         } else if (e.key === 'Enter' && focusedIdx >= 0) {
           e.preventDefault();
           const el = items[focusedIdx];
@@ -1631,9 +1556,7 @@
       };
 
       // Export city setter for quick-picks and URL pre-fill
-      window._selectCity = function (name, country) {
-        selectCity(name, country);
-      };
+      window._selectCity = function (name, country) { selectCity(name, country); };
     })();
 
     /* ── Popular city quick-picks ── */
