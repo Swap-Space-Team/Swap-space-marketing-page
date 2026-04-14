@@ -275,6 +275,13 @@
   width: 100%;
   margin-top: 0;
   justify-content: center;
+  background-color: var(--color-primary-500);
+  color: var(--color-neutral-0);
+}
+
+.apply-button:hover {
+  background-color: var(--color-primary-600);
+  color: var(--color-neutral-0);
 }
 
 /* Comparison boxes */
