@@ -11,11 +11,9 @@
       href="Style.css"
     />
     <!-- Property Details Specific Stylesheet -->
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="PropertyDetails.css"
-    />
+    <link rel="stylesheet" type="text/css" href="PropertyDetails.css" />
+    <link rel="stylesheet" href="ClashDisplay_Complete/Fonts/WEB/css/clash-display.css" />
+    <link rel="stylesheet" href="swap-space-tokens.css" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <link rel="canonical" href="https://www.swap-space.com/Propertydetails" />
@@ -104,12 +102,45 @@
     <!-- ============================================
          HEADER / MASTHEAD SECTION
          ============================================ -->
-    <div class="masthead">
-      <a href="/">
-        <img class="logo" src="assets/Swapspace-Logo-Primary-Rgb_1_VjSw6R2piRZ0oV5VmNJOs.svg" alt="Swap-space-logo">
+    <header class="masthead">
+      <a href="/" class="masthead-logo-link">
+        <img class="logo" src="assets/Swapspace-wordmark-white.svg" alt="SwapSpace" width="140" height="29">
       </a>
 
-      <a href="https://app.swap-space.com/login" class="secondary-button">Log in</a>
+      <nav class="masthead-nav">
+        <a href="/how-it-works.html" class="nav-link">How it works</a>
+        <a href="#who-is-it-for" class="nav-link" style="display:none">Who is it for?</a>
+        <a href="/guides.html" class="nav-link">Guides</a>
+        <a href="/travel-cost-calculator" class="nav-link">Trip calculator</a>
+        <a href="/#faq" class="nav-link">FAQ</a>
+      </nav>
+
+      <div class="masthead-actions">
+        <a href="/application.html" class="btn-cta-masthead">Can I swap my home?</a>
+        <a href="https://app.swap-space.com/login" class="btn-login-masthead">Log in</a>
+      </div>
+
+      <!-- Mobile: CTA + hamburger -->
+      <div class="masthead-mobile-right">
+        <a href="/application.html" class="btn-cta-masthead btn-cta-mobile">Can I swap my home?</a>
+        <button class="hamburger-btn" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Mobile menu overlay -->
+    <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+      <nav class="mobile-menu-nav">
+        <a href="/how-it-works.html" class="mobile-nav-link">How it works</a>
+        <a href="#who-is-it-for" class="mobile-nav-link" style="display:none">Who is it for?</a>
+        <a href="/guides.html" class="mobile-nav-link">Guides</a>
+        <a href="/travel-cost-calculator" class="mobile-nav-link">Trip calculator</a>
+        <a href="/#faq" class="mobile-nav-link">FAQ</a>
+      </nav>
+      <a href="https://app.swap-space.com/login" class="mobile-login-btn">Log in</a>
     </div>
 
     <!-- ============================================
@@ -212,12 +243,13 @@
               <button class="toggle-btn active" data-switch="mutual">Mutual swap</button>
               <button class="toggle-btn" data-switch="swapcredits">One way Swap</button>
             </div>
-            <button class="button-primary apply-button">See if your home qualifies</button>
+            <a href="/application.html" class="btn-hiw-step apply-button">See if your home qualifies</a>
           </div>
 
           <!-- SwapCredits Card -->
           <div class="comparison-card" id="swapcreditsCard">
-            <p class="card-description">When you host, you earn SwapCredits that you can use for one-way stays. The more you host, the more you can travel</p>
+            <h3 class="card-title">One-way stays with SwapCredits</h3>
+            <p class="card-description">When you host, you earn SwapCredits that you can use for one-way stays. The more you host, the more you can travel.</p>
             <p class="comparison-label">Comparison if you're staying for 7 nights</p>
             <div class="comparison-boxes">
               <div class="comparison-box-left swapcredits">
@@ -233,7 +265,7 @@
               <button class="toggle-btn" data-switch="mutual">Mutual swap</button>
               <button class="toggle-btn active" data-switch="swapcredits">One way Swap</button>
             </div>
-            <button class="button-primary apply-button">See if your home qualifies</button>
+            <a href="/application.html" class="btn-hiw-step apply-button">See if your home qualifies</a>
           </div>
         </div>
       </div>
@@ -637,6 +669,37 @@
           }
         });
       });
+    </script>
+
+    <!-- Hamburger menu toggle -->
+    <script>
+      (function () {
+        var btn = document.getElementById('hamburgerBtn');
+        var menu = document.getElementById('mobileMenu');
+        var mobileLinks = menu.querySelectorAll('.mobile-nav-link');
+
+        function openMenu() {
+          menu.classList.add('is-open');
+          btn.setAttribute('aria-expanded', 'true');
+          btn.classList.add('is-open');
+          document.body.style.overflow = 'hidden';
+        }
+
+        function closeMenu() {
+          menu.classList.remove('is-open');
+          btn.setAttribute('aria-expanded', 'false');
+          btn.classList.remove('is-open');
+          document.body.style.overflow = '';
+        }
+
+        btn.addEventListener('click', function () {
+          menu.classList.contains('is-open') ? closeMenu() : openMenu();
+        });
+
+        mobileLinks.forEach(function (link) {
+          link.addEventListener('click', closeMenu);
+        });
+      })();
     </script>
   </body>
 </html>
