@@ -1,6 +1,10 @@
 /* ============================================
    PROPERTY DETAILS PAGE
    ============================================ */
+body {
+  background-color: var(--surface-warm);
+}
+
 .property-details-container {
   max-width: 1400px;
   margin: 0 auto;
