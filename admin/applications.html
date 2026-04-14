@@ -25,76 +25,138 @@
       </div>
     </div>
 
-    <h1 style="font-size: 22px; font-weight: 600; margin-bottom: 24px;">Applications</h1>
+    <!-- Tab switcher -->
+    <div style="display:flex; gap:4px; margin-bottom:28px; border-bottom:1px solid #E5E7EB; padding-bottom:0;">
+      <button id="tabApplications" onclick="switchTab('applications')" style="padding:8px 18px 10px; font-size:14px; font-weight:500; background:none; border:none; border-bottom:2px solid #079455; color:#079455; cursor:pointer; margin-bottom:-1px; font-family:inherit;">Applications</button>
+      <button id="tabLeads" onclick="switchTab('leads')" style="padding:8px 18px 10px; font-size:14px; font-weight:500; background:none; border:none; border-bottom:2px solid transparent; color:#6B7280; cursor:pointer; margin-bottom:-1px; font-family:inherit;">Calculator Leads</button>
+    </div>
 
-    <!-- Stats -->
-    <div class="stats-bar" id="statsBar">
-      <div class="stat-card">
-        <div class="stat-label">Total</div>
-        <div class="stat-value" id="statTotal">—</div>
+    <!-- ── Applications tab ── -->
+    <div id="panelApplications">
+      <!-- Stats -->
+      <div class="stats-bar" id="statsBar">
+        <div class="stat-card">
+          <div class="stat-label">Total</div>
+          <div class="stat-value" id="statTotal">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Photos Requested</div>
+          <div class="stat-value" id="statRequested">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Photos Received</div>
+          <div class="stat-value" id="statReceived">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Approved</div>
+          <div class="stat-value" id="statApproved">—</div>
+        </div>
       </div>
-      <div class="stat-card">
-        <div class="stat-label">Photos Requested</div>
-        <div class="stat-value" id="statRequested">—</div>
+
+      <!-- Filters -->
+      <div class="filters">
+        <div class="filter-btns">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="Photos Requested">Photos Requested</button>
+          <button class="filter-btn" data-filter="Photos Received">Photos Received</button>
+          <button class="filter-btn" data-filter="Approved">Approved</button>
+        </div>
+        <div class="search-box">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input type="text" id="searchInput" placeholder="Search by name or email…" oninput="renderTable()">
+        </div>
       </div>
-      <div class="stat-card">
-        <div class="stat-label">Photos Received</div>
-        <div class="stat-value" id="statReceived">—</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Approved</div>
-        <div class="stat-value" id="statApproved">—</div>
+
+      <!-- Table -->
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:40px; color:#9CA3AF;">#</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Country</th>
+              <th>City</th>
+              <th>Status</th>
+              <th>Photos</th>
+              <th>Ready to List</th>
+              <th>
+                <button id="sortDateBtn" onclick="toggleSort()" style="background:none;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:5px;font:inherit;font-size:11px;font-weight:600;color:#6B7280;text-transform:uppercase;letter-spacing:0.05em;padding:0;">
+                  Submission date
+                  <svg id="sortIcon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/>
+                  </svg>
+                </button>
+              </th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="applicationsBody">
+            <tr>
+              <td colspan="10" class="loading">Loading applications...</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
-    <!-- Filters -->
-    <div class="filters">
-      <div class="filter-btns">
-        <button class="filter-btn active" data-filter="all">All</button>
-        <button class="filter-btn" data-filter="Photos Requested">Photos Requested</button>
-        <button class="filter-btn" data-filter="Photos Received">Photos Received</button>
-        <button class="filter-btn" data-filter="Approved">Approved</button>
+    <!-- ── Calculator Leads tab ── -->
+    <div id="panelLeads" style="display:none;">
+      <!-- Stats -->
+      <div class="stats-bar">
+        <div class="stat-card">
+          <div class="stat-label">Total Leads</div>
+          <div class="stat-value" id="leadStatTotal">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Budget</div>
+          <div class="stat-value" id="leadStatBudget">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Mid-range</div>
+          <div class="stat-value" id="leadStatMid">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Comfortable</div>
+          <div class="stat-value" id="leadStatComfort">—</div>
+        </div>
       </div>
-      <div class="search-box">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-        </svg>
-        <input type="text" id="searchInput" placeholder="Search by name or email…" oninput="renderTable()">
+
+      <!-- Search -->
+      <div class="filters" style="justify-content:flex-end;">
+        <div class="search-box">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input type="text" id="leadsSearchInput" placeholder="Search by email or city…" oninput="renderLeadsTable()">
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:40px; color:#9CA3AF;">#</th>
+              <th>Email</th>
+              <th>City</th>
+              <th>Style</th>
+              <th>Nights</th>
+              <th>Travellers</th>
+              <th>Currency</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody id="leadsBody">
+            <tr><td colspan="9" class="loading">Loading leads…</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
-    <!-- Table -->
-    <div class="table-container">
-      <table>
-        <thead>
-          <tr>
-            <th style="width:40px; color:#9CA3AF;">#</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Country</th>
-            <th>City</th>
-            <th>Status</th>
-            <th>Photos</th>
-            <th>Ready to List</th>
-            <th>
-              <button id="sortDateBtn" onclick="toggleSort()" style="background:none;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:5px;font:inherit;font-size:11px;font-weight:600;color:#6B7280;text-transform:uppercase;letter-spacing:0.05em;padding:0;">
-                Submission date
-                <svg id="sortIcon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/>
-                </svg>
-              </button>
-            </th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody id="applicationsBody">
-          <tr>
-            <td colspan="10" class="loading">Loading applications...</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -256,6 +318,70 @@
         </tr>
       `).join('');
     }
+    // ── Tab switching ──────────────────────────────────────────────────────────
+    function switchTab(tab) {
+      const isLeads = tab === 'leads';
+      document.getElementById('panelApplications').style.display = isLeads ? 'none' : 'block';
+      document.getElementById('panelLeads').style.display = isLeads ? 'block' : 'none';
+
+      const tabApps  = document.getElementById('tabApplications');
+      const tabLeads = document.getElementById('tabLeads');
+      tabApps.style.borderBottomColor  = isLeads ? 'transparent' : '#079455';
+      tabApps.style.color              = isLeads ? '#6B7280' : '#079455';
+      tabLeads.style.borderBottomColor = isLeads ? '#079455' : 'transparent';
+      tabLeads.style.color             = isLeads ? '#079455' : '#6B7280';
+
+      if (isLeads && allLeads === null) loadLeads();
+    }
+
+    // ── Calculator Leads ───────────────────────────────────────────────────────
+    let allLeads = null;
+
+    async function loadLeads() {
+      const response = await adminFetch('/api/admin?action=calculator-leads', { method: 'GET' });
+      if (!response) return;
+      const data = await response.json();
+      allLeads = Array.isArray(data) ? data : [];
+      updateLeadsStats();
+      renderLeadsTable();
+    }
+
+    function updateLeadsStats() {
+      document.getElementById('leadStatTotal').textContent   = allLeads.length;
+      document.getElementById('leadStatBudget').textContent  = allLeads.filter(l => l.style === 'budget').length;
+      document.getElementById('leadStatMid').textContent     = allLeads.filter(l => l.style === 'mid-range').length;
+      document.getElementById('leadStatComfort').textContent = allLeads.filter(l => l.style === 'comfortable').length;
+    }
+
+    function renderLeadsTable() {
+      const tbody = document.getElementById('leadsBody');
+      const query = (document.getElementById('leadsSearchInput')?.value || '').toLowerCase().trim();
+      const filtered = (allLeads || []).filter(l =>
+        !query ||
+        (l.email || '').toLowerCase().includes(query) ||
+        (l.city  || '').toLowerCase().includes(query)
+      );
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9" class="empty-state">No leads found.</td></tr>';
+        return;
+      }
+
+      const styleLabel = { budget: 'Budget', 'mid-range': 'Mid-range', comfortable: 'Comfortable' };
+      tbody.innerHTML = filtered.map((l, i) => `
+        <tr style="cursor:default;">
+          <td style="color:#9CA3AF; font-size:13px; font-weight:400;">${i + 1}</td>
+          <td style="font-weight:500;">${l.email || '—'}</td>
+          <td>${l.city || '—'}</td>
+          <td>${styleLabel[l.style] || l.style || '—'}</td>
+          <td>${l.nights || '—'}</td>
+          <td>${l.travellers || '—'}</td>
+          <td>${l.currency || '—'}</td>
+          <td>${formatDate(l.created_at)}</td>
+        </tr>
+      `).join('');
+    }
+
     async function deleteApplication(appId, e) {
       e.stopPropagation();
       const btn = e.currentTarget;
