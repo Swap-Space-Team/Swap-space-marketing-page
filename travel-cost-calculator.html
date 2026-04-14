@@ -1283,7 +1283,7 @@
         </div>
 
         <!-- Email -->
-        <div class="calc-field">
+        <div class="calc-field" id="emailField">
           <label class="calc-label" for="userEmail">Your email address</label>
           <input
             type="email"
@@ -1294,6 +1294,12 @@
           <div style="margin-top:6px; font-family:'Geist',sans-serif; font-size:12px; color:var(--color-neutral-400);">
             We'll send you a copy of these results and travel tips. No spam.
           </div>
+        </div>
+
+        <!-- Returning user — email already known -->
+        <div id="emailKnown" style="display:none; margin-bottom:16px; font-family:'Geist',sans-serif; font-size:13px; color:var(--color-neutral-500);">
+          Results will be sent to <strong id="emailKnownAddress" style="color:var(--color-neutral-700);"></strong> &mdash;
+          <button type="button" onclick="resetEmail()" style="background:none;border:none;padding:0;font:inherit;font-size:13px;color:var(--color-primary-700);cursor:pointer;text-decoration:underline;">change</button>
         </div>
 
         <!-- Submit -->
@@ -1858,6 +1864,30 @@
       }
     }
 
+    /* ── Email session persistence ── */
+    function _getSavedEmail() { return sessionStorage.getItem('calc_email') || ''; }
+
+    function _setSavedEmail(email) {
+      sessionStorage.setItem('calc_email', email);
+      document.getElementById('emailField').style.display = 'none';
+      document.getElementById('emailKnown').style.display = 'block';
+      document.getElementById('emailKnownAddress').textContent = email;
+    }
+
+    function resetEmail() {
+      sessionStorage.removeItem('calc_email');
+      document.getElementById('emailField').style.display = 'block';
+      document.getElementById('emailKnown').style.display = 'none';
+      document.getElementById('userEmail').value = '';
+      document.getElementById('userEmail').focus();
+    }
+
+    // Restore on page load
+    (function () {
+      const saved = _getSavedEmail();
+      if (saved) _setSavedEmail(saved);
+    })();
+
     /* ── Calculate ── */
     document.getElementById('calcSubmit').addEventListener('click', async function () {
       const cityObj = window._getSelectedCity();
@@ -1865,7 +1895,8 @@
       const travellers = parseInt(document.getElementById('travellersInput').value) || 2;
       const currency = document.getElementById('currencySelect').value;
       const style = selectedStyle;
-      const email = document.getElementById('userEmail').value.trim();
+      const savedEmail = _getSavedEmail();
+      const email = savedEmail || document.getElementById('userEmail').value.trim();
       const errorEl = document.getElementById('calcError');
       const loadingEl = document.getElementById('calcLoading');
       const resultsEl = document.getElementById('calcResults');
@@ -1886,8 +1917,8 @@
         return;
       }
 
-      // Remember email for future searches
-      try { localStorage.setItem('calc_email', email); } catch(e) {}
+      // Save email after first valid submission
+      if (!savedEmail) _setSavedEmail(email);
 
       // Show loading
       resultsEl.className = 'calc-results-area';
