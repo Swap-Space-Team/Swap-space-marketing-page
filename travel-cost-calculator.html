@@ -1886,6 +1886,9 @@
         return;
       }
 
+      // Remember email for future searches
+      try { localStorage.setItem('calc_email', email); } catch(e) {}
+
       // Show loading
       resultsEl.className = 'calc-results-area';
       loadingEl.classList.add('visible');
@@ -1947,6 +1950,14 @@
           Calculate trip cost`;
       }
     });
+    /* ── Restore remembered email ── */
+    (function () {
+      try {
+        const saved = localStorage.getItem('calc_email');
+        if (saved) document.getElementById('userEmail').value = saved;
+      } catch(e) {}
+    })();
+
     /* ── Pre-fill form from shared URL ── */
     (function () {
       const p = new URLSearchParams(window.location.search);
