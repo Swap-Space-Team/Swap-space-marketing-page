@@ -289,7 +289,7 @@
         </div>
         <p class="host-membership-note">
           SwapSpace is a members-only community and host profiles are only available to members
-          <a href="#" class="apply-link">Apply to list your home and Swap</a>
+          <a href="/application.html" class="apply-link">Apply to list your home and Swap</a>
         </p>
       </div>
 
@@ -308,7 +308,7 @@
             <div class="about-blur-overlay" id="aboutBlurOverlay">
               <div class="about-blur-content">
                 <p class="about-blur-message">SwapSpace is a members-only community and home details are only available to members.</p>
-                <button class="button-primary">Apply to list your home</button>
+                <a href="/application.html" class="button-primary">Apply to list your home</a>
               </div>
             </div>
           </div>
@@ -649,14 +649,6 @@
         const formOverlay = document.getElementById('formOverlay');
         const closeFormBtn = document.getElementById('closeForm');
 
-        // Use event delegation to handle clicks on any button with class 'button-primary' or 'apply-link'
-        // This works for buttons anywhere on the page, even if added dynamically
-        document.addEventListener('click', function(e) {
-          if (e.target && (e.target.classList.contains('button-primary') || e.target.classList.contains('apply-link'))) {
-            e.preventDefault(); // Prevent default link behavior
-            formOverlay.style.display = 'block';
-          }
-        });
 
         closeFormBtn.addEventListener('click', function() {
           formOverlay.style.display = 'none';
