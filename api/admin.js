@@ -182,24 +182,43 @@ async function deletePhoto(req, res) {
   return res.status(200).json({ success: true });
 }
 
+async function calculatorLeads(req, res) {
+  const supabase = getSupabase();
+  const { data, error } = await supabase
+    .from('calculator_leads')
+    .select('*')
+    .order('created_at', { ascending: false });
+  if (error) {
+    console.error('calculator-leads fetch error:', error);
+    return res.status(500).json({ error: 'Failed to fetch calculator leads' });
+  }
+  return res.status(200).json(data || []);
+}
+
 // ── Router ────────────────────────────────────────────────────────────────────
-const ACTIONS = { approve, reject, 'resend-photos': resendPhotos, 'delete-application': deleteApplication, 'delete-photo': deletePhoto };
+const POST_ACTIONS = { approve, reject, 'resend-photos': resendPhotos, 'delete-application': deleteApplication, 'delete-photo': deletePhoto };
+const GET_ACTIONS  = { 'calculator-leads': calculatorLeads };
 
 export default async function handler(req, res) {
   Object.entries(CORS).forEach(([k, v]) => res.setHeader(k, v));
 
   if (req.method === 'OPTIONS') return res.status(200).end();
-  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   const action = req.query.action;
-  const handler = ACTIONS[action];
-  if (!handler) return res.status(400).json({ error: `Unknown action: ${action}` });
-
   const user = await verifyAdmin(req);
   if (!user) return res.status(401).json({ error: 'Unauthorized' });
 
+  let fn;
+  if (req.method === 'POST') {
+    fn = POST_ACTIONS[action];
+  } else if (req.method === 'GET') {
+    fn = GET_ACTIONS[action];
+  }
+
+  if (!fn) return res.status(405).json({ error: 'Method not allowed or unknown action' });
+
   try {
-    return await handler(req, res);
+    return await fn(req, res);
   } catch (error) {
     console.error(`Admin [${action}] error:`, error);
     return res.status(500).json({ error: 'Internal server error' });
