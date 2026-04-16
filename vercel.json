@@ -38,6 +38,22 @@
     {
       "source": "/travel-cost-calculator",
       "destination": "/travel-cost-calculator.html"
+    },
+    {
+      "source": "/blog",
+      "destination": "https://blog.swap-space.com/blog"
+    },
+    {
+      "source": "/blog/:path*",
+      "destination": "https://blog.swap-space.com/blog/:path*"
+    },
+    {
+      "source": "/wp-content/:path*",
+      "destination": "https://blog.swap-space.com/wp-content/:path*"
+    },
+    {
+      "source": "/wp-includes/:path*",
+      "destination": "https://blog.swap-space.com/wp-includes/:path*"
     }
   ],
   "images": {
