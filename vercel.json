@@ -2,6 +2,7 @@
   "buildCommand": "",
   "outputDirectory": ".",
   "cleanUrls": true,
+  "trailingSlash": true,
   "headers": [
     {
       "source": "/assets/(.*)",
