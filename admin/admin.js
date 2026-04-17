@@ -250,6 +250,7 @@ function formatDate(dateStr) {
 
 function statusBadge(status) {
   const colors = {
+    'Application Received': 'background: #EDE9FE; color: #5B21B6;',
     'Photos Requested': 'background: #FEF3C7; color: #92400E;',
     'Photos Received': 'background: #DBEAFE; color: #1E40AF;',
     'Approved': 'background: #D1FAE5; color: #065F46;',
