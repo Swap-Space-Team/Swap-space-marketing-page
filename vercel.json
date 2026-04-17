@@ -2,7 +2,6 @@
   "buildCommand": "",
   "outputDirectory": ".",
   "cleanUrls": true,
-  "trailingSlash": true,
   "headers": [
     {
       "source": "/assets/(.*)",
@@ -42,6 +41,10 @@
     },
     {
       "source": "/blog",
+      "destination": "https://blog.swap-space.com"
+    },
+    {
+      "source": "/blog/",
       "destination": "https://blog.swap-space.com"
     },
     {
