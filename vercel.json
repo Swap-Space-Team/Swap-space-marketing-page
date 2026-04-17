@@ -50,6 +50,10 @@
     {
       "source": "/wp-includes/:path*",
       "destination": "https://blog.swap-space.com/wp-includes/:path*"
+    },
+    {
+      "source": "/wp-sitemap:path(.*)",
+      "destination": "https://blog.swap-space.com/wp-sitemap:path"
     }
   ],
   "images": {
