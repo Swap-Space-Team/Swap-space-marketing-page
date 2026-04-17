@@ -117,25 +117,12 @@
 
       // Actions based on status
       let actionsHtml = '';
-      if (app.application_status === 'Photos Received') {
+      if (app.application_status === 'Application Received' ||
+          app.application_status === 'Photos Received' ||
+          app.application_status === 'Photos Requested') {
         actionsHtml = `
           <button class="btn btn-primary" id="approveBtn" onclick="approveApplication('${app.id}')">
             Approve Application
-          </button>
-          <button class="btn btn-secondary" id="resendBtn" onclick="resendPhotos('${app.id}')">
-            Resend Photo Request
-          </button>
-          <button class="btn btn-danger" id="rejectBtn" onclick="rejectApplication('${app.id}')">
-            Reject
-          </button>
-        `;
-      } else if (app.application_status === 'Photos Requested') {
-        actionsHtml = `
-        <button class="btn btn-primary" id="approveBtn" onclick="approveApplication('${app.id}')">
-            Approve Application
-          </button>
-          <button class="btn btn-secondary" id="resendBtn" onclick="resendPhotos('${app.id}')">
-            Resend Photo Request
           </button>
           <button class="btn btn-danger" id="rejectBtn" onclick="rejectApplication('${app.id}')">
             Reject

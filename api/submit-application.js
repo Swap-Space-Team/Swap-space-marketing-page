@@ -54,7 +54,7 @@ export default async function handler(req, res) {
         top_cities: fields['Top Cities'] || null,
         travel_dates: fields['Travel Dates'] || null,
         submission_date: fields['Submission Date'] || new Date().toISOString(),
-        application_status: 'Photos Requested',
+        application_status: 'Application Received',
       })
       .select()
       .single();
