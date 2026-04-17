@@ -40,16 +40,8 @@
       "destination": "/travel-cost-calculator.html"
     },
     {
-      "source": "/blog",
-      "destination": "https://blog.swap-space.com"
-    },
-    {
-      "source": "/blog/",
-      "destination": "https://blog.swap-space.com"
-    },
-    {
-      "source": "/blog/:path*",
-      "destination": "https://blog.swap-space.com/:path*"
+      "source": "/blog/:path(.*)",
+      "destination": "https://blog.swap-space.com/:path"
     },
     {
       "source": "/wp-content/:path*",
