@@ -2,7 +2,6 @@
   "buildCommand": "",
   "outputDirectory": ".",
   "cleanUrls": true,
-  "trailingSlash": true,
   "headers": [
     {
       "source": "/assets/(.*)",
@@ -31,33 +30,10 @@
       "schedule": "0 3 * * 1"
     }
   ],
-  "redirects": [
-    {
-      "source": "/:path+/",
-      "destination": "/:path+",
-      "permanent": true
-    }
-  ],
   "rewrites": [
     {
       "source": "/",
       "destination": "/index.html"
-    },
-    {
-      "source": "/how-it-works",
-      "destination": "/how-it-works.html"
-    },
-    {
-      "source": "/application",
-      "destination": "/application.html"
-    },
-    {
-      "source": "/guides",
-      "destination": "/guides.html"
-    },
-    {
-      "source": "/guides-pages/photoguidelines",
-      "destination": "/guides-pages/photoguidelines.html"
     },
     {
       "source": "/travel-cost-calculator",
