@@ -20,6 +20,7 @@ export default async function handler(req, res) {
   const RESEND_API_KEY = process.env.RESEND_API_KEY;
   const META_PIXEL_ID = process.env.META_PIXEL_ID;
   const META_ACCESS_TOKEN = process.env.META_ACCESS_TOKEN;
+  const SLACK_WEBHOOK_URL = process.env.SLACK_WEBHOOK_URL;
 
   if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
     console.error('Missing Supabase environment variables');
@@ -64,6 +65,47 @@ export default async function handler(req, res) {
       return res.status(500).json({
         error: insertError.message || 'Failed to submit application'
       });
+    }
+
+    // Best-effort Slack notification (never blocks submission)
+    if (!SLACK_WEBHOOK_URL) {
+      console.warn('SLACK_WEBHOOK_URL not set; skipping Slack notification');
+    } else {
+      try {
+        const submittedAt =
+          data?.submission_date ||
+          fields['Submission Date'] ||
+          new Date().toISOString();
+
+        const city = fields.City || '';
+        const country = fields.Country || '';
+        const location =
+          city && country ? `${city}, ${country}` : (city || country || 'N/A');
+
+        const readyToListLabel = listingReady ? 'Yes' : 'No';
+
+        const slackText = [
+          'New application submitted',
+          `Name: ${fields.Name || 'N/A'}`,
+          `Email: ${fields.Email || 'N/A'}`,
+          `Location: ${location}`,
+          `Ready to list: ${readyToListLabel}`,
+          `Submitted: ${submittedAt}`,
+        ].join('\n');
+
+        const slackRes = await fetch(SLACK_WEBHOOK_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text: slackText }),
+        });
+
+        if (!slackRes.ok) {
+          const slackBody = await slackRes.text().catch(() => '');
+          console.error('Slack webhook error:', slackRes.status, slackBody);
+        }
+      } catch (slackError) {
+        console.error('Slack notification error:', slackError);
+      }
     }
 
     // Send confirmation email via Resend — two paths based on listing readiness
