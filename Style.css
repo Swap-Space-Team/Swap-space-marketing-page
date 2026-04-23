@@ -1991,6 +1991,10 @@ p {
     min-height: unset;
   }
 
+  .listing-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   .masthead {
     padding: 0 24px;
     height: 72px;
@@ -2061,10 +2065,6 @@ p {
 
   .browse-homes {
     padding: 40px 24px;
-  }
-
-  .listing-cards {
-    overflow-x: auto;
   }
 
   .listing-card {
@@ -2388,7 +2388,7 @@ p {
   }
 
   .listing-cards {
-    overflow-x: auto;
+    grid-template-columns: 1fr;
   }
 }
 
@@ -2403,7 +2403,6 @@ p {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-4);
-  overflow: hidden;
 }
 
 .browse-homes-header {
@@ -2472,12 +2471,12 @@ p {
   background-color: var(--color-primary-800);
 }
 
-/* Cards row */
+/* Cards grid */
 .listing-cards {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: var(--spacing-4);
   width: 100%;
-  overflow: hidden;
 }
 
 .listing-card {
@@ -2487,8 +2486,6 @@ p {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-4);
-  flex: 1 1 0;
-  min-width: 0;
   padding-bottom: var(--spacing-6);
   box-shadow: 0 0 0 1px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.06);
 }
@@ -2513,10 +2510,10 @@ p {
 }
 
 .listing-card-avatar-row {
+  display: none;
   position: absolute;
   top: var(--spacing-4);
   left: var(--spacing-4);
-  display: flex;
   align-items: center;
   gap: var(--spacing-2);
   z-index: 2;
@@ -2621,7 +2618,7 @@ p {
 
 /* Availability */
 .listing-card-availability {
-  display: flex;
+  display: none;
   flex-direction: column;
   gap: var(--spacing-1);
 }
@@ -2696,7 +2693,7 @@ p {
   }
 
   .listing-cards {
-    overflow-x: auto;
+    grid-template-columns: 1fr;
     margin-top: 24px;
   }
 

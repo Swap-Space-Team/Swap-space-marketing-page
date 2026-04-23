@@ -587,7 +587,7 @@
         // LISTING CARDS API INTEGRATION
         // ============================================
         // Backend API endpoint
-        const API_ENDPOINT = 'https://staging-backend.swap-space.com/api/v1/properties/public';
+        const API_ENDPOINT = 'https://production-backend.swap-space.com/api/v1/properties/public';
         
         // Transform API response to match expected format
         function transformApiResponse(apiData) {
@@ -859,7 +859,7 @@
         function renderListings(data) {
           if (!listingCardsEl) return;
 
-          const listings = (data.listings || data || []).slice(0, 4);
+          const listings = (data.listings || data || []);
 
           if (listings.length === 0) {
             listingCardsEl.innerHTML = '';
