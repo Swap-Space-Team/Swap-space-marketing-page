@@ -665,7 +665,7 @@
 
         function createListingCard(listing) {
           const propertyId = listing.id;
-          const imageUrl = listing.images && listing.images.length > 0 ? listing.images[0] : '';
+          const images = (listing.images && listing.images.length > 0) ? listing.images : [''];
           const avatarUrl = listing.host && listing.host.avatar ? listing.host.avatar : '';
 
           const bedrooms = listing.amenities?.bedrooms || 0;
@@ -692,22 +692,27 @@
             ? `<img src="${avatarUrl}" alt="Member avatar" class="listing-card-avatar" loading="lazy">`
             : '';
 
+          const dotsHtml = images.length > 1
+            ? images.map((_, i) => `<span class="listing-dot${i === 0 ? ' listing-dot--active' : ''}"></span>`).join('')
+            : '';
+
+          const hasMultiple = images.length > 1;
+
           const wrapper = document.createElement('div');
           wrapper.innerHTML = `
-            <div class="listing-card" style="cursor:pointer">
-              <div class="listing-card-image">
-                <img src="${imageUrl}" alt="${listing.title}" class="listing-card-photo" loading="lazy">
+            <div class="listing-card">
+              <div class="listing-card-image" style="cursor:pointer">
+                <img src="${images[0]}" alt="${listing.title}" class="listing-card-photo" loading="lazy">
                 <div class="listing-card-avatar-row">
                   ${avatarHtml}
                   <span class="listing-card-avatar-label">Member's home</span>
                 </div>
-                <div class="listing-card-dots">
-                  <span class="listing-dot listing-dot--active"></span>
-                  <span class="listing-dot"></span>
-                  <span class="listing-dot"></span>
-                </div>
+                ${hasMultiple ? `
+                <button class="listing-card-prev" aria-label="Previous image">&#8249;</button>
+                <button class="listing-card-next" aria-label="Next image">&#8250;</button>
+                <div class="listing-card-dots">${dotsHtml}</div>` : ''}
               </div>
-              <div class="listing-card-body">
+              <div class="listing-card-body" style="cursor:pointer">
                 <h3 class="listing-card-title">${listing.title}</h3>
                 <p class="listing-card-location">${listing.location}</p>
                 <div class="listing-card-amenities">${amenitiesHtml}</div>
@@ -716,9 +721,61 @@
             </div>`;
 
           const card = wrapper.firstElementChild;
-          card.addEventListener('click', function() {
+          const photo = card.querySelector('.listing-card-photo');
+          const dots = card.querySelectorAll('.listing-dot');
+          const imgArea = card.querySelector('.listing-card-image');
+          const body = card.querySelector('.listing-card-body');
+          let currentIndex = 0;
+
+          function goToSlide(index) {
+            currentIndex = (index + images.length) % images.length;
+            photo.src = images[currentIndex];
+            dots.forEach((d, i) => d.classList.toggle('listing-dot--active', i === currentIndex));
+          }
+
+          function navigate(e) {
+            e.stopPropagation();
+            goToSlide(currentIndex + 1);
+          }
+
+          if (hasMultiple) {
+            // Prev / Next buttons
+            card.querySelector('.listing-card-next').addEventListener('click', function(e) {
+              e.stopPropagation();
+              goToSlide(currentIndex + 1);
+            });
+            card.querySelector('.listing-card-prev').addEventListener('click', function(e) {
+              e.stopPropagation();
+              goToSlide(currentIndex - 1);
+            });
+
+            // Dot clicks
+            dots.forEach((dot, i) => {
+              dot.addEventListener('click', function(e) {
+                e.stopPropagation();
+                goToSlide(i);
+              });
+            });
+
+            // Swipe on mobile
+            let touchStartX = 0;
+            imgArea.addEventListener('touchstart', function(e) {
+              touchStartX = e.touches[0].clientX;
+            }, { passive: true });
+            imgArea.addEventListener('touchend', function(e) {
+              const diff = touchStartX - e.changedTouches[0].clientX;
+              if (Math.abs(diff) > 40) goToSlide(diff > 0 ? currentIndex + 1 : currentIndex - 1);
+            }, { passive: true });
+          }
+
+          // Navigate to property only from image area (no arrows) or card body
+          imgArea.addEventListener('click', function() {
             if (propertyId) window.location.href = `Propertydetails.html?id=${propertyId}`;
           });
+          body.addEventListener('click', function() {
+            if (propertyId) window.location.href = `Propertydetails.html?id=${propertyId}`;
+          });
+
           return card;
         }
 
@@ -859,7 +916,11 @@
         function renderListings(data) {
           if (!listingCardsEl) return;
 
-          const listings = (data.listings || data || []);
+          const listings = (data.listings || data || []).sort((a, b) => {
+            const aUS = (a.address?.country || '').toLowerCase().includes('united states') ? 0 : 1;
+            const bUS = (b.address?.country || '').toLowerCase().includes('united states') ? 0 : 1;
+            return aUS - bUS;
+          });
 
           if (listings.length === 0) {
             listingCardsEl.innerHTML = '';

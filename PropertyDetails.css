@@ -7,7 +7,7 @@ body {
 
 .property-details-container {
   max-width: 1400px;
-  margin: 0 auto;
+  margin: 80px auto 0;
   padding: 40px;
   background-color: var(--surface-warm);
 }
@@ -756,6 +756,7 @@ body {
 @media screen and (max-width: 768px) {
   .property-details-container {
     padding: 16px;
+    margin-top: 80px;
   }
 
   .property-title {
