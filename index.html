@@ -9,8 +9,16 @@
     <!-- Preconnect to key third-party origins -->
     <link rel="preconnect" href="https://www.googletagmanager.com" />
     <link rel="preconnect" href="https://events.swap-space.com" />
-    <!-- Stylesheet -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://production-backend.swap-space.com" />
+    <link rel="dns-prefetch" href="https://swap-space-images-bucket.s3.eu-west-2.amazonaws.com" />
+    <!-- Stylesheets — tokens first, both load in parallel as <link> tags (no @import chain) -->
+    <link rel="stylesheet" href="/swap-space-tokens.css" />
     <link rel="stylesheet" type="text/css" href="/Style.css" />
+    <!-- Google Fonts — async load to avoid render-blocking -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" /></noscript>
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://www.swap-space.com/" />
     <script
