@@ -2469,6 +2469,49 @@ p {
   background-color: var(--color-primary-800);
 }
 
+/* Pagination */
+.listings-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-4);
+  padding-top: var(--spacing-6);
+}
+
+.pagination-btn {
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 20px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-neutral-300);
+  background-color: transparent;
+  font-family: 'Geist', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-neutral-900);
+  cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background-color: var(--color-neutral-100);
+  border-color: var(--color-neutral-400);
+}
+
+.pagination-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.pagination-info {
+  font-family: 'Geist', sans-serif;
+  font-size: 14px;
+  color: var(--color-neutral-500);
+  min-width: 90px;
+  text-align: center;
+}
+
 /* Cards grid */
 .listing-cards {
   display: grid;

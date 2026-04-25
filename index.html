@@ -208,6 +208,11 @@
         <div class="listing-card listing-card--skeleton"></div>
         <div class="listing-card listing-card--skeleton"></div>
       </div>
+      <div class="listings-pagination" id="listingsPagination" style="display:none">
+        <button class="pagination-btn" id="paginationPrev" aria-label="Previous page">&#8592; Prev</button>
+        <span class="pagination-info" id="paginationInfo"></span>
+        <button class="pagination-btn" id="paginationNext" aria-label="Next page">Next &#8594;</button>
+      </div>
     </section>
 
     <!-- ============================================
@@ -930,25 +935,50 @@
           }
         }
 
-        function renderListings(data) {
-          if (!listingCardsEl) return;
+        const PAGE_SIZE = 4;
+        let allListings = [];
+        let currentPage = 0;
 
-          const listings = (data.listings || data || []).sort((a, b) => {
+        function renderPage(page) {
+          if (!listingCardsEl) return;
+          const start = page * PAGE_SIZE;
+          const pageListings = allListings.slice(start, start + PAGE_SIZE);
+
+          listingCardsEl.innerHTML = '';
+          pageListings.forEach(listing => listingCardsEl.appendChild(createListingCard(listing)));
+
+          // Pagination controls
+          const totalPages = Math.ceil(allListings.length / PAGE_SIZE);
+          const paginationEl = document.getElementById('listingsPagination');
+          const infoEl = document.getElementById('paginationInfo');
+          const prevBtn = document.getElementById('paginationPrev');
+          const nextBtn = document.getElementById('paginationNext');
+
+          paginationEl.style.display = totalPages > 1 ? 'flex' : 'none';
+          infoEl.textContent = `Page ${page + 1} of ${totalPages}`;
+          prevBtn.disabled = page === 0;
+          nextBtn.disabled = page >= totalPages - 1;
+
+          // Scroll to top of section smoothly
+          if (page > 0) listingCardsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function renderListings(data) {
+          allListings = (data.listings || data || []).sort((a, b) => {
             const aUS = (a.address?.country || '').toLowerCase().includes('united states') ? 0 : 1;
             const bUS = (b.address?.country || '').toLowerCase().includes('united states') ? 0 : 1;
             return aUS - bUS;
           });
-
-          if (listings.length === 0) {
-            listingCardsEl.innerHTML = '';
-            return;
-          }
-
-          listingCardsEl.innerHTML = '';
-          listings.forEach(listing => {
-            listingCardsEl.appendChild(createListingCard(listing));
-          });
+          currentPage = 0;
+          renderPage(currentPage);
         }
+
+        document.getElementById('paginationPrev').addEventListener('click', function() {
+          if (currentPage > 0) { currentPage--; renderPage(currentPage); }
+        });
+        document.getElementById('paginationNext').addEventListener('click', function() {
+          if (currentPage < Math.ceil(allListings.length / PAGE_SIZE) - 1) { currentPage++; renderPage(currentPage); }
+        });
 
         // Fetch listings when page loads
         fetchListings();
