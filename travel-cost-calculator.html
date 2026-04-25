@@ -828,6 +828,346 @@
       line-height: 1.6;
     }
 
+    /* ── Redesigned result sections ── */
+    .calc-decision-banner {
+      margin: 0 -40px;
+      padding: 24px 40px 20px;
+      background: var(--color-neutral-50);
+      border-bottom: 1px solid var(--color-neutral-100);
+    }
+    .calc-decision-meta {
+      font-family: 'Geist', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--color-neutral-400);
+      margin-bottom: 8px;
+    }
+    .calc-decision-headline {
+      font-family: 'Geist', sans-serif;
+      font-size: 17px;
+      line-height: 1.5;
+      color: var(--color-neutral-800);
+    }
+    .calc-decision-headline strong {
+      font-weight: 700;
+      color: var(--color-primary-900);
+    }
+
+    .calc-comparison-section {
+      padding: 28px 0 24px;
+      border-bottom: 1px solid var(--color-neutral-100);
+    }
+    .calc-comparison-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) 36px minmax(0, 3fr);
+      gap: 12px;
+      align-items: stretch;
+      margin-bottom: 20px;
+    }
+    .calc-comparison-card {
+      background: var(--color-neutral-50);
+      border: 1px solid var(--color-neutral-200);
+      border-radius: 12px;
+      padding: 18px 14px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .calc-comparison-card--swapspace {
+      background: var(--color-primary-50);
+      border: 1.5px solid var(--color-primary-200);
+      padding: 22px 18px;
+    }
+    .calc-comparison-card--swapspace .calc-comparison-amount {
+      font-size: 36px;
+    }
+    .calc-comparison-label {
+      font-family: 'Geist', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--color-neutral-400);
+      margin-bottom: 8px;
+    }
+    .calc-comparison-label--green { color: var(--color-primary-700); }
+    .calc-comparison-amount {
+      font-family: 'Clash Display', 'Geist', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.8px;
+      color: var(--color-neutral-900);
+      line-height: 1;
+    }
+    .calc-comparison-amount--strikethrough {
+      text-decoration: line-through;
+      text-decoration-color: var(--color-neutral-300);
+      color: var(--color-neutral-600);
+    }
+    .calc-comparison-amount--green { color: var(--color-primary-800); }
+    .calc-comparison-sub {
+      font-family: 'Geist', sans-serif;
+      font-size: 11px;
+      color: var(--color-neutral-400);
+      margin-top: 6px;
+    }
+    .calc-comparison-sub--green { color: var(--color-primary-500); }
+    .calc-comparison-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .calc-savings-block {
+      background: var(--color-amber-400);
+      border-radius: 12px;
+      padding: 20px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .calc-savings-eyebrow {
+      font-family: 'Geist', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-amber-900);
+      margin-bottom: 4px;
+    }
+    .calc-savings-amount {
+      font-family: 'Clash Display', 'Geist', sans-serif;
+      font-size: 48px;
+      font-weight: 700;
+      letter-spacing: -2px;
+      line-height: 1;
+      color: var(--color-neutral-900);
+    }
+    .calc-savings-sub {
+      font-family: 'Geist', sans-serif;
+      font-size: 13px;
+      color: var(--color-amber-800);
+      margin-top: 4px;
+    }
+    .calc-savings-tag {
+      background: rgba(0,0,0,0.1);
+      border-radius: 10px;
+      padding: 12px 16px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .calc-savings-tag-num {
+      font-family: 'Clash Display', 'Geist', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--color-neutral-900);
+    }
+    .calc-savings-tag-label {
+      font-family: 'Geist', sans-serif;
+      font-size: 12px;
+      color: var(--color-amber-900);
+      margin-top: 2px;
+    }
+
+    .calc-breakdown-section {
+      padding: 20px 0 16px;
+      border-bottom: 1px solid var(--color-neutral-100);
+    }
+    .calc-breakdown-eyebrow {
+      font-family: 'Geist', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--color-neutral-400);
+      margin-bottom: 14px;
+    }
+    .calc-accom-row {
+      background: var(--color-amber-50);
+      border: 1px solid var(--color-amber-200);
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+    }
+    .calc-accom-row-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 7px;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .calc-accom-row-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .calc-accom-row-label {
+      font-family: 'Geist', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-amber-900);
+    }
+    .calc-accom-row-badge {
+      font-family: 'Geist', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      background: var(--color-amber-400);
+      color: var(--color-neutral-900);
+      padding: 2px 8px;
+      border-radius: 999px;
+    }
+    .calc-accom-row-amount {
+      font-family: 'Geist', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-amber-800);
+    }
+
+    .calc-swap-block {
+      margin: 0 -40px;
+      background: var(--color-primary-900);
+      padding: 32px 40px;
+    }
+    .calc-swap-eyebrow {
+      font-family: 'Geist', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-amber-400);
+      margin-bottom: 10px;
+    }
+    .calc-swap-heading {
+      font-family: 'Clash Display', 'Geist', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.3;
+      margin-bottom: 10px;
+    }
+    .calc-swap-body {
+      font-family: 'Geist', sans-serif;
+      font-size: 14px;
+      color: rgba(255,255,255,0.72);
+      line-height: 1.65;
+      margin-bottom: 18px;
+    }
+    .calc-swap-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 22px;
+    }
+    .calc-swap-pill {
+      font-family: 'Geist', sans-serif;
+      font-size: 12px;
+      color: rgba(255,255,255,0.82);
+      background: rgba(255,255,255,0.1);
+      border-radius: 999px;
+      padding: 5px 12px;
+    }
+    .calc-swap-cta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      background: var(--color-amber-400);
+      color: var(--color-neutral-900);
+      font-family: 'Geist', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 16px 22px;
+      border-radius: 999px;
+      text-decoration: none;
+      margin-bottom: 10px;
+      transition: background 0.15s;
+    }
+    .calc-swap-cta:hover {
+      background: var(--color-amber-300);
+      color: var(--color-neutral-900);
+    }
+    .calc-swap-urgency {
+      font-family: 'Geist', sans-serif;
+      font-size: 12px;
+      color: rgba(255,255,255,0.45);
+      text-align: center;
+    }
+
+    .calc-next-section {
+      padding: 28px 0 4px;
+    }
+    .calc-next-heading {
+      font-family: 'Clash Display', 'Geist', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--color-primary-900);
+      margin-bottom: 20px;
+    }
+    .calc-next-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .calc-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+    .calc-step-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--color-primary-50);
+      border: 1px solid var(--color-primary-200);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-family: 'Geist', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--color-primary-700);
+    }
+    .calc-step-title {
+      font-family: 'Geist', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-neutral-900);
+      margin-bottom: 3px;
+    }
+    .calc-step-desc {
+      font-family: 'Geist', sans-serif;
+      font-size: 13px;
+      color: var(--color-neutral-500);
+      line-height: 1.55;
+    }
+    .calc-next-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--color-neutral-100);
+      margin-top: 22px;
+      padding-top: 16px;
+    }
+    .calc-next-footer-text {
+      font-family: 'Geist', sans-serif;
+      font-size: 13px;
+      color: var(--color-neutral-500);
+    }
+    .calc-next-footer-link {
+      font-family: 'Geist', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-primary-600);
+      text-decoration: none;
+    }
+    .calc-next-footer-link:hover { color: var(--color-primary-900); }
+
     /* ── Email capture ── */
     .calc-email-block {
       margin-top: 24px;
@@ -1024,6 +1364,17 @@
       .calc-hero-body { font-size: 16px; }
       .calc-form-area { padding: 28px 24px 24px; }
       .calc-results-area { padding: 0 24px 32px; }
+      .calc-decision-banner { margin: 0 -24px; padding: 20px 24px 16px; }
+      .calc-swap-block { margin: 0 -24px; padding: 28px 24px; }
+      .calc-comparison-grid { grid-template-columns: minmax(0, 2fr) 16px minmax(0, 3fr); gap: 6px; }
+      .calc-comparison-card { padding: 12px 8px; }
+      .calc-comparison-amount { font-size: 18px; letter-spacing: -0.5px; }
+      .calc-comparison-card--swapspace { padding: 18px 12px; }
+      .calc-comparison-card--swapspace .calc-comparison-amount { font-size: 26px; letter-spacing: -0.8px; }
+      .calc-savings-amount { font-size: 36px; }
+      .calc-savings-block { padding: 16px 12px; }
+      .calc-savings-tag { display: none; }
+      .calc-next-footer { flex-direction: column; align-items: flex-start; gap: 8px; }
       .calc-card { margin: 0 16px 0; }
       .calc-row { grid-template-columns: 1fr; }
       .calc-total-amount { font-size: 40px; }
@@ -1744,47 +2095,127 @@
       const whatsappShareUrl = 'https://wa.me/?text=' + encodeURIComponent(shareText + '\n' + shareUrl);
 
       el.innerHTML = `
-        <div class="calc-total-header">
-          <div class="calc-total-eyebrow">Estimated total cost</div>
-          <div class="calc-total-amount" id="totalCounter">${formatCurrency(0, currency)}</div>
-          <div class="calc-total-sub">for ${nights} night${nights !== 1 ? 's' : ''}, ${travellers} traveller${travellers !== 1 ? 's' : ''} · ${data.styleLabel} style · ${data.city}</div>
-          <div class="calc-per-day">≈ ${formatCurrency(perPersonPerDay, currency)} per person, per day</div>
+        <div class="calc-decision-banner">
+          <div class="calc-decision-meta">Your ${cityShort} trip · ${nights} night${nights !== 1 ? 's' : ''} · ${travellers} traveller${travellers !== 1 ? 's' : ''} · ${data.styleLabel}</div>
+          <div class="calc-decision-headline">At today's prices, this trip costs <strong>${formatCurrency(total, currency)}</strong> — and ${formatCurrency(breakdown.accommodation, currency)} of that is just the hotel.</div>
         </div>
 
-        <div class="calc-breakdown">
-          ${categories.map(cat => {
-            const amount = breakdown[cat.key] || 0;
-            const pct = total > 0 ? Math.round((amount / total) * 100) : 0;
-            return `
-              <div class="calc-breakdown-item">
-                <div class="calc-breakdown-row">
-                  <span class="calc-breakdown-name">
-                    <span class="calc-breakdown-icon">${cat.icon}</span>
-                    ${cat.label}
-                  </span>
-                  <span class="calc-breakdown-amount">
-                    ${formatCurrency(amount, currency)}<span class="calc-breakdown-pct"> · ${pct}%</span>
-                  </span>
-                </div>
-                <div class="calc-bar-track">
-                  <div class="calc-bar-fill calc-bar-fill--${cat.barClass}" data-width="${pct}" style="width:0%"></div>
-                </div>
-              </div>`;
-          }).join('')}
+        <div class="calc-comparison-section">
+          <div class="calc-comparison-grid">
+            <div class="calc-comparison-card">
+              <div class="calc-comparison-label">Standard trip cost</div>
+              <div class="calc-comparison-amount calc-comparison-amount--strikethrough" id="totalCounter">${formatCurrency(0, currency)}</div>
+              <div class="calc-comparison-sub">Hotel included</div>
+            </div>
+            <div class="calc-comparison-arrow">
+              <svg width="20" height="14" viewBox="0 0 20 14" fill="none"><path d="M0 7h16M10 1l6 6-6 6" stroke="var(--color-neutral-300)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="calc-comparison-card calc-comparison-card--swapspace">
+              <div class="calc-comparison-label calc-comparison-label--green">With SwapSpace</div>
+              <div class="calc-comparison-amount calc-comparison-amount--green">${formatCurrency(total - breakdown.accommodation, currency)}</div>
+              <div class="calc-comparison-sub calc-comparison-sub--green">Accommodation: ${formatCurrency(0, currency)}</div>
+            </div>
+          </div>
+
+          <div class="calc-savings-block">
+            <div>
+              <div class="calc-savings-eyebrow">You save</div>
+              <div class="calc-savings-amount">${formatCurrency(breakdown.accommodation, currency)}</div>
+              <div class="calc-savings-sub">${accomPct}% of your total trip budget</div>
+            </div>
+            <div class="calc-savings-tag">
+              <div class="calc-savings-tag-num">1 cost</div>
+              <div class="calc-savings-tag-label">eliminated entirely</div>
+            </div>
+          </div>
         </div>
 
-        <div class="calc-accom-highlight">
-          <div class="calc-accom-icon">🏠</div>
-          <div class="calc-accom-text">
-            <p class="calc-accom-title">Save ${formatCurrency(breakdown.accommodation, currency)} on this trip — that's ${accomPct}% back in your pocket</p>
-            <p class="calc-accom-body">Your biggest expense is ${biggestCat.label.toLowerCase()} at ${biggestPct}% of the total. But accommodation — ${formatCurrency(breakdown.accommodation, currency)} of this trip — is the one cost SwapSpace members eliminate entirely, by swapping homes with verified members worldwide.</p>
-            <a href="/application.html" class="calc-accom-cta">See if you can swap your home →</a>
+        <div class="calc-breakdown-section">
+          <div class="calc-breakdown-eyebrow">Where your money goes</div>
+          <div class="calc-accom-row">
+            <div class="calc-accom-row-top">
+              <div class="calc-accom-row-left">
+                <span class="calc-accom-row-label">🏨 Accommodation</span>
+                <span class="calc-accom-row-badge">SwapSpace removes this</span>
+              </div>
+              <span class="calc-accom-row-amount">${formatCurrency(breakdown.accommodation, currency)} · ${accomPct}%</span>
+            </div>
+            <div class="calc-bar-track">
+              <div class="calc-bar-fill calc-bar-fill--accommodation" data-width="${accomPct}" style="width:0%"></div>
+            </div>
+          </div>
+          <div class="calc-breakdown">
+            ${categories.filter(cat => cat.key !== 'accommodation').map(cat => {
+              const amount = breakdown[cat.key] || 0;
+              const pct = total > 0 ? Math.round((amount / total) * 100) : 0;
+              return `
+                <div class="calc-breakdown-item">
+                  <div class="calc-breakdown-row">
+                    <span class="calc-breakdown-name">
+                      <span class="calc-breakdown-icon">${cat.icon}</span>
+                      ${cat.label}
+                    </span>
+                    <span class="calc-breakdown-amount">
+                      ${formatCurrency(amount, currency)}<span class="calc-breakdown-pct"> · ${pct}%</span>
+                    </span>
+                  </div>
+                  <div class="calc-bar-track">
+                    <div class="calc-bar-fill calc-bar-fill--${cat.barClass}" data-width="${pct}" style="width:0%"></div>
+                  </div>
+                </div>`;
+            }).join('')}
+          </div>
+        </div>
+
+        <div class="calc-swap-block">
+          <div class="calc-swap-eyebrow">The SwapSpace way</div>
+          <div class="calc-swap-heading">Stay in a real ${cityShort} home.<br>Pay nothing for the room.</div>
+          <div class="calc-swap-body">SwapSpace members open their homes to each other — no nightly rate, no platform fees, no hotel markup. The rest of your trip stays exactly the same.</div>
+          <div class="calc-swap-pills">
+            <span class="calc-swap-pill">Verified members</span>
+            <span class="calc-swap-pill">No hidden fees</span>
+            <span class="calc-swap-pill">Real homes, not hotels</span>
+          </div>
+          <a href="/application.html" class="calc-swap-cta">
+            Find free stays in ${cityShort}
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <div class="calc-swap-urgency">Most swaps are arranged 4–8 weeks in advance. Your trip is coming up.</div>
+        </div>
+
+        <div class="calc-next-section">
+          <div class="calc-next-heading">What happens next</div>
+          <div class="calc-next-steps">
+            <div class="calc-step">
+              <div class="calc-step-num">1</div>
+              <div>
+                <div class="calc-step-title">List your home — takes about 10 minutes</div>
+                <div class="calc-step-desc">Add photos, your availability, and a short description. Our team reviews listings within 48 hours.</div>
+              </div>
+            </div>
+            <div class="calc-step">
+              <div class="calc-step-num">2</div>
+              <div>
+                <div class="calc-step-title">Browse SwapSpace members in ${cityShort}</div>
+                <div class="calc-step-desc">Filter by your travel dates and home type. Message members directly — no middleman, no booking fee.</div>
+              </div>
+            </div>
+            <div class="calc-step">
+              <div class="calc-step-num">3</div>
+              <div>
+                <div class="calc-step-title">Agree your swap dates and go</div>
+                <div class="calc-step-desc">They stay in your home, you stay in theirs. No money changes hands for accommodation. Ever.</div>
+              </div>
+            </div>
+          </div>
+          <div class="calc-next-footer">
+            <span class="calc-next-footer-text">Not ready to apply yet?</span>
+            <a href="/how-it-works.html" class="calc-next-footer-link">See how it works →</a>
           </div>
         </div>
 
         ${data.isRegionalFallback ? '<p class="calc-regional-note">ℹ️ We couldn\'t find exact data for that city — these figures are estimated from nearby cities in the same region.</p>' : ''}
 
-        <!-- Dynamic city FAQ -->
         <div class="calc-dynamic-faq">
           <p class="calc-dynamic-faq-eyebrow">About your ${cityShort} trip</p>
           <div class="calc-dynamic-faq-item">
@@ -1801,7 +2232,6 @@
           </div>
         </div>
 
-        <!-- Share -->
         <div class="calc-share">
           <span class="calc-share-label">Share</span>
           <a class="calc-share-btn calc-share-btn--x" href="${twitterShareUrl}" target="_blank" rel="noopener">
@@ -1818,7 +2248,6 @@
           </button>
         </div>
 
-        <!-- Data source / confidence badge -->
         <div class="calc-data-source">
           <span class="calc-data-source-badge">
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
@@ -1968,8 +2397,12 @@
           }),
         }).catch(() => {});
 
-        // Scroll to results smoothly
-        document.getElementById('calcResults').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Scroll to results smoothly, accounting for fixed masthead
+        (function() {
+          var resultsEl = document.getElementById('calcResults');
+          var top = resultsEl.getBoundingClientRect().top + window.pageYOffset - 90;
+          window.scrollTo({ top: top, behavior: 'smooth' });
+        })();
 
       } catch (err) {
         loadingEl.classList.remove('visible');
@@ -2045,7 +2478,11 @@
             const data = await res.json();
             loadingEl.classList.remove('visible');
             renderResults(data);
-            document.getElementById('calcResults').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            (function() {
+              var resultsEl = document.getElementById('calcResults');
+              var top = resultsEl.getBoundingClientRect().top + window.pageYOffset - 90;
+              window.scrollTo({ top: top, behavior: 'smooth' });
+            })();
           } catch (_) {
             loadingEl.classList.remove('visible');
             errorEl.textContent = 'Could not load the shared estimate. Please fill in the form and calculate.';
