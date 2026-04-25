@@ -597,6 +597,14 @@
         // Backend API endpoint
         const API_ENDPOINT = 'https://production-backend.swap-space.com/api/v1/properties/public';
         
+        // Prepend https:// to bare URLs returned by the API (e.g. "d3vretalihqpwb.cloudfront.net/img.jpg")
+        function normalizeImageUrl(url) {
+          if (!url) return url;
+          if (/^(https?:\/\/|\/|data:)/.test(url)) return url;
+          if (/^[a-zA-Z0-9][a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\//.test(url)) return 'https://' + url;
+          return url;
+        }
+
         // Transform API response to match expected format
         function transformApiResponse(apiData) {
           return apiData.map(property => {
@@ -645,10 +653,10 @@
               id: property.propertyId?.toString() || '',
               title: property.propertyTitle || 'Untitled Property',
               location: location,
-              images: property.images?.map(img => img.imageUrl) || [],
+              images: property.images?.map(img => normalizeImageUrl(img.imageUrl)) || [],
               host: {
                 name: property.hostName || 'Host',
-                avatar: property.profilePhotoUrl || ''
+                avatar: normalizeImageUrl(property.profilePhotoUrl || '')
               },
               amenities: {
                 bedrooms: bedrooms || 0,
