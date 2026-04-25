@@ -2518,6 +2518,7 @@ p {
   grid-template-columns: repeat(4, 1fr);
   gap: var(--spacing-4);
   width: 100%;
+  min-height: 420px;
 }
 
 .listing-card {

@@ -959,8 +959,6 @@
           prevBtn.disabled = page === 0;
           nextBtn.disabled = page >= totalPages - 1;
 
-          // Scroll to top of section smoothly
-          if (page > 0) listingCardsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
         function renderListings(data) {
