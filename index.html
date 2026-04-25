@@ -12,6 +12,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://production-backend.swap-space.com" />
+    <link rel="preconnect" href="https://d3vretalihqpwb.cloudfront.net" />
     <link rel="dns-prefetch" href="https://swap-space-images-bucket.s3.eu-west-2.amazonaws.com" />
     <!-- Stylesheets — tokens first, both load in parallel as <link> tags (no @import chain) -->
     <link rel="stylesheet" href="/swap-space-tokens.css" />
@@ -718,7 +719,7 @@
           wrapper.innerHTML = `
             <div class="listing-card">
               <div class="listing-card-image" style="cursor:pointer">
-                <img src="${images[0]}" alt="${listing.title}" class="listing-card-photo" loading="lazy">
+                <img src="${images[0]}" alt="${listing.title}" class="listing-card-photo">
                 <div class="listing-card-avatar-row">
                   ${avatarHtml}
                   <span class="listing-card-avatar-label">Member's home</span>
