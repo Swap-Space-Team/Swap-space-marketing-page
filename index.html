@@ -685,7 +685,7 @@
           return `<span class="listing-amenity"><img src="${iconSrc}" alt="${iconAlt}" class="listing-amenity-icon">${text}</span>`;
         }
 
-        function createListingCard(listing) {
+        function createListingCard(listing, priority) {
           const propertyId = listing.id;
           const images = (listing.images && listing.images.length > 0) ? listing.images : [''];
           const avatarUrl = listing.host && listing.host.avatar ? listing.host.avatar : '';
@@ -724,7 +724,7 @@
           wrapper.innerHTML = `
             <div class="listing-card">
               <div class="listing-card-image" style="cursor:pointer">
-                <img src="${images[0]}" alt="${listing.title}" class="listing-card-photo">
+                <img src="${images[0]}" alt="${listing.title}" class="listing-card-photo" decoding="async"${priority ? ' fetchpriority="high"' : ''}>
                 <div class="listing-card-avatar-row">
                   ${avatarHtml}
                   <span class="listing-card-avatar-label">Member's home</span>
@@ -919,15 +919,35 @@
               return;
             }
 
+            // Check localStorage cache (4-hour TTL)
+            const CACHE_KEY = 'ss_listings_cache';
+            const CACHE_TTL = 4 * 60 * 60 * 1000; // 4 hours in ms
+            try {
+              const cached = localStorage.getItem(CACHE_KEY);
+              if (cached) {
+                const { timestamp, listings } = JSON.parse(cached);
+                if (Date.now() - timestamp < CACHE_TTL) {
+                  renderListings({ listings });
+                  return;
+                }
+              }
+            } catch (_) { /* ignore parse/storage errors */ }
+
             const response = await fetch(API_ENDPOINT);
-            
+
             if (!response.ok) {
               throw new Error(`HTTP error! status: ${response.status}`);
             }
-            
+
             const apiData = await response.json();
             // Transform API response to match expected format
             const transformedData = transformApiResponse(apiData);
+
+            // Save to localStorage cache
+            try {
+              localStorage.setItem(CACHE_KEY, JSON.stringify({ timestamp: Date.now(), listings: transformedData }));
+            } catch (_) { /* ignore quota/storage errors */ }
+
             renderListings({ listings: transformedData });
           } catch (error) {
             console.error('Error fetching listings:', error);
@@ -945,7 +965,7 @@
           const pageListings = allListings.slice(start, start + PAGE_SIZE);
 
           listingCardsEl.innerHTML = '';
-          pageListings.forEach(listing => listingCardsEl.appendChild(createListingCard(listing)));
+          pageListings.forEach((listing, i) => listingCardsEl.appendChild(createListingCard(listing, i < 4)));
 
           // Pagination controls
           const totalPages = Math.ceil(allListings.length / PAGE_SIZE);
