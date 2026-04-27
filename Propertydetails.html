@@ -346,16 +346,24 @@
         }).join(' ');
       }
 
+      // Ensure image URLs have a proper protocol prefix
+      function normalizeImageUrl(url) {
+        if (!url) return url;
+        if (/^(https?:\/\/|\/|data:)/.test(url)) return url;
+        if (/^[a-zA-Z0-9][a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\//.test(url)) return 'https://' + url;
+        return url;
+      }
+
       // Transform API response to match expected format
       function transformPropertyData(apiData) {
         return {
           id: apiData.propertyId?.toString() || '',
           title: apiData.propertyTitle || 'Untitled Property',
           location: buildLocationString(apiData.address),
-          images: apiData.images?.map(img => typeof img === 'string' ? img : img.imageUrl) || [],
+          images: apiData.images?.map(img => normalizeImageUrl(typeof img === 'string' ? img : img.imageUrl)) || [],
           host: {
             name: apiData.hostName || 'Host',
-            avatar: apiData.profilePhotoUrl || '',
+            avatar: normalizeImageUrl(apiData.profilePhotoUrl || ''),
             memberSince: apiData.memberSince || 'January 2025'
           },
           amenities: {
