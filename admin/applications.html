@@ -69,6 +69,16 @@
         </div>
       </div>
 
+      <!-- Bulk actions -->
+      <div style="display:flex; gap:8px; margin-bottom:14px;">
+        <button id="checkPasswordBtn" onclick="checkPasswordStatus()" class="btn btn-secondary" style="font-size:13px;">
+          Check Password Status
+        </button>
+        <button id="resendWelcomeBtn" onclick="resendWelcomeEmail()" class="btn btn-secondary" style="font-size:13px;">
+          Resend Welcome Email
+        </button>
+      </div>
+
       <!-- Table -->
       <div class="table-container">
         <table>
@@ -380,6 +390,118 @@
           <td>${formatDate(l.created_at)}</td>
         </tr>
       `).join('');
+    }
+
+    async function checkPasswordStatus() {
+      const approvedEmails = allApplications
+        .filter(a => a.application_status === 'Approved')
+        .map(a => a.email)
+        .filter(Boolean);
+
+      if (approvedEmails.length === 0) {
+        await showAlert({ title: 'No Approved Applications', message: 'There are no applications with "Approved" status to check.', variant: 'info' });
+        return;
+      }
+
+      const btn = document.getElementById('checkPasswordBtn');
+      btn.disabled = true;
+      btn.textContent = 'Checking…';
+
+      try {
+        const response = await adminFetch('/api/admin?action=check-password-status', {
+          method: 'POST',
+          body: JSON.stringify({ emails: approvedEmails }),
+        });
+        if (!response) return;
+
+        const data = await response.json();
+        if (!response.ok || !data.results) {
+          await showAlert({ title: 'Error', message: data.error || 'Unexpected response from server.', variant: 'danger' });
+          return;
+        }
+
+        const { results, completedCount } = data;
+
+        // Update local state for newly completed accounts
+        if (completedCount > 0) {
+          const completedSet = new Set(results.filter(r => r.passwordChanged).map(r => r.email));
+          allApplications = allApplications.map(a =>
+            completedSet.has(a.email) ? { ...a, application_status: 'Completed' } : a
+          );
+          updateStats();
+          renderTable();
+        }
+
+        // Build toast summary
+        const completed = results.filter(r => r.passwordChanged);
+        const notSetup  = results.filter(r => r.found && !r.passwordChanged);
+        const notFound  = results.filter(r => !r.found);
+
+        const lines = [];
+        if (completed.length) lines.push(`✓ Marked Completed (${completed.length}): ${completed.map(r => r.email).join(', ')}`);
+        if (notSetup.length)  lines.push(`⏳ Not yet set up (${notSetup.length}): ${notSetup.map(r => r.email).join(', ')}`);
+        if (notFound.length)  lines.push(`✗ Not found (${notFound.length}): ${notFound.map(r => r.email).join(', ')}`);
+
+        showToast({
+          title: `Checked ${approvedEmails.length} approved account${approvedEmails.length !== 1 ? 's' : ''} — ${completedCount} marked Completed`,
+          lines,
+          variant: completedCount > 0 ? 'info' : 'warning',
+          duration: 8000,
+        });
+      } catch (err) {
+        await showAlert({ title: 'Error', message: err.message, variant: 'danger' });
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Check Password Status';
+      }
+    }
+
+    async function resendWelcomeEmail() {
+      const approvedEmails = allApplications
+        .filter(a => a.application_status === 'Approved')
+        .map(a => a.email)
+        .filter(Boolean);
+
+      if (approvedEmails.length === 0) {
+        await showAlert({ title: 'No Approved Applications', message: 'There are no applications with "Approved" status to resend emails to.', variant: 'info' });
+        return;
+      }
+
+      const btn = document.getElementById('resendWelcomeBtn');
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+
+      try {
+        const response = await adminFetch('/api/admin?action=resend-welcome-email', {
+          method: 'POST',
+          body: JSON.stringify({ emails: approvedEmails }),
+        });
+        if (!response) return;
+
+        const data = await response.json();
+        if (!response.ok) {
+          await showAlert({ title: 'Error', message: data.error || 'Request failed.', variant: 'danger' });
+          return;
+        }
+
+        const { sent = [], skipped = [], notFound = [] } = data;
+        const lines = [];
+        if (sent.length)     lines.push(`✓ Sent (${sent.length}): ${sent.join(', ')}`);
+        if (skipped.length)  lines.push(`⏭ Skipped — already set up (${skipped.length}): ${skipped.join(', ')}`);
+        if (notFound.length) lines.push(`✗ Not found (${notFound.length}): ${notFound.join(', ')}`);
+
+        showToast({
+          title: `Welcome email: ${sent.length} sent, ${skipped.length} skipped, ${notFound.length} not found`,
+          lines,
+          variant: sent.length > 0 ? 'info' : 'warning',
+          duration: 8000,
+        });
+      } catch (err) {
+        await showAlert({ title: 'Error', message: err.message, variant: 'danger' });
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Resend Welcome Email';
+      }
     }
 
     async function deleteApplication(appId, e) {

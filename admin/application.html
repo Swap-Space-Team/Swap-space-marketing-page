@@ -129,7 +129,12 @@
           </button>
         `;
       } else if (app.application_status === 'Approved') {
-        actionsHtml = `<span style="color: #065F46; font-weight: 500;">✓ This application has been approved.</span>`;
+        actionsHtml = `
+          <span style="color: #065F46; font-weight: 500;">✓ This application has been approved.</span>
+          <button class="btn btn-secondary" id="resendApprovalBtn" onclick="resendApprovalEmail('${app.id}')" style="margin-left: 12px;">
+            Resend Approval Email
+          </button>
+        `;
       } else if (app.application_status === 'Rejected') {
         actionsHtml = `<span style="color: #991B1B; font-weight: 500;">✕ This application has been rejected.</span>`;
       }
@@ -390,6 +395,35 @@
         await showAlert({ title: 'Error', message: err.message, variant: 'danger' });
         btn.disabled = false;
         btn.textContent = 'Approve Application';
+      }
+    }
+
+    async function resendApprovalEmail(id) {
+      const btn = document.getElementById('resendApprovalBtn');
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+
+      try {
+        const response = await adminFetch('/api/admin?action=resend-approval-email', {
+          method: 'POST',
+          body: JSON.stringify({ applicationId: id }),
+        });
+        if (!response) return;
+
+        const result = await response.json();
+
+        if (result.status === 'sent') {
+          await showAlert({ title: 'Email Sent', message: 'Approval email resent successfully.', variant: 'info' });
+        } else if (result.status === 'skipped') {
+          await showAlert({ title: 'Not Sent', message: result.message, variant: 'warning' });
+        } else {
+          await showAlert({ title: 'Error', message: result.message || result.error || 'Failed to resend email.', variant: 'danger' });
+        }
+      } catch (err) {
+        await showAlert({ title: 'Error', message: err.message, variant: 'danger' });
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Resend Approval Email';
       }
     }
 
