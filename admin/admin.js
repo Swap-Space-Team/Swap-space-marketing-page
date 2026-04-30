@@ -239,6 +239,66 @@ async function adminFetch(url, options = {}) {
   return response;
 }
 
+// ── Toast system ──────────────────────────────────────────────────────────────
+
+(function injectToastStyles() {
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes toastIn  { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes toastOut { from { opacity: 1; transform: translateY(0); }    to { opacity: 0; transform: translateY(-8px); } }
+    #adminToastContainer { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+    .admin-toast { pointer-events: all; animation: toastIn 0.22s ease; border-radius: 10px; padding: 14px 16px; min-width: 280px; max-width: 400px; box-shadow: 0 4px 18px rgba(0,0,0,0.12); }
+    .admin-toast--info    { background: #f0fdf4; border: 1px solid #bbf7d0; }
+    .admin-toast--warning { background: #fffbeb; border: 1px solid #fde68a; }
+    .admin-toast--danger  { background: #fef2f2; border: 1px solid #fecaca; }
+    .admin-toast-header   { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+    .admin-toast-title    { margin: 0; font-size: 13px; font-weight: 600; }
+    .admin-toast--info    .admin-toast-title { color: #065F46; }
+    .admin-toast--warning .admin-toast-title { color: #92400e; }
+    .admin-toast--danger  .admin-toast-title { color: #991b1b; }
+    .admin-toast-line     { margin: 4px 0 0; font-size: 12px; color: #374151; line-height: 1.5; }
+    .admin-toast-close    { background: none; border: none; cursor: pointer; color: #9ca3af; font-size: 17px; line-height: 1; padding: 0; flex-shrink: 0; margin-top: -1px; }
+    .admin-toast-close:hover { color: #6b7280; }
+  `;
+  document.head.appendChild(style);
+
+  const container = document.createElement('div');
+  container.id = 'adminToastContainer';
+  document.body.appendChild(container);
+})();
+
+function showToast({ title, lines = [], variant = 'info', duration = 7000 }) {
+  const container = document.getElementById('adminToastContainer');
+  if (!container) return;
+
+  const toast = document.createElement('div');
+  toast.className = `admin-toast admin-toast--${variant}`;
+  toast.innerHTML = `
+    <div class="admin-toast-header">
+      <div>
+        <p class="admin-toast-title">${title}</p>
+        ${lines.map(l => `<p class="admin-toast-line">${l}</p>`).join('')}
+      </div>
+      <button class="admin-toast-close" aria-label="Dismiss">&times;</button>
+    </div>
+  `;
+
+  toast.querySelector('.admin-toast-close').addEventListener('click', () => dismissToast(toast));
+  container.appendChild(toast);
+
+  const timer = setTimeout(() => dismissToast(toast), duration);
+  toast._dismissTimer = timer;
+}
+
+function dismissToast(toast) {
+  clearTimeout(toast._dismissTimer);
+  toast.style.animation = 'toastOut 0.22s ease forwards';
+  setTimeout(() => toast.remove(), 220);
+}
+
+// ── End Toast system ──────────────────────────────────────────────────────────
+
+
 function formatDate(dateStr) {
   if (!dateStr) return '—';
   return new Date(dateStr).toLocaleDateString('en-GB', {
@@ -255,6 +315,7 @@ function statusBadge(status) {
     'Photos Received': 'background: #DBEAFE; color: #1E40AF;',
     'Approved': 'background: #D1FAE5; color: #065F46;',
     'Rejected': 'background: #FEE2E2; color: #991B1B;',
+    'Completed': 'background: #E0E7FF; color: #3730A3;',
   };
   const style = colors[status] || 'background: #F3F4F6; color: #374151;';
   return `<span style="display: inline-block; padding: 4px 12px; border-radius: 9999px; font-size: 12px; font-weight: 500; ${style}">${status || 'Unknown'}</span>`;

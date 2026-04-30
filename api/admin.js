@@ -196,7 +196,131 @@ async function calculatorLeads(req, res) {
 }
 
 // ── Router ────────────────────────────────────────────────────────────────────
-const POST_ACTIONS = { approve, reject, 'resend-photos': resendPhotos, 'delete-application': deleteApplication, 'delete-photo': deletePhoto };
+async function checkPasswordStatus(req, res) {
+  const { emails } = req.body;
+  if (!Array.isArray(emails) || emails.length === 0) {
+    return res.status(400).json({ error: 'Missing or empty emails array' });
+  }
+
+  const BACKEND_URL = process.env.BACKEND_URL;
+  const AUTO_REGISTER_API_KEY = process.env.AUTO_REGISTER_API_KEY;
+  if (!BACKEND_URL || !AUTO_REGISTER_API_KEY) {
+    return res.status(500).json({ error: 'Backend not configured' });
+  }
+
+  let results;
+  try {
+    const backendRes = await fetch(`${BACKEND_URL}/api/internal/password-status`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Internal-API-Key': AUTO_REGISTER_API_KEY },
+      body: JSON.stringify(emails),
+    });
+    if (!backendRes.ok) {
+      const err = await backendRes.json().catch(() => ({}));
+      console.error('password-status backend error:', err);
+      return res.status(502).json({ error: 'Backend request failed' });
+    }
+    results = await backendRes.json();
+  } catch (err) {
+    console.error('password-status fetch error:', err);
+    return res.status(502).json({ error: 'Could not reach backend' });
+  }
+
+  // Update status to "Completed" for users who have set their password
+  const completedEmails = results.filter(r => r.passwordChanged === true).map(r => r.email);
+  if (completedEmails.length > 0) {
+    const supabase = getSupabase();
+    const { error: updateError } = await supabase
+      .from('applications')
+      .update({ application_status: 'Completed' })
+      .in('email', completedEmails)
+      .eq('application_status', 'Approved');
+    if (updateError) {
+      console.error('Failed to update completed statuses:', updateError);
+      // Non-fatal — still return results to the frontend
+    }
+  }
+
+  return res.status(200).json({ results, completedCount: completedEmails.length });
+}
+
+async function resendWelcomeEmail(req, res) {
+  const { emails } = req.body;
+  if (!Array.isArray(emails) || emails.length === 0) {
+    return res.status(400).json({ error: 'Missing or empty emails array' });
+  }
+
+  const BACKEND_URL = process.env.BACKEND_URL;
+  const AUTO_REGISTER_API_KEY = process.env.AUTO_REGISTER_API_KEY;
+  if (!BACKEND_URL || !AUTO_REGISTER_API_KEY) {
+    return res.status(500).json({ error: 'Backend not configured' });
+  }
+
+  try {
+    const backendRes = await fetch(`${BACKEND_URL}/api/internal/resend-welcome-email`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Internal-API-Key': AUTO_REGISTER_API_KEY },
+      body: JSON.stringify(emails),
+    });
+    if (!backendRes.ok) {
+      const err = await backendRes.json().catch(() => ({}));
+      console.error('resend-welcome-email backend error:', err);
+      return res.status(502).json({ error: 'Backend request failed' });
+    }
+    const summary = await backendRes.json();
+    return res.status(200).json(summary);
+  } catch (err) {
+    console.error('resend-welcome-email fetch error:', err);
+    return res.status(502).json({ error: 'Could not reach backend' });
+  }
+}
+
+async function resendApprovalEmail(req, res) {
+  const { applicationId } = req.body;
+  if (!applicationId) return res.status(400).json({ error: 'Missing applicationId' });
+
+  const supabase = getSupabase();
+  const { data: application, error: fetchError } = await supabase
+    .from('applications').select('email, application_status').eq('id', applicationId).single();
+  if (fetchError || !application) return res.status(404).json({ error: 'Application not found' });
+  if (application.application_status !== 'Approved') {
+    return res.status(400).json({ error: 'Can only resend approval email for Approved applications' });
+  }
+  if (!application.email) return res.status(400).json({ error: 'Application has no email address' });
+
+  const BACKEND_URL = process.env.BACKEND_URL;
+  const AUTO_REGISTER_API_KEY = process.env.AUTO_REGISTER_API_KEY;
+  if (!BACKEND_URL || !AUTO_REGISTER_API_KEY) {
+    return res.status(500).json({ error: 'Backend not configured' });
+  }
+
+  try {
+    const backendRes = await fetch(`${BACKEND_URL}/api/internal/resend-welcome-email`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Internal-API-Key': AUTO_REGISTER_API_KEY },
+      body: JSON.stringify([application.email]),
+    });
+    if (!backendRes.ok) {
+      const err = await backendRes.json().catch(() => ({}));
+      console.error('resend-approval-email backend error:', err);
+      return res.status(502).json({ error: 'Backend request failed' });
+    }
+    const summary = await backendRes.json();
+    // summary: { sent, skipped, notFound }
+    if (summary.skipped?.includes(application.email)) {
+      return res.status(200).json({ success: true, status: 'skipped', message: 'User has already set up their account — no email was sent.' });
+    }
+    if (summary.notFound?.includes(application.email)) {
+      return res.status(200).json({ success: false, status: 'notFound', message: 'No platform account found for this email address.' });
+    }
+    return res.status(200).json({ success: true, status: 'sent', message: 'Approval email resent successfully.' });
+  } catch (err) {
+    console.error('resend-approval-email fetch error:', err);
+    return res.status(502).json({ error: 'Could not reach backend' });
+  }
+}
+
+const POST_ACTIONS = { approve, reject, 'resend-photos': resendPhotos, 'delete-application': deleteApplication, 'delete-photo': deletePhoto, 'check-password-status': checkPasswordStatus, 'resend-welcome-email': resendWelcomeEmail, 'resend-approval-email': resendApprovalEmail };
 const GET_ACTIONS  = { 'calculator-leads': calculatorLeads };
 
 export default async function handler(req, res) {
