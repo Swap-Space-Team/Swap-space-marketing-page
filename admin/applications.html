@@ -70,12 +70,16 @@
       </div>
 
       <!-- Bulk actions -->
-      <div style="display:flex; gap:8px; margin-bottom:14px;">
+      <div style="display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap; align-items:center;">
         <button id="checkPasswordBtn" onclick="checkPasswordStatus()" class="btn btn-secondary" style="font-size:13px;">
           Check Password Status
         </button>
         <button id="resendWelcomeBtn" onclick="resendWelcomeEmail()" class="btn btn-secondary" style="font-size:13px;">
           Resend Welcome Email
+        </button>
+        <button onclick="downloadApplicationsCSV()" class="btn btn-secondary" style="font-size:13px; margin-left:auto; display:inline-flex; align-items:center; gap:6px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download CSV
         </button>
       </div>
 
@@ -135,8 +139,12 @@
         </div>
       </div>
 
-      <!-- Search -->
-      <div class="filters" style="justify-content:flex-end;">
+      <!-- Search + Download -->
+      <div class="filters" style="justify-content:flex-end; gap:8px;">
+        <button onclick="downloadLeadsCSV()" class="btn btn-secondary" style="font-size:13px; display:inline-flex; align-items:center; gap:6px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download CSV
+        </button>
         <div class="search-box">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
@@ -391,6 +399,58 @@
         </tr>
       `).join('');
     }
+
+    // ── CSV downloads ────────────────────────────────────────────────────────
+    function downloadApplicationsCSV() {
+      if (!allApplications.length) {
+        showAlert({ title: 'No Data', message: 'No applications to export yet.', variant: 'info' });
+        return;
+      }
+      const headers = ['#', 'Name', 'Email', 'Phone', 'Country', 'City', 'Desired Destinations', 'Preferred Travel Dates', 'Status', 'Listing Ready', 'Submission Date'];
+      const rows = [
+        headers,
+        ...allApplications.map((app, i) => [
+          i + 1,
+          app.name || '',
+          app.email || '',
+          app.phone || '',
+          app.country || '',
+          app.city || '',
+          app.top_cities || '',
+          app.travel_dates || '',
+          app.application_status || '',
+          app.listing_ready === 'ready' ? 'Yes' : app.listing_ready === 'not-ready' ? 'Not yet' : '',
+          formatDate(app.submission_date || app.created_at),
+        ]),
+      ];
+      const today = new Date().toISOString().slice(0, 10);
+      downloadCSV(rows, `swapspace-applications-${today}.csv`);
+    }
+
+    function downloadLeadsCSV() {
+      if (!allLeads || !allLeads.length) {
+        showAlert({ title: 'No Data', message: 'No calculator leads to export yet.', variant: 'info' });
+        return;
+      }
+      const styleLabel = { budget: 'Budget', 'mid-range': 'Mid-range', comfortable: 'Comfortable' };
+      const headers = ['#', 'Email', 'City', 'Style', 'Nights', 'Travellers', 'Currency', 'Date'];
+      const rows = [
+        headers,
+        ...allLeads.map((l, i) => [
+          i + 1,
+          l.email || '',
+          l.city || '',
+          styleLabel[l.style] || l.style || '',
+          l.nights || '',
+          l.travellers || '',
+          l.currency || '',
+          formatDate(l.created_at),
+        ]),
+      ];
+      const today = new Date().toISOString().slice(0, 10);
+      downloadCSV(rows, `swapspace-calculator-leads-${today}.csv`);
+    }
+    // ── End CSV downloads ────────────────────────────────────────────────────
 
     async function checkPasswordStatus() {
       const approvedEmails = allApplications

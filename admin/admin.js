@@ -308,6 +308,32 @@ function formatDate(dateStr) {
   });
 }
 
+// ── CSV export utility ────────────────────────────────────────────────────────
+
+function downloadCSV(rows, filename) {
+  const escape = val => {
+    if (val == null) return '';
+    const str = String(val);
+    // Wrap in quotes if value contains comma, double-quote, or newline
+    if (str.includes(',') || str.includes('"') || str.includes('\n')) {
+      return '"' + str.replace(/"/g, '""') + '"';
+    }
+    return str;
+  };
+  const csv = '﻿' + rows.map(row => row.map(escape).join(',')).join('\r\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.style.display = 'none';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1000);
+}
+
+// ── End CSV export utility ────────────────────────────────────────────────────
+
 function statusBadge(status) {
   const colors = {
     'Application Received': 'background: #EDE9FE; color: #5B21B6;',
