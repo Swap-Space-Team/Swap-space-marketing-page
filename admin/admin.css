@@ -39,6 +39,30 @@ body {
   text-decoration: none;
 }
 
+.admin-header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.admin-nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #043F29;
+  background: #DCFCE7;
+  border: 1px solid #BBF7D0;
+  border-radius: 8px;
+  padding: 7px 12px;
+  text-decoration: none;
+}
+
+.admin-nav-link:hover {
+  background: #BBF7D0;
+}
+
 .btn {
   display: inline-flex;
   align-items: center;
