@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Reddit Engagement System · SwapSpace</title>
+    <link rel="stylesheet" href="styles.css" />
+    <!-- supabase-js UMD must load before the ES modules (they read window.supabase) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  </head>
+  <body>
+    <!-- First-visit "Who are you?" picker -->
+    <div id="userPicker" class="modal-overlay hidden" aria-hidden="true">
+      <div class="modal-card">
+        <h2>Who are you?</h2>
+        <p class="muted">
+          This is honor-system tracking for coordination — pick yourself. You can
+          switch any time from the header.
+        </p>
+        <div class="picker-btns">
+          <button class="picker-btn" data-user="Ola">👤 Ola</button>
+          <button class="picker-btn" data-user="Ezekiel">👤 Ezekiel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Generic confirm modal (used by clear matches, delete activity, mode switch) -->
+    <div id="confirmModal" class="modal-overlay hidden" aria-hidden="true">
+      <div class="modal-card">
+        <h3 id="confirmTitle">Are you sure?</h3>
+        <p id="confirmMessage" class="muted"></p>
+        <div class="modal-btns">
+          <button id="confirmCancel" class="btn btn-ghost">Cancel</button>
+          <button id="confirmOk" class="btn btn-danger">Confirm</button>
+        </div>
+      </div>
+    </div>
+
+    <header id="appHeader"><!-- rendered by ui-header.js --></header>
+
+    <main id="content">
+      <section id="tab-schedule" class="tab-panel"></section>
+      <section id="tab-subreddits" class="tab-panel hidden"></section>
+      <section id="tab-backfill" class="tab-panel hidden"></section>
+      <section id="tab-activity" class="tab-panel hidden"></section>
+    </main>
+
+    <div id="bootError" class="boot-error hidden"></div>
+
+    <script type="module" src="js/main.js"></script>
+  </body>
+</html>
