@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Email Tracking | SwapSpace Admin</title>
+  <link rel="stylesheet" href="/admin/admin.css">
+  <link rel="stylesheet" href="styles.css">
+  <!-- supabase-js UMD must load before admin.js (it reads window.supabase) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <div class="admin-container">
+    <!-- Header (mirrors applications.html) -->
+    <div class="admin-header">
+      <div>
+        <a href="/admin/applications"><img src="/assets/Swapspace wordmark.svg" height="28" alt="SwapSpace"></a>
+      </div>
+      <div class="admin-header-right">
+        <div class="profile-menu-wrap">
+          <button class="profile-icon-btn" onclick="toggleProfileMenu(event)" aria-label="Account menu">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </button>
+          <div class="profile-dropdown" id="profileDropdown">
+            <span class="profile-dropdown-email" id="userEmail"></span>
+            <div class="profile-dropdown-divider"></div>
+            <button class="profile-dropdown-item" onclick="showChangePassword(); closeProfileMenu()">Change password</button>
+            <button class="profile-dropdown-item profile-dropdown-item--danger" onclick="signOut()">Sign out</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="et-intro">
+      <h1>Email Tracking</h1>
+      <p>
+        Delivery and engagement for transactional emails sent by the SwapSpace platform.
+        Click any row to see its full lifecycle (sent → delivered → opened → clicked).
+      </p>
+    </div>
+
+    <!-- How to read this (data caveats) -->
+    <div class="et-caveats" id="caveats">
+      <button class="et-caveats-toggle" id="caveatsToggle" aria-expanded="true">
+        <span class="et-caveats-icon">ℹ️</span>
+        How to read these numbers
+        <span class="et-caveats-chev">▾</span>
+      </button>
+      <ul class="et-caveats-body" id="caveatsBody">
+        <li><strong>Clicks are the trustworthy signal.</strong> A click is a real human action — prefer it for engagement.</li>
+        <li><strong>Delivered</strong> reliably means the email reached the mailbox.</li>
+        <li><strong>Opens are an estimate, not a fact.</strong> Gmail and Apple Mail pre-fetch and cache the tracking pixel, so opens and open counts often reflect machine prefetches rather than a person reading. Don't build critical logic on them.</li>
+        <li>A recipient with no name isn't a registered SwapSpace user (e.g. internal or test sends). Untagged emails are grouped as <em>Uncategorized</em>.</li>
+      </ul>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="et-toolbar">
+      <div class="et-filter">
+        <label for="typeFilter">Email type</label>
+        <select id="typeFilter" disabled>
+          <option value="">All types</option>
+        </select>
+      </div>
+      <span class="et-count" id="countLabel">Loading…</span>
+    </div>
+
+    <!-- Table -->
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Recipient</th>
+            <th>Type</th>
+            <th>Subject</th>
+            <th>Sent</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="rowsBody">
+          <tr><td colspan="5" class="loading">Loading…</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="et-pager" id="pager" style="display:none;">
+      <button class="btn btn-secondary btn-sm" id="prevBtn" onclick="changePage(-1)">← Previous</button>
+      <span class="et-page-label" id="pageLabel">Page 1</span>
+      <button class="btn btn-secondary btn-sm" id="nextBtn" onclick="changePage(1)">Next →</button>
+    </div>
+  </div>
+
+  <!-- Timeline drawer -->
+  <div class="et-drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+  <aside class="et-drawer" id="drawer" aria-hidden="true">
+    <div class="et-drawer-head">
+      <div>
+        <h2 id="drawerTitle">Email timeline</h2>
+        <div class="et-drawer-meta" id="drawerMeta"></div>
+      </div>
+      <button class="et-drawer-close" onclick="closeDrawer()" aria-label="Close">&times;</button>
+    </div>
+    <div class="et-drawer-body" id="drawerBody"></div>
+  </aside>
+
+  <script src="/admin/admin.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

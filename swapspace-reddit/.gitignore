@@ -1,7 +1,0 @@
-node_modules/
-.env
-.env.local
-*.log
-
-# backfill output CSVs — import via the dashboard, don't commit
-backfill-*.csv
