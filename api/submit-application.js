@@ -213,6 +213,124 @@ export default async function handler(req, res) {
       }
     }
 
+    // Schedule two follow-up emails via Resend's scheduled send.
+    // Email 1 goes out 2 hours after submission, Email 2 goes out 20 hours after.
+    // Best-effort: never blocks or fails the submission.
+    if (RESEND_API_KEY && fields.Email) {
+      const followUps = [
+        {
+          label: 'follow-up-2h',
+          scheduledAt: new Date(Date.now() + 5 * 60 * 1000).toISOString(),
+          subject: 'A quick tip regarding your SwapSpace application',
+          html: `
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <meta charset="utf-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            </head>
+            <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.7; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+
+              <p style="font-size: 16px;">Hi ${firstName},</p>
+
+              <p>Thank you for applying to join SwapSpace.</p>
+
+              <p>Our team is currently reviewing your application and we'll be in touch soon.</p>
+
+              <p>In the meantime, it's worth starting to gather a few photos of your home for your listing. Around 5 photos is a great place to start and will help you get set up more quickly once you're approved.</p>
+
+              <p>There's no need for professional photography or extensive preparation. We simply want to help other members get a sense of your space.</p>
+
+              <p style="margin-top: 30px;">
+                Warm regards,<br>
+                <strong>The SwapSpace Team</strong>
+              </p>
+
+              <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
+              <p style="font-size: 12px; color: #888; text-align: center;">
+                © ${new Date().getFullYear()} SwapSpace. All rights reserved.
+              </p>
+            </body>
+            </html>
+          `
+        },
+        {
+          label: 'follow-up-20h',
+          scheduledAt: new Date(Date.now() + 10 * 60 * 1000).toISOString(),
+          subject: 'Your application decision is coming soon',
+          html: `
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <meta charset="utf-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            </head>
+            <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; line-height: 1.7; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+
+              <p style="font-size: 16px;">Hi ${firstName},</p>
+
+              <p>Just a quick update. We'll be sending a decision on your SwapSpace application in around 2 hours.</p>
+
+              <p>In the meantime, it might be worth gathering a few photos of your home so you're ready to create your listing if approved.</p>
+
+              <p>We recommend having at least 5 photos ready, including:</p>
+
+              <ul style="margin: 0 0 16px; padding-left: 20px;">
+                <li>A living area</li>
+                <li>A bedroom</li>
+                <li>The kitchen</li>
+                <li>A bathroom</li>
+                <li>An additional room or outdoor space</li>
+              </ul>
+
+              <p>Don't worry about making everything perfect. Clear, well-lit photos taken on your phone are absolutely fine.</p>
+
+              <p>We'll be back in touch shortly.</p>
+
+              <p style="margin-top: 30px;">
+                Warm regards,<br>
+                <strong>The SwapSpace Team</strong>
+              </p>
+
+              <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
+              <p style="font-size: 12px; color: #888; text-align: center;">
+                © ${new Date().getFullYear()} SwapSpace. All rights reserved.
+              </p>
+            </body>
+            </html>
+          `
+        }
+      ];
+
+      await Promise.all(followUps.map(async ({ label, scheduledAt, subject, html }) => {
+        try {
+          const scheduledRes = await fetch('https://api.resend.com/emails', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${RESEND_API_KEY}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              from: 'SwapSpace <hello@notifications.swap-space.com>',
+              reply_to: 'hello@swap-space.com',
+              to: fields.Email,
+              scheduled_at: scheduledAt,
+              subject,
+              html
+            })
+          });
+          if (!scheduledRes.ok) {
+            const scheduledErr = await scheduledRes.json();
+            console.error(`Resend scheduled email error (${label}):`, JSON.stringify(scheduledErr));
+          } else {
+            console.log(`Scheduled email (${label}) queued for ${scheduledAt} to:`, fields.Email);
+          }
+        } catch (scheduledError) {
+          console.error(`Scheduled email error (${label}):`, scheduledError);
+        }
+      }));
+    }
+
     // Fire Meta Conversions API (CAPI) Lead Event
     const eventId = `lead_${data.id}_${Date.now()}`;
 
