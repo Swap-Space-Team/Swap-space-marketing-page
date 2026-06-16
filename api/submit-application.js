@@ -220,7 +220,7 @@ export default async function handler(req, res) {
       const followUps = [
         {
           label: 'follow-up-2h',
-          scheduledAt: new Date(Date.now() + 5 * 60 * 1000).toISOString(),
+          scheduledAt: new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString(),
           subject: 'A quick tip regarding your SwapSpace application',
           html: `
             <!DOCTYPE html>
@@ -256,7 +256,7 @@ export default async function handler(req, res) {
         },
         {
           label: 'follow-up-20h',
-          scheduledAt: new Date(Date.now() + 10 * 60 * 1000).toISOString(),
+          scheduledAt: new Date(Date.now() + 20 * 60 * 60 * 1000).toISOString(),
           subject: 'Your application decision is coming soon',
           html: `
             <!DOCTYPE html>
