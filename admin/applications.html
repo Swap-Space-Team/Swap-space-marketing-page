@@ -97,7 +97,7 @@
               <th>Country</th>
               <th>City</th>
               <th>Status</th>
-              <th>Photos</th>
+              <th>Waiting</th>
               <th>Ready to List</th>
               <th>
                 <button id="sortDateBtn" onclick="toggleSort()" style="background:none;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:5px;font:inherit;font-size:11px;font-weight:600;color:#6B7280;text-transform:uppercase;letter-spacing:0.05em;padding:0;">
@@ -183,7 +183,6 @@
   <script src="/admin/admin.js"></script>
   <script>
     let allApplications = [];
-    let photoMap = {}; // applicationId -> { firstUrl, count }
     let currentFilter = 'all';
     let sortAsc = false; // newest first by default
 
@@ -208,10 +207,10 @@
     async function loadApplications() {
       const sb = await getSupabase();
 
-      const [{ data, error }, { data: photos }] = await Promise.all([
-        sb.from('applications').select('*').order('created_at', { ascending: false }),
-        sb.from('application_photos').select('application_id, storage_path').order('uploaded_at', { ascending: true }),
-      ]);
+      const { data, error } = await sb
+        .from('applications')
+        .select('*')
+        .order('created_at', { ascending: false });
 
       if (error) {
         console.error('Error loading applications:', error);
@@ -221,39 +220,6 @@
       }
 
       allApplications = data || [];
-
-      // Build a map: appId -> [storagePaths]
-      const grouped = {};
-      for (const p of (photos || [])) {
-        if (!grouped[p.application_id]) grouped[p.application_id] = [];
-        grouped[p.application_id].push(p.storage_path);
-      }
-
-      // Collect the first 2 preview paths per application
-      photoMap = {};
-      const appIdsWithPhotos = Object.keys(grouped);
-      const previewMeta = []; // { appId, path }
-      for (const appId of appIdsWithPhotos) {
-        grouped[appId].slice(0, 2).forEach(path => previewMeta.push({ appId, path }));
-      }
-
-      // Fetch all preview signed URLs in one batch call
-      if (previewMeta.length > 0) {
-        const { data: signedData } = await sb.storage
-          .from('application-photos')
-          .createSignedUrls(previewMeta.map(m => m.path), 3600);
-
-        (signedData || []).forEach((item, i) => {
-          const { appId } = previewMeta[i];
-          if (!photoMap[appId]) photoMap[appId] = { urls: [], count: grouped[appId].length };
-          if (item.signedUrl) photoMap[appId].urls.push(item.signedUrl);
-        });
-
-        // Ensure all apps with photos have an entry even if signing failed
-        for (const appId of appIdsWithPhotos) {
-          if (!photoMap[appId]) photoMap[appId] = { urls: [], count: grouped[appId].length };
-        }
-      }
 
       updateStats();
       renderTable();
@@ -269,15 +235,28 @@
         allApplications.filter(a => a.application_status === 'Rejected').length;
     }
 
-    function renderPhotos(appId) {
-      const p = photoMap[appId];
-      if (!p || !p.urls.length) return '<span style="color:#9CA3AF; font-size:13px;">—</span>';
-      const remaining = p.count - p.urls.length;
-      return `
-        <div class="thumb-cell">
-          ${p.urls.map(url => `<img class="thumb" src="${url}" alt="Photo">`).join('')}
-          ${remaining > 0 ? `<span class="thumb-count">+${remaining}</span>` : ''}
-        </div>`;
+    // SLA: at 20h the applicant is told a decision is coming in ~2h, so it's due by ~22h.
+    const SLA_DUE_SOON_HOURS = 20;
+    const SLA_OVERDUE_HOURS = 22;
+
+    function formatDuration(hours) {
+      if (hours < 1) return Math.max(0, Math.round(hours * 60)) + 'm';
+      if (hours < 48) return Math.round(hours) + 'h';
+      return Math.floor(hours / 24) + 'd';
+    }
+
+    // Time the applicant has been waiting since submission. Only meaningful while
+    // a decision is still pending — once decided we show a dash.
+    function renderWaiting(app) {
+      const decided = ['Approved', 'Rejected', 'Completed'].includes(app.application_status);
+      const start = new Date(app.submission_date || app.created_at);
+      if (decided || isNaN(start)) return '<span style="color:#9CA3AF; font-size:13px;">—</span>';
+
+      const hours = (Date.now() - start.getTime()) / 3600000;
+      let color = '#374151';
+      if (hours >= SLA_OVERDUE_HOURS) color = '#DC2626';        // overdue — red
+      else if (hours >= SLA_DUE_SOON_HOURS) color = '#D97706';  // due soon — amber
+      return `<span style="color:${color}; font-weight:500;">${formatDuration(hours)}</span>`;
     }
 
     function toggleSort() {
@@ -322,7 +301,7 @@
           <td>${app.country || '—'}</td>
           <td>${app.city || '—'}</td>
           <td>${statusBadge(app.application_status)}</td>
-          <td>${renderPhotos(app.id)}</td>
+          <td>${renderWaiting(app)}</td>
           <td>${app.listing_ready === 'ready' ? 'Yes' : app.listing_ready === 'not-ready' ? 'Not yet' : '—'}</td>
           <td>${formatDate(app.submission_date || app.created_at)}</td>
           <td onclick="event.stopPropagation()">
@@ -587,7 +566,6 @@
 
       if (result.success) {
         allApplications = allApplications.filter(a => a.id !== appId);
-        delete photoMap[appId];
         updateStats();
         renderTable();
       } else {
