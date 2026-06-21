@@ -1989,10 +1989,6 @@ p {
     min-height: unset;
   }
 
-  .listing-cards {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
   .masthead {
     padding: 0 24px;
     height: 72px;
@@ -2384,10 +2380,6 @@ p {
     width: 100%;
     justify-content: center;
   }
-
-  .listing-cards {
-    grid-template-columns: 1fr;
-  }
 }
 
 /* ============================================
@@ -2519,6 +2511,20 @@ p {
   gap: var(--spacing-4);
   width: 100%;
   min-height: 420px;
+}
+
+/* Responsive column counts — declared after the base rule so they win the
+   cascade. 2-up on tablet, 1-up on mobile. */
+@media screen and (max-width: 1024px) {
+  .listing-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .listing-cards {
+    grid-template-columns: 1fr;
+  }
 }
 
 .listing-card {
@@ -2763,13 +2769,7 @@ p {
   }
 
   .listing-cards {
-    grid-template-columns: 1fr;
     margin-top: 24px;
-  }
-
-  .listing-card {
-    flex: 0 0 260px;
-    min-width: 260px;
   }
 }
 
