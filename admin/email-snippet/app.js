@@ -19,7 +19,7 @@ const EMAIL_CTA_URL = 'https://app.swap-space.com/login';
 const LISTING_PAGE_BASE = 'https://www.swap-space.com/Propertydetails?id=';
 
 // Brand
-const BRAND_GREEN = '#079455';
+const BRAND_GREEN = '#06633D'; /* color-primary-700 */
 
 let allProperties = [];   // transformed list
 let selectedId = null;
@@ -338,8 +338,8 @@ ${descBlock}${detailBlock}${monthsBlock}              <tr>
                 <td style="padding:4px 0 0;">
                   <table role="presentation" cellpadding="0" cellspacing="0" border="0">
                     <tr>
-                      <td align="center" bgcolor="${BRAND_GREEN}" style="background-color:${BRAND_GREEN}; border-radius:8px;">
-                        <a href="${EMAIL_CTA_URL}" target="_blank" style="display:inline-block; padding:14px 30px; font-size:16px; font-weight:600; color:#ffffff; text-decoration:none; font-family:${FONT};">View listing &rarr;</a>
+                      <td align="center" bgcolor="${BRAND_GREEN}" style="background-color:${BRAND_GREEN}; border-radius:999px;">
+                        <a href="${EMAIL_CTA_URL}" target="_blank" style="display:inline-block; padding:14px 30px; font-size:16px; font-weight:600; color:#ffffff; text-decoration:none; font-family:${FONT}; border-radius:999px;">View listing &rarr;</a>
                       </td>
                     </tr>
                   </table>
