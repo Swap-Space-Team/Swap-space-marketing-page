@@ -1,5 +1,7 @@
 import crypto from 'crypto';
 import supabase from '../lib/supabase.js';
+import { isAutoApprovable, regionForCountry } from '../lib/regions.js';
+import { autoRegisterUser } from '../lib/auto-register.js';
 
 export default async function handler(req, res) {
   // CORS headers
@@ -37,6 +39,17 @@ export default async function handler(req, res) {
     const listingReady = fields['Listing Ready'] === 'ready';
     const firstName = (fields.Name || '').split(' ')[0] || 'there';
 
+    // ── Geographic auto-approval gate ──────────────────────────────────────────
+    // Feature-flagged kill switch. When off, behaviour is identical to the legacy
+    // manual-review flow. When on, applicants from allowed regions are approved and
+    // registered on the platform at submission time.
+    const AUTO_APPROVAL_ENABLED = process.env.AUTO_APPROVAL_ENABLED === 'true';
+    const countryCode = fields.CountryCode || null;
+    const region = regionForCountry(countryCode);
+    // Whether we intend to auto-approve. Only actually confirmed once the account
+    // is successfully created on the platform (see the auto-register step below).
+    const wantAutoApprove = AUTO_APPROVAL_ENABLED && isAutoApprovable(countryCode);
+
     // Insert into Supabase (map frontend field names to DB columns)
     const { data, error: insertError } = await supabase
       .from('applications')
@@ -47,6 +60,8 @@ export default async function handler(req, res) {
         address: fields.Address,
         city: fields.City,
         country: fields.Country,
+        country_code: countryCode,
+        region,
         home_type: fields['Home Type'],
         bedrooms: fields.Bedrooms,
         guest_capacity: fields['Guest Capacity'],
@@ -55,7 +70,8 @@ export default async function handler(req, res) {
         top_cities: fields['Top Cities'] || null,
         travel_dates: fields['Travel Dates'] || null,
         submission_date: fields['Submission Date'] || new Date().toISOString(),
-        application_status: 'Application Received',
+        application_status: wantAutoApprove ? 'Approved' : 'Application Received',
+        auto_approved: wantAutoApprove,
       })
       .select()
       .single();
@@ -65,6 +81,40 @@ export default async function handler(req, res) {
       return res.status(500).json({
         error: insertError.message || 'Failed to submit application'
       });
+    }
+
+    // ── Auto-register the approved applicant on the platform ───────────────────
+    // The backend creates the account and sends the password-setup / welcome email.
+    // `preApproved` is only true once that succeeds — a failure downgrades the
+    // applicant back into the manual pile so we never promise an account we didn't
+    // create. This decides which confirmation emails and success screen they get.
+    let preApproved = false;
+    if (wantAutoApprove) {
+      const register = await autoRegisterUser({
+        email: fields.Email,
+        name: fields.Name,
+        telephone: fields.Phone,
+      });
+
+      if (register.ok) {
+        preApproved = true;
+        console.log(`Auto-approved and registered ${fields.Email} (${region})`);
+      } else {
+        // Fallback: revert to the manual review pile.
+        const reason = register.notConfigured
+          ? 'backend not configured'
+          : register.timedOut
+            ? 'timed out'
+            : JSON.stringify(register.error || register.status);
+        console.error(`Auto-register failed for ${fields.Email} (${reason}) — downgrading to manual review`);
+        const { error: downgradeError } = await supabase
+          .from('applications')
+          .update({ application_status: 'Application Received', auto_approved: false })
+          .eq('id', data.id);
+        if (downgradeError) {
+          console.error('Failed to downgrade auto-approval:', downgradeError);
+        }
+      }
     }
 
     // Best-effort Slack notification (never blocks submission)
@@ -85,10 +135,12 @@ export default async function handler(req, res) {
         const readyToListLabel = listingReady ? 'Yes' : 'No';
 
         const slackText = [
-          'New application submitted',
+          preApproved ? 'New application submitted (auto-approved)' : 'New application submitted',
           `Name: ${fields.Name || 'N/A'}`,
           `Email: ${fields.Email || 'N/A'}`,
           `Location: ${location}`,
+          `Region: ${region}`,
+          `Pre-approved: ${preApproved ? 'Yes' : 'No'}`,
           `Ready to list: ${readyToListLabel}`,
           `Submitted: ${submittedAt}`,
         ].join('\n');
@@ -108,8 +160,10 @@ export default async function handler(req, res) {
       }
     }
 
-    // Send confirmation email via Resend — two paths based on listing readiness
-    if (RESEND_API_KEY && fields.Email) {
+    // Send confirmation email via Resend — two paths based on listing readiness.
+    // Skipped for pre-approved applicants: the platform sends their password-setup /
+    // welcome email, and the "we'll review" wording would be wrong for them.
+    if (!preApproved && RESEND_API_KEY && fields.Email) {
       try {
         const emailPayload = listingReady
           ? {
@@ -216,7 +270,9 @@ export default async function handler(req, res) {
     // Schedule two follow-up emails via Resend's scheduled send.
     // Email 1 goes out 2 hours after submission, Email 2 goes out 20 hours after.
     // Best-effort: never blocks or fails the submission.
-    if (RESEND_API_KEY && fields.Email) {
+    // Skipped for pre-approved applicants — these nudge toward a pending decision
+    // that has already been made.
+    if (!preApproved && RESEND_API_KEY && fields.Email) {
       const followUps = [
         {
           label: 'follow-up-2h',
@@ -398,7 +454,7 @@ export default async function handler(req, res) {
       console.log('Skipping Meta CAPI: META_PIXEL_ID or META_ACCESS_TOKEN missing');
     }
 
-    return res.status(200).json({ success: true, id: data.id, eventId });
+    return res.status(200).json({ success: true, id: data.id, eventId, preApproved, region });
   } catch (error) {
     console.error('Server error:', error);
     return res.status(500).json({ error: 'Internal server error' });

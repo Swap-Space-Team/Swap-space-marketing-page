@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import { autoRegisterUser } from '../lib/auto-register.js';
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -44,27 +45,19 @@ async function approve(req, res) {
     return res.status(500).json({ error: 'Failed to update application status' });
   }
 
-  const BACKEND_URL = process.env.BACKEND_URL;
-  const AUTO_REGISTER_API_KEY = process.env.AUTO_REGISTER_API_KEY;
-  if (BACKEND_URL && AUTO_REGISTER_API_KEY) {
-    try {
-      const registerResponse = await fetch(`${BACKEND_URL}/api/internal/auto-register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-Internal-API-Key': AUTO_REGISTER_API_KEY },
-        body: JSON.stringify({ email: application.email, name: application.name, telephone: application.phone }),
-      });
-      if (!registerResponse.ok) {
-        const registerErr = await registerResponse.json().catch(() => ({}));
-        console.error('Auto-register failed:', registerErr);
-        return res.status(200).json({ success: true, warning: 'Application approved but failed to register user on the platform. Please register them manually.' });
-      }
-      console.log(`Auto-register succeeded for ${application.email}`);
-    } catch (registerError) {
-      console.error('Auto-register error:', registerError);
-      return res.status(200).json({ success: true, warning: 'Application approved but could not reach the platform to register the user. Please register them manually.' });
-    }
-  } else {
+  const register = await autoRegisterUser({
+    email: application.email,
+    name: application.name,
+    telephone: application.phone,
+  });
+
+  if (register.notConfigured) {
     console.warn('BACKEND_URL or AUTO_REGISTER_API_KEY not set — skipping auto-register');
+  } else if (!register.ok) {
+    console.error('Auto-register failed:', register.timedOut ? 'timed out' : register.error);
+    return res.status(200).json({ success: true, warning: 'Application approved but failed to register user on the platform. Please register them manually.' });
+  } else {
+    console.log(`Auto-register succeeded for ${application.email}`);
   }
 
   return res.status(200).json({ success: true, applicationId });
