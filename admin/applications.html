@@ -50,6 +50,10 @@
           <div class="stat-value" id="statApproved">—</div>
         </div>
         <div class="stat-card">
+          <div class="stat-label">Auto-approved</div>
+          <div class="stat-value" id="statAutoApproved">—</div>
+        </div>
+        <div class="stat-card">
           <div class="stat-label">Rejected</div>
           <div class="stat-value" id="statRejected">—</div>
         </div>
@@ -61,6 +65,7 @@
           <button class="filter-btn active" data-filter="all">All</button>
           <button class="filter-btn" data-filter="Application Received">Received</button>
           <button class="filter-btn" data-filter="Approved">Approved</button>
+          <button class="filter-btn" data-filter="auto-approved">Auto-approved</button>
           <button class="filter-btn" data-filter="Rejected">Rejected</button>
         </div>
         <div class="search-box">
@@ -231,8 +236,16 @@
         allApplications.filter(a => a.application_status === 'Application Received').length;
       document.getElementById('statApproved').textContent =
         allApplications.filter(a => a.application_status === 'Approved').length;
+      document.getElementById('statAutoApproved').textContent =
+        allApplications.filter(a => a.auto_approved === true).length;
       document.getElementById('statRejected').textContent =
         allApplications.filter(a => a.application_status === 'Rejected').length;
+    }
+
+    // Small pill shown alongside the status for applications that were approved
+    // automatically by the geographic gate (vs. approved by a human).
+    function autoApprovedBadge() {
+      return '<span style="display:inline-block; margin-left:6px; padding:4px 10px; border-radius:9999px; font-size:12px; font-weight:500; background:#CCFBF1; color:#0F766E;">Auto</span>';
     }
 
     // SLA: at 20h the applicant is told a decision is coming in ~2h, so it's due by ~22h.
@@ -275,7 +288,12 @@
 
       const filtered = allApplications
         .filter(a => {
-          const matchesFilter = currentFilter === 'all' || a.application_status === currentFilter;
+          const matchesFilter =
+            currentFilter === 'all'
+              ? true
+              : currentFilter === 'auto-approved'
+                ? a.auto_approved === true
+                : a.application_status === currentFilter;
           const matchesSearch = !query ||
             (a.name || '').toLowerCase().includes(query) ||
             (a.email || '').toLowerCase().includes(query);
@@ -300,7 +318,7 @@
           <td>${app.phone || '—'}</td>
           <td>${app.country || '—'}</td>
           <td>${app.city || '—'}</td>
-          <td>${statusBadge(app.application_status)}</td>
+          <td>${statusBadge(app.application_status)}${app.auto_approved ? autoApprovedBadge() : ''}</td>
           <td>${renderWaiting(app)}</td>
           <td>${app.listing_ready === 'ready' ? 'Yes' : app.listing_ready === 'not-ready' ? 'Not yet' : '—'}</td>
           <td>${formatDate(app.submission_date || app.created_at)}</td>
