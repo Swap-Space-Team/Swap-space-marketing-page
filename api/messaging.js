@@ -135,7 +135,7 @@ async function syncApplications(req, res) {
     .not('phone', 'is', null);
   if (error) {
     console.error('syncApplications fetch error:', error);
-    return res.status(500).json({ error: 'Failed to read applications' });
+    return res.status(500).json({ error: `Failed to read applications: ${error.message || ''} ${error.details || ''} ${error.hint || ''} [${error.code || ''}]`.trim() });
   }
 
   const byPhone = new Map();
@@ -164,7 +164,7 @@ async function syncApplications(req, res) {
     .select('phone');
   if (upsertError) {
     console.error('syncApplications upsert error:', upsertError);
-    return res.status(500).json({ error: 'Failed to sync applications' });
+    return res.status(500).json({ error: `Failed to sync applications: ${upsertError.message || ''} ${upsertError.details || ''} ${upsertError.hint || ''} [${upsertError.code || ''}]`.trim() });
   }
   return res.status(200).json({ success: true, synced: data?.length || 0 });
 }
