@@ -149,7 +149,10 @@ async function syncApplications(req, res) {
       city: a.city || null,
       country: a.country || null,
       source: 'application',
-      application_id: a.id,
+      // application_id intentionally not written: applications.id is a UUID but
+      // existing messaging_contacts.application_id is bigint in already-migrated
+      // DBs. The schema now declares it uuid; restore this write once existing
+      // DBs are retyped. Nothing reads application_id today, so this is a no-op.
       sms_consent: a.sms_consent === true,
       sms_consent_at: a.sms_consent_at || null,
       updated_at: new Date().toISOString(),

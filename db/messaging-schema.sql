@@ -32,7 +32,7 @@ create table if not exists public.messaging_contacts (
   country         text,
   source          text not null default 'manual' -- 'application' | 'manual' | 'import'
                     check (source in ('application', 'manual', 'import')),
-  application_id  bigint,                         -- FK-ish ref to applications.id (loose: no hard FK so imports never fail)
+  application_id  uuid,                           -- FK-ish ref to applications.id (uuid; loose: no hard FK so imports never fail)
   sms_consent     boolean not null default false, -- captured at application time (smsConsent11)
   sms_consent_at  timestamptz,
   tags            text[] not null default '{}',
