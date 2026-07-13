@@ -22,9 +22,10 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 32px;
+  margin-bottom: 0;
   padding-bottom: 16px;
-  border-bottom: 1px solid #E5E7EB;
+  /* The section nav row injected below carries the divider now. */
+  border-bottom: none;
 }
 
 .admin-header h1 {
@@ -39,30 +40,116 @@ body {
   text-decoration: none;
 }
 
-/* Top-level section nav (Applications / Messaging) */
-.admin-nav {
-  display: inline-flex;
-  gap: 4px;
+.admin-header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
-.admin-nav-link {
-  padding: 6px 12px;
+/* Section nav — injected by admin.js (injectAdminNav). Horizontal tab bar on
+   desktop; collapses to a hamburger dropdown on mobile (see media query below). */
+.admin-nav {
+  position: relative;
+  margin-bottom: 28px;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.admin-nav-list {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.admin-nav-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 14px;
   font-size: 14px;
   font-weight: 500;
   color: #6B7280;
   text-decoration: none;
-  border-radius: 8px;
-  transition: background 0.15s, color 0.15s;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;            /* overlap the divider so the active underline sits on it */
+  white-space: nowrap;
+  transition: color 0.15s, border-color 0.15s;
 }
 
-.admin-nav-link:hover {
-  background: #F3F4F6;
+.admin-nav-item:hover {
   color: #111827;
 }
 
-.admin-nav-link.active {
+.admin-nav-item.is-active {
   color: #079455;
-  background: #ECFDF3;
+  border-bottom-color: #079455;
+  font-weight: 600;
+}
+
+.admin-nav-item-icon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+/* Hamburger toggle — hidden on desktop, shown under 768px. */
+.admin-nav-toggle {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 14px;
+  background: #fff;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .admin-nav {
+    border-bottom: none;
+    margin-bottom: 22px;
+  }
+  .admin-nav-toggle {
+    display: inline-flex;
+  }
+  .admin-nav-list {
+    display: none;
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2px;
+    background: #fff;
+    border: 1px solid #E5E7EB;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.10);
+    padding: 6px;
+    z-index: 50;
+  }
+  .admin-nav-list.is-open {
+    display: flex;
+  }
+  .admin-nav-item {
+    border-bottom: none;
+    border-radius: 8px;
+    margin-bottom: 0;
+    padding: 11px 12px;
+  }
+  .admin-nav-item:hover {
+    background: #F9FAFB;
+  }
+  .admin-nav-item.is-active {
+    background: #DCFCE7;
+    color: #065F46;
+    border-bottom: none;
+  }
 }
 
 .btn {

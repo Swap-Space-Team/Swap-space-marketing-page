@@ -55,14 +55,11 @@
 <body>
   <div class="admin-container">
     <div class="admin-header">
-      <div style="display:flex; align-items:center; gap:28px;">
+      <div>
         <a href="/admin/applications"><img src="/assets/Swapspace wordmark.svg" height="28" alt="SwapSpace"></a>
-        <nav class="admin-nav">
-          <a href="/admin/applications" class="admin-nav-link">Applications</a>
-          <a href="/admin/messaging" class="admin-nav-link active">Messaging</a>
-        </nav>
       </div>
-      <div class="profile-menu-wrap">
+      <div class="admin-header-right">
+        <div class="profile-menu-wrap">
         <button class="profile-icon-btn" onclick="toggleProfileMenu(event)" aria-label="Account menu">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         </button>
@@ -71,6 +68,7 @@
           <div class="profile-dropdown-divider"></div>
           <button class="profile-dropdown-item" onclick="showChangePassword(); closeProfileMenu()">Change password</button>
           <button class="profile-dropdown-item profile-dropdown-item--danger" onclick="signOut()">Sign out</button>
+        </div>
         </div>
       </div>
     </div>
@@ -211,7 +209,7 @@
       if (search) params.set('search', search);
       if (source) params.set('source', source);
 
-      const res = await adminFetch('/api/messaging?action=contacts-list&' + params.toString(), { method: 'GET' });
+      const res = await adminFetch('/api/admin?action=contacts-list&' + params.toString(), { method: 'GET' });
       if (!res) return;
       const { contacts } = await res.json();
       _contacts = contacts || [];
@@ -291,7 +289,7 @@
       const btn = document.getElementById('sendBtn');
       btn.disabled = true; btn.textContent = 'Sending…';
       try {
-        const res = await adminFetch('/api/messaging?action=send-sms', {
+        const res = await adminFetch('/api/admin?action=send-sms', {
           method: 'POST',
           body: JSON.stringify({ body, contactIds, phones, campaignName: campaignName || undefined }),
         });
@@ -317,7 +315,7 @@
     function toggleImportPanel(){ const p = document.getElementById('importPanel'); p.style.display = p.style.display === 'none' ? 'block' : 'none'; }
 
     async function loadContacts() {
-      const res = await adminFetch('/api/messaging?action=contacts-list', { method: 'GET' });
+      const res = await adminFetch('/api/admin?action=contacts-list', { method: 'GET' });
       if (!res) return;
       const { contacts } = await res.json();
       const body = document.getElementById('contactsBody');
@@ -338,7 +336,7 @@
     }
 
     async function syncApplicants() {
-      const res = await adminFetch('/api/messaging?action=sync-applications', { method: 'POST', body: '{}' });
+      const res = await adminFetch('/api/admin?action=sync-applications', { method: 'POST', body: '{}' });
       if (!res) return;
       const data = await res.json();
       if (!res.ok) return showAlert({ title: 'Sync failed', message: data.error || 'Error', variant: 'danger' });
@@ -350,7 +348,7 @@
       const phone = document.getElementById('addPhone').value.trim();
       const name = document.getElementById('addName').value.trim();
       if (!phone) return showAlert({ title: 'Phone required', message: 'Enter a phone number.', variant: 'warning' });
-      const res = await adminFetch('/api/messaging?action=contact-add', { method: 'POST', body: JSON.stringify({ phone, name }) });
+      const res = await adminFetch('/api/admin?action=contact-add', { method: 'POST', body: JSON.stringify({ phone, name }) });
       const data = await res.json();
       if (!res.ok) return showAlert({ title: 'Could not add', message: data.error || 'Error', variant: 'danger' });
       document.getElementById('addPhone').value = ''; document.getElementById('addName').value = '';
@@ -365,7 +363,7 @@
         return { phone: phone.trim(), name: rest.join(',').trim() || null };
       });
       if (!contacts.length) return showAlert({ title: 'Nothing to import', message: 'Paste at least one number.', variant: 'warning' });
-      const res = await adminFetch('/api/messaging?action=contacts-import', { method: 'POST', body: JSON.stringify({ contacts }) });
+      const res = await adminFetch('/api/admin?action=contacts-import', { method: 'POST', body: JSON.stringify({ contacts }) });
       const data = await res.json();
       if (!res.ok) return showAlert({ title: 'Import failed', message: data.error || 'Error', variant: 'danger' });
       document.getElementById('importText').value = '';
@@ -376,7 +374,7 @@
     async function optOut(phone) {
       const ok = await showConfirm({ title: 'Opt out this number?', message: `${phone} will be suppressed from all future sends.`, confirmText: 'Opt out', variant: 'danger' });
       if (!ok) return;
-      const res = await adminFetch('/api/messaging?action=optout-add', { method: 'POST', body: JSON.stringify({ phone }) });
+      const res = await adminFetch('/api/admin?action=optout-add', { method: 'POST', body: JSON.stringify({ phone }) });
       if (!res) return;
       if (!res.ok) { const d = await res.json(); return showAlert({ title: 'Failed', message: d.error || 'Error', variant: 'danger' }); }
       showToast({ title: 'Opted out', lines: [phone], variant: 'info' });
@@ -385,7 +383,7 @@
 
     // ── History tab ──────────────────────────────────────────────────────
     async function loadHistory() {
-      const res = await adminFetch('/api/messaging?action=log-list', { method: 'GET' });
+      const res = await adminFetch('/api/admin?action=log-list', { method: 'GET' });
       if (!res) return;
       const { log } = await res.json();
       const body = document.getElementById('historyBody');

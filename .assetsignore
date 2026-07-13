@@ -1,0 +1,44 @@
+# Cloudflare Workers uploads the assets directory (the repo root, per
+# wrangler.jsonc -> assets.directory ".") as static assets. Without this file
+# everything — node_modules, secrets, backend source — gets served. Keep the
+# upload to the actual static marketing site.
+#
+# Syntax is .gitignore-style. This is what stops the build from failing on
+# node_modules/ffmpeg-static/ffmpeg (76 MiB, over the 25 MiB per-asset limit).
+
+# Dependencies & build output
+node_modules
+dist
+
+# Secrets / env — must never be publicly served
+.env
+.env.*
+
+# Version control & CI
+.git
+.github
+
+# Local tooling / editor / agent dirs
+.cursor
+.claude
+.vscode
+
+# Build & dev scripts, local server (not static assets)
+scripts
+server.js
+setup-localhost.sh
+
+# Backend source — these run as Vercel functions, not on Cloudflare Workers,
+# so serving them here would only expose source with no benefit.
+api
+lib
+
+# Config & docs
+package.json
+package-lock.json
+vercel.json
+wrangler.jsonc
+*.md
+
+# OS cruft
+.DS_Store

@@ -299,6 +299,67 @@ function dismissToast(toast) {
 // ── End Toast system ──────────────────────────────────────────────────────────
 
 
+// ── Admin section nav ──────────────────────────────────────────────────────────
+// Single source of truth for the top-level admin nav. Add a dashboard here and
+// every page picks it up. Rendered as a horizontal tab bar under the header on
+// desktop, and a hamburger dropdown on mobile. Injected on any page that has an
+// .admin-header — so the login page (which has none) is naturally excluded. The
+// active item is detected from the URL.
+
+const ADMIN_NAV_ITEMS = [
+  { href: '/admin/applications',    label: 'Applications',      icon: '📋', match: ['/admin/applications', '/admin/application'] },
+  { href: '/admin/messaging',       label: 'Messaging',         icon: '💬' },
+  { href: '/admin/email-snippet/',  label: 'Email Snippets',    icon: '✉️' },
+  { href: '/admin/email-tracking/', label: 'Email Tracking',    icon: '📬' },
+];
+
+(function injectAdminNav() {
+  const header = document.querySelector('.admin-header');
+  if (!header) return; // e.g. the login page — no nav
+
+  const path = (location.pathname.replace(/\/+$/, '') || '/');
+  const isActive = (item) =>
+    (item.match || [item.href]).some(b => path === (b.replace(/\/+$/, '') || '/'));
+  const activeItem = ADMIN_NAV_ITEMS.find(isActive);
+
+  const items = ADMIN_NAV_ITEMS.map(item => {
+    const active = item === activeItem;
+    return `<li>
+        <a class="admin-nav-item${active ? ' is-active' : ''}" href="${item.href}"${active ? ' aria-current="page"' : ''}>
+          <span class="admin-nav-item-icon" aria-hidden="true">${item.icon}</span>${item.label}
+        </a>
+      </li>`;
+  }).join('');
+
+  const nav = document.createElement('nav');
+  nav.className = 'admin-nav';
+  nav.setAttribute('aria-label', 'Admin sections');
+  nav.innerHTML = `
+    <button class="admin-nav-toggle" id="adminNavToggle" aria-expanded="false" aria-controls="adminNavList">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      <span>${activeItem ? activeItem.label : 'Menu'}</span>
+    </button>
+    <ul class="admin-nav-list" id="adminNavList">${items}</ul>
+  `;
+  header.insertAdjacentElement('afterend', nav);
+
+  const toggle = nav.querySelector('#adminNavToggle');
+  const list = nav.querySelector('#adminNavList');
+  toggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const open = list.classList.toggle('is-open');
+    toggle.setAttribute('aria-expanded', String(open));
+  });
+  // Close the mobile menu when tapping elsewhere (mirrors the profile dropdown).
+  document.addEventListener('click', () => {
+    list.classList.remove('is-open');
+    toggle.setAttribute('aria-expanded', 'false');
+  });
+})();
+
+// ── End Admin section nav ──────────────────────────────────────────────────────
+
+
 function formatDate(dateStr) {
   if (!dateStr) return '—';
   return new Date(dateStr).toLocaleDateString('en-GB', {

@@ -20,8 +20,11 @@
     "api/upload-images.js": {
       "maxDuration": 60
     },
-    "api/messaging.js": {
+    "api/admin.js": {
       "maxDuration": 60
+    },
+    "api/property-image.js": {
+      "maxDuration": 30
     },
     "api/cron/refresh-city-costs.js": {
       "maxDuration": 300

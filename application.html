@@ -505,6 +505,45 @@
       color: #079455;
     }
 
+    /* ── Country dropdown (searchable) ──────────────────────── */
+    .custom-select-dropdown.country {
+      padding-top: 8px;
+    }
+
+    .country-search {
+      width: 100%;
+      padding: 8px 10px;
+      margin-bottom: 4px;
+      border: 1px solid #d5d7da;
+      border-radius: 6px;
+      font-family: 'Geist', sans-serif;
+      font-size: 14px;
+      line-height: 20px;
+      color: #202939;
+      box-sizing: border-box;
+    }
+
+    .country-search:focus {
+      outline: none;
+      border-color: #202939;
+      box-shadow: 0 0 0 3px rgba(32, 41, 57, 0.08);
+    }
+
+    .country-options {
+      max-height: 240px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .country-empty {
+      padding: 8px 10px;
+      font-family: 'Geist', sans-serif;
+      font-size: 14px;
+      color: #667085;
+    }
+
     /* ── Confirmation page (step 6) ─────────────────────────── */
     .confirmation-inner {
       display: flex;
@@ -875,18 +914,24 @@
               </div>
 
               <div class="field-item">
-                <label class="field-label" for="country">
+                <label class="field-label" id="countryLabel">
                   Country <span class="required-star">*</span>
                 </label>
-                <input
-                  type="text"
-                  class="field-input"
-                  id="country"
-                  name="country"
-                  placeholder="United States"
-                  required
-                  autocomplete="country-name"
-                />
+                <div class="custom-select" id="countrySelect" role="combobox" aria-labelledby="countryLabel" aria-expanded="false">
+                  <button type="button" class="custom-select-trigger" id="countryTrigger" aria-haspopup="listbox">
+                    <span class="custom-select-value" id="countryValue">Select your country</span>
+                    <svg class="custom-select-chevron" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="1.667" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </button>
+                  <div class="custom-select-dropdown country">
+                    <input type="text" class="country-search" id="countrySearch" placeholder="Search countries" autocomplete="off" />
+                    <div class="country-options" id="countryOptions" role="listbox"></div>
+                    <div class="country-empty" id="countryEmpty" style="display: none;">No countries found</div>
+                  </div>
+                </div>
+                <input type="hidden" id="country" name="country" />
+                <input type="hidden" id="countryCode" name="countryCode" />
               </div>
             </div>
 
@@ -1254,6 +1299,10 @@
     let currentStep = 1;
     const STORAGE_KEY = 'swapspace_application_form';
 
+    // Holds the /api/submit-application response so the confirmation screen (step 6)
+    // can branch on whether the applicant was pre-approved.
+    let lastSubmitResult = null;
+
     // PostHog experiment state
     let reorderVariant = 'control';
 
@@ -1269,7 +1318,7 @@
     const STEP_TO_DOT = { 1: 1, 3: 2, 4: 3, 7: 4, 8: 5, 9: 6, 10: null, 11: null, 12: 7, 6: null };
 
     // Form fields to persist
-    const formFields = ['name', 'email11', 'phone11', 'city', 'country', 'homeType', 'bedrooms', 'homeOwnership', 'listingReady', 'topCities', 'travelDates'];
+    const formFields = ['name', 'email11', 'phone11', 'city', 'country', 'countryCode', 'homeType', 'bedrooms', 'homeOwnership', 'listingReady', 'topCities', 'travelDates'];
 
     // ── Continue button + city cluster callout for step 1 ───
     const CITY_CLUSTERS = [
@@ -1380,13 +1429,24 @@
       }
 
       if (step === 6) {
-        const isReady = document.getElementById('listingReady')?.value === 'ready';
         const body = document.getElementById('confirmationBody');
-        if (body) {
-          body.innerHTML = isReady
-            ? `<p>Thanks for applying to SwapSpace. We'll review your application and get back to you within 24 hours.</p>
-               <p>Once approved, you'll have 5 days to list your home and start swapping. We've sent you an email with everything you'll need to get your listing live.</p>`
-            : `<p>Thanks for applying to SwapSpace. We understand you're not quite ready to list your home yet and that's completely fine. We'll review your application and be in touch when you're ready to take the next step.</p>`;
+        const title = document.querySelector('[data-step="6"] .confirmation-title');
+        if (lastSubmitResult && lastSubmitResult.preApproved) {
+          if (title) title.textContent = "You've been pre-approved!";
+          if (body) {
+            body.innerHTML =
+              `<p>Great news — your application has been pre-approved. We've sent you an email with a link to set up your account and list your property.</p>
+               <p>Check your inbox (and your spam folder, just in case) to get started.</p>`;
+          }
+        } else {
+          const isReady = document.getElementById('listingReady')?.value === 'ready';
+          if (title) title.textContent = 'Application submitted';
+          if (body) {
+            body.innerHTML = isReady
+              ? `<p>Thanks for applying to SwapSpace. We'll review your application and get back to you within 24 hours.</p>
+                 <p>Once approved, you'll have 5 days to list your home and start swapping. We've sent you an email with everything you'll need to get your listing live.</p>`
+              : `<p>Thanks for applying to SwapSpace. We understand you're not quite ready to list your home yet and that's completely fine. We'll review your application and be in touch when you're ready to take the next step.</p>`;
+          }
         }
       }
 
@@ -1512,6 +1572,7 @@
         Phone:           '+' + (document.getElementById('phone11')?.value || ''),
         City:             document.getElementById('city').value,
         Country:          document.getElementById('country').value,
+        CountryCode:      document.getElementById('countryCode').value,
         'Home Type':      document.getElementById('homeType').value,
         Bedrooms:         document.getElementById('bedrooms').value,
         'Home Ownership': document.getElementById('homeOwnership').value,
@@ -1535,6 +1596,7 @@
         }
 
         const successData = await response.json();
+        lastSubmitResult = successData;
 
         if (typeof posthog !== 'undefined') {
           posthog.identify(formData.Email, {
@@ -1601,6 +1663,181 @@
       saveFormData();
     }
 
+    // ── Country dropdown (searchable, ISO alpha-2) ───────────
+    const COUNTRIES = [
+      { name: 'Afghanistan', code: 'AF' }, { name: 'Albania', code: 'AL' },
+      { name: 'Algeria', code: 'DZ' }, { name: 'Andorra', code: 'AD' },
+      { name: 'Angola', code: 'AO' }, { name: 'Antigua and Barbuda', code: 'AG' },
+      { name: 'Argentina', code: 'AR' }, { name: 'Armenia', code: 'AM' },
+      { name: 'Australia', code: 'AU' }, { name: 'Austria', code: 'AT' },
+      { name: 'Azerbaijan', code: 'AZ' }, { name: 'Bahamas', code: 'BS' },
+      { name: 'Bahrain', code: 'BH' }, { name: 'Bangladesh', code: 'BD' },
+      { name: 'Barbados', code: 'BB' }, { name: 'Belarus', code: 'BY' },
+      { name: 'Belgium', code: 'BE' }, { name: 'Belize', code: 'BZ' },
+      { name: 'Benin', code: 'BJ' }, { name: 'Bhutan', code: 'BT' },
+      { name: 'Bolivia', code: 'BO' }, { name: 'Bosnia and Herzegovina', code: 'BA' },
+      { name: 'Botswana', code: 'BW' }, { name: 'Brazil', code: 'BR' },
+      { name: 'Brunei', code: 'BN' }, { name: 'Bulgaria', code: 'BG' },
+      { name: 'Burkina Faso', code: 'BF' }, { name: 'Burundi', code: 'BI' },
+      { name: 'Cambodia', code: 'KH' }, { name: 'Cameroon', code: 'CM' },
+      { name: 'Canada', code: 'CA' }, { name: 'Cape Verde', code: 'CV' },
+      { name: 'Central African Republic', code: 'CF' }, { name: 'Chad', code: 'TD' },
+      { name: 'Chile', code: 'CL' }, { name: 'China', code: 'CN' },
+      { name: 'Colombia', code: 'CO' }, { name: 'Comoros', code: 'KM' },
+      { name: 'Congo (Brazzaville)', code: 'CG' }, { name: 'Congo (Kinshasa)', code: 'CD' },
+      { name: 'Costa Rica', code: 'CR' }, { name: 'Croatia', code: 'HR' },
+      { name: 'Cuba', code: 'CU' }, { name: 'Cyprus', code: 'CY' },
+      { name: 'Czechia', code: 'CZ' }, { name: 'Denmark', code: 'DK' },
+      { name: 'Djibouti', code: 'DJ' }, { name: 'Dominica', code: 'DM' },
+      { name: 'Dominican Republic', code: 'DO' }, { name: 'Ecuador', code: 'EC' },
+      { name: 'Egypt', code: 'EG' }, { name: 'El Salvador', code: 'SV' },
+      { name: 'Equatorial Guinea', code: 'GQ' }, { name: 'Eritrea', code: 'ER' },
+      { name: 'Estonia', code: 'EE' }, { name: 'Eswatini', code: 'SZ' },
+      { name: 'Ethiopia', code: 'ET' }, { name: 'Fiji', code: 'FJ' },
+      { name: 'Finland', code: 'FI' }, { name: 'France', code: 'FR' },
+      { name: 'Gabon', code: 'GA' }, { name: 'Gambia', code: 'GM' },
+      { name: 'Georgia', code: 'GE' }, { name: 'Germany', code: 'DE' },
+      { name: 'Ghana', code: 'GH' }, { name: 'Greece', code: 'GR' },
+      { name: 'Grenada', code: 'GD' }, { name: 'Guatemala', code: 'GT' },
+      { name: 'Guinea', code: 'GN' }, { name: 'Guinea-Bissau', code: 'GW' },
+      { name: 'Guyana', code: 'GY' }, { name: 'Haiti', code: 'HT' },
+      { name: 'Honduras', code: 'HN' }, { name: 'Hungary', code: 'HU' },
+      { name: 'Iceland', code: 'IS' }, { name: 'India', code: 'IN' },
+      { name: 'Indonesia', code: 'ID' }, { name: 'Iran', code: 'IR' },
+      { name: 'Iraq', code: 'IQ' }, { name: 'Ireland', code: 'IE' },
+      { name: 'Israel', code: 'IL' }, { name: 'Italy', code: 'IT' },
+      { name: 'Ivory Coast', code: 'CI' }, { name: 'Jamaica', code: 'JM' },
+      { name: 'Japan', code: 'JP' }, { name: 'Jordan', code: 'JO' },
+      { name: 'Kazakhstan', code: 'KZ' }, { name: 'Kenya', code: 'KE' },
+      { name: 'Kiribati', code: 'KI' }, { name: 'Kosovo', code: 'XK' },
+      { name: 'Kuwait', code: 'KW' }, { name: 'Kyrgyzstan', code: 'KG' },
+      { name: 'Laos', code: 'LA' }, { name: 'Latvia', code: 'LV' },
+      { name: 'Lebanon', code: 'LB' }, { name: 'Lesotho', code: 'LS' },
+      { name: 'Liberia', code: 'LR' }, { name: 'Libya', code: 'LY' },
+      { name: 'Liechtenstein', code: 'LI' }, { name: 'Lithuania', code: 'LT' },
+      { name: 'Luxembourg', code: 'LU' }, { name: 'Madagascar', code: 'MG' },
+      { name: 'Malawi', code: 'MW' }, { name: 'Malaysia', code: 'MY' },
+      { name: 'Maldives', code: 'MV' }, { name: 'Mali', code: 'ML' },
+      { name: 'Malta', code: 'MT' }, { name: 'Marshall Islands', code: 'MH' },
+      { name: 'Mauritania', code: 'MR' }, { name: 'Mauritius', code: 'MU' },
+      { name: 'Mexico', code: 'MX' }, { name: 'Micronesia', code: 'FM' },
+      { name: 'Moldova', code: 'MD' }, { name: 'Monaco', code: 'MC' },
+      { name: 'Mongolia', code: 'MN' }, { name: 'Montenegro', code: 'ME' },
+      { name: 'Morocco', code: 'MA' }, { name: 'Mozambique', code: 'MZ' },
+      { name: 'Myanmar', code: 'MM' }, { name: 'Namibia', code: 'NA' },
+      { name: 'Nauru', code: 'NR' }, { name: 'Nepal', code: 'NP' },
+      { name: 'Netherlands', code: 'NL' }, { name: 'New Zealand', code: 'NZ' },
+      { name: 'Nicaragua', code: 'NI' }, { name: 'Niger', code: 'NE' },
+      { name: 'Nigeria', code: 'NG' }, { name: 'North Macedonia', code: 'MK' },
+      { name: 'Norway', code: 'NO' }, { name: 'Oman', code: 'OM' },
+      { name: 'Pakistan', code: 'PK' }, { name: 'Palau', code: 'PW' },
+      { name: 'Palestine', code: 'PS' }, { name: 'Panama', code: 'PA' },
+      { name: 'Papua New Guinea', code: 'PG' }, { name: 'Paraguay', code: 'PY' },
+      { name: 'Peru', code: 'PE' }, { name: 'Philippines', code: 'PH' },
+      { name: 'Poland', code: 'PL' }, { name: 'Portugal', code: 'PT' },
+      { name: 'Qatar', code: 'QA' }, { name: 'Romania', code: 'RO' },
+      { name: 'Russia', code: 'RU' }, { name: 'Rwanda', code: 'RW' },
+      { name: 'Saint Kitts and Nevis', code: 'KN' }, { name: 'Saint Lucia', code: 'LC' },
+      { name: 'Saint Vincent and the Grenadines', code: 'VC' }, { name: 'Samoa', code: 'WS' },
+      { name: 'San Marino', code: 'SM' }, { name: 'Sao Tome and Principe', code: 'ST' },
+      { name: 'Saudi Arabia', code: 'SA' }, { name: 'Senegal', code: 'SN' },
+      { name: 'Serbia', code: 'RS' }, { name: 'Seychelles', code: 'SC' },
+      { name: 'Sierra Leone', code: 'SL' }, { name: 'Singapore', code: 'SG' },
+      { name: 'Slovakia', code: 'SK' }, { name: 'Slovenia', code: 'SI' },
+      { name: 'Solomon Islands', code: 'SB' }, { name: 'Somalia', code: 'SO' },
+      { name: 'South Africa', code: 'ZA' }, { name: 'South Korea', code: 'KR' },
+      { name: 'South Sudan', code: 'SS' }, { name: 'Spain', code: 'ES' },
+      { name: 'Sri Lanka', code: 'LK' }, { name: 'Sudan', code: 'SD' },
+      { name: 'Suriname', code: 'SR' }, { name: 'Sweden', code: 'SE' },
+      { name: 'Switzerland', code: 'CH' }, { name: 'Syria', code: 'SY' },
+      { name: 'Taiwan', code: 'TW' }, { name: 'Tajikistan', code: 'TJ' },
+      { name: 'Tanzania', code: 'TZ' }, { name: 'Thailand', code: 'TH' },
+      { name: 'Timor-Leste', code: 'TL' }, { name: 'Togo', code: 'TG' },
+      { name: 'Tonga', code: 'TO' }, { name: 'Trinidad and Tobago', code: 'TT' },
+      { name: 'Tunisia', code: 'TN' }, { name: 'Turkey', code: 'TR' },
+      { name: 'Turkmenistan', code: 'TM' }, { name: 'Tuvalu', code: 'TV' },
+      { name: 'Uganda', code: 'UG' }, { name: 'Ukraine', code: 'UA' },
+      { name: 'United Arab Emirates', code: 'AE' }, { name: 'United Kingdom', code: 'GB' },
+      { name: 'United States', code: 'US' }, { name: 'Uruguay', code: 'UY' },
+      { name: 'Uzbekistan', code: 'UZ' }, { name: 'Vanuatu', code: 'VU' },
+      { name: 'Vatican City', code: 'VA' }, { name: 'Venezuela', code: 'VE' },
+      { name: 'Vietnam', code: 'VN' }, { name: 'Yemen', code: 'YE' },
+      { name: 'Zambia', code: 'ZM' }, { name: 'Zimbabwe', code: 'ZW' },
+    ];
+
+    function initCountryDropdown() {
+      const select    = document.getElementById('countrySelect');
+      if (!select) return;
+      const trigger    = document.getElementById('countryTrigger');
+      const valueEl    = document.getElementById('countryValue');
+      const optionsEl  = document.getElementById('countryOptions');
+      const searchEl   = document.getElementById('countrySearch');
+      const emptyEl    = document.getElementById('countryEmpty');
+      const hiddenName = document.getElementById('country');
+      const hiddenCode = document.getElementById('countryCode');
+
+      // Render every country once; search filters visibility rather than re-rendering.
+      COUNTRIES.forEach(({ name, code }) => {
+        const item = document.createElement('div');
+        item.className = 'custom-select-item';
+        item.setAttribute('role', 'option');
+        item.dataset.code = code;
+        item.dataset.name = name;
+        item.textContent = name;
+        item.addEventListener('click', () => {
+          applyCountry(name, code);
+          select.classList.remove('open');
+          select.setAttribute('aria-expanded', 'false');
+          updateStep1Button();
+          saveFormData();
+        });
+        optionsEl.appendChild(item);
+      });
+
+      // Set the visible label + hidden inputs + selected highlight (no side effects).
+      function applyCountry(name, code) {
+        valueEl.textContent = name;
+        trigger.classList.add('has-value');
+        hiddenName.value = name;
+        hiddenCode.value = code;
+        optionsEl.querySelectorAll('.custom-select-item').forEach(i =>
+          i.classList.toggle('selected', i.dataset.code === code));
+      }
+
+      function filter(q) {
+        const query = q.trim().toLowerCase();
+        let visible = 0;
+        optionsEl.querySelectorAll('.custom-select-item').forEach(item => {
+          const match = item.dataset.name.toLowerCase().includes(query);
+          item.style.display = match ? '' : 'none';
+          if (match) visible++;
+        });
+        emptyEl.style.display = visible === 0 ? 'block' : 'none';
+      }
+
+      trigger.addEventListener('click', () => {
+        const isOpen = select.classList.toggle('open');
+        select.setAttribute('aria-expanded', isOpen);
+        if (isOpen) {
+          searchEl.value = '';
+          filter('');
+          setTimeout(() => searchEl.focus(), 0);
+        }
+      });
+
+      searchEl.addEventListener('input', () => filter(searchEl.value));
+      searchEl.addEventListener('click', e => e.stopPropagation());
+
+      // Restore selection from persisted values (country code preferred, name fallback).
+      const savedCode = hiddenCode.value;
+      const savedName = hiddenName.value;
+      let restored = savedCode && COUNTRIES.find(c => c.code === savedCode);
+      if (!restored && savedName) {
+        restored = COUNTRIES.find(c => c.name.toLowerCase() === savedName.toLowerCase());
+      }
+      if (restored) applyCountry(restored.name, restored.code);
+    }
+
     // ── Custom dropdown factory ──────────────────────────────
     function initCustomDropdown() {
       const configs = [
@@ -1650,10 +1887,9 @@
     // ── Init ─────────────────────────────────────────────────
     document.addEventListener('DOMContentLoaded', function () {
       // Wire up step 1 continue button
-      const cityInput    = document.getElementById('city');
-      const countryInput = document.getElementById('country');
-      if (cityInput)    cityInput.addEventListener('input', updateStep1Button);
-      if (countryInput) countryInput.addEventListener('input', updateStep1Button);
+      const cityInput = document.getElementById('city');
+      if (cityInput) cityInput.addEventListener('input', updateStep1Button);
+      // Country is a custom dropdown; it calls updateStep1Button directly on select.
 
       // Wire up step 8 continue button
       const topCitiesInput = document.getElementById('topCities');
@@ -1701,6 +1937,7 @@
       initCustomDropdown();
       setupAutoSave();
       restoreFormData();
+      initCountryDropdown();
       updateStep1Button();
       updateProgressDots();
 
