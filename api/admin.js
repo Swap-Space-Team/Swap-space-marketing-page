@@ -462,13 +462,19 @@ async function syncApplications(req, res) {
   return res.status(200).json({ success: true, synced: data?.length || 0 });
 }
 
-// Resolve the recipient set from explicit ids, ad-hoc phones, and/or a segment.
-async function resolveRecipients(supabase, { contactIds, phones, segment }) {
+// Resolve the recipient set from explicit ids, ad-hoc phones, a filter object,
+// and/or a saved segment (a tag on messaging_contacts.tags).
+async function resolveRecipients(supabase, { contactIds, phones, segment, tag }) {
   const byPhone = new Map(); // phone -> { phone, contact_id }
 
   if (Array.isArray(contactIds) && contactIds.length) {
     const { data } = await supabase.from('messaging_contacts').select('id, phone').in('id', contactIds);
     for (const c of data || []) byPhone.set(c.phone, { phone: c.phone, contact_id: c.id });
+  }
+
+  if (tag) {
+    const { data } = await supabase.from('messaging_contacts').select('id, phone').contains('tags', [tag]);
+    for (const c of data || []) if (!byPhone.has(c.phone)) byPhone.set(c.phone, { phone: c.phone, contact_id: c.id });
   }
 
   if (segment && Object.keys(segment).length) {
@@ -490,14 +496,97 @@ async function resolveRecipients(supabase, { contactIds, phones, segment }) {
   return [...byPhone.values()];
 }
 
+// ── Segments (backed by the messaging_contacts.tags array) ────────────────────
+
+// List every segment (distinct tag) with its member count.
+async function segmentsList(req, res) {
+  const supabase = getSupabase();
+  const { data, error } = await supabase.from('messaging_contacts').select('tags');
+  if (error) {
+    console.error('segmentsList error:', error);
+    return res.status(500).json({ error: 'Failed to load segments' });
+  }
+  const counts = new Map();
+  for (const row of data || []) for (const t of (row.tags || [])) counts.set(t, (counts.get(t) || 0) + 1);
+  const segments = [...counts.entries()]
+    .map(([name, count]) => ({ name, count }))
+    .sort((a, b) => a.name.localeCompare(b.name));
+  return res.status(200).json({ segments });
+}
+
+// Members of a segment (contacts carrying the tag).
+async function segmentMembers(req, res) {
+  const supabase = getSupabase();
+  const name = (req.query.segment || '').trim();
+  if (!name) return res.status(400).json({ error: 'Missing segment' });
+  const { data, error } = await supabase
+    .from('messaging_contacts')
+    .select('id, name, phone, source')
+    .contains('tags', [name])
+    .order('name');
+  if (error) {
+    console.error('segmentMembers error:', error);
+    return res.status(500).json({ error: 'Failed to load members' });
+  }
+  const optouts = await getOptoutSet(supabase);
+  return res.status(200).json({ members: (data || []).map(c => ({ ...c, opted_out: optouts.has(c.phone) })) });
+}
+
+// Add the segment tag to the selected contacts (creates the segment if new).
+async function segmentAssign(req, res) {
+  const supabase = getSupabase();
+  const { segment, contactIds } = req.body || {};
+  const name = (segment || '').trim();
+  if (!name) return res.status(400).json({ error: 'Segment name is required' });
+  if (!Array.isArray(contactIds) || contactIds.length === 0) return res.status(400).json({ error: 'Select at least one contact' });
+
+  const { data: rows, error } = await supabase.from('messaging_contacts').select('id, tags').in('id', contactIds);
+  if (error) {
+    console.error('segmentAssign fetch error:', error);
+    return res.status(500).json({ error: 'Failed to load contacts' });
+  }
+  let added = 0;
+  for (const r of rows || []) {
+    const tags = r.tags || [];
+    if (tags.includes(name)) continue;
+    const { error: upErr } = await supabase
+      .from('messaging_contacts')
+      .update({ tags: [...tags, name], updated_at: new Date().toISOString() })
+      .eq('id', r.id);
+    if (upErr) { console.error('segmentAssign update error:', upErr); continue; }
+    added++;
+  }
+  return res.status(200).json({ success: true, added, segment: name });
+}
+
+// Remove one contact from a segment (strip the tag).
+async function segmentUnassign(req, res) {
+  const supabase = getSupabase();
+  const { segment, contactId } = req.body || {};
+  const name = (segment || '').trim();
+  if (!name || !contactId) return res.status(400).json({ error: 'Missing segment or contact' });
+  const { data: row, error } = await supabase.from('messaging_contacts').select('tags').eq('id', contactId).single();
+  if (error || !row) return res.status(404).json({ error: 'Contact not found' });
+  const tags = (row.tags || []).filter(t => t !== name);
+  const { error: upErr } = await supabase
+    .from('messaging_contacts')
+    .update({ tags, updated_at: new Date().toISOString() })
+    .eq('id', contactId);
+  if (upErr) {
+    console.error('segmentUnassign error:', upErr);
+    return res.status(500).json({ error: 'Failed to update contact' });
+  }
+  return res.status(200).json({ success: true });
+}
+
 async function sendSmsAction(req, res) {
   const supabase = getSupabase();
-  const { body, contactIds, phones, segment, campaignName } = req.body || {};
+  const { body, contactIds, phones, segment, tag, campaignName } = req.body || {};
 
   const text = (body || '').trim();
   if (!text) return res.status(400).json({ error: 'Message body is required' });
 
-  let recipients = await resolveRecipients(supabase, { contactIds, phones, segment });
+  let recipients = await resolveRecipients(supabase, { contactIds, phones, segment, tag });
   const requested = recipients.length;
   if (requested === 0) return res.status(400).json({ error: 'No recipients resolved' });
 
@@ -516,7 +605,7 @@ async function sendSmsAction(req, res) {
   if (campaignName && recipients.length > 1) {
     const { data: campaign } = await supabase
       .from('messaging_campaigns')
-      .insert({ name: campaignName, channel: 'sms', body: text, segment: segment || {}, status: 'sending', audience_count: recipients.length, created_by: req._adminEmail || null })
+      .insert({ name: campaignName, channel: 'sms', body: text, segment: segment || (tag ? { tag } : {}), status: 'sending', audience_count: recipients.length, created_by: req._adminEmail || null })
       .select('id')
       .single();
     campaignId = campaign?.id || null;
@@ -600,11 +689,13 @@ const POST_ACTIONS = {
   // Messaging
   'contact-add': contactAdd, 'contacts-import': contactsImport, 'sync-applications': syncApplications,
   'send-sms': sendSmsAction, 'optout-add': optoutAdd,
+  'segment-assign': segmentAssign, 'segment-unassign': segmentUnassign,
 };
 const GET_ACTIONS  = {
   'calculator-leads': calculatorLeads,
   // Messaging
   'contacts-list': contactsList, 'log-list': logList,
+  'segments-list': segmentsList, 'segment-members': segmentMembers,
 };
 
 export default async function handler(req, res) {

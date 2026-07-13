@@ -76,6 +76,7 @@
     <div class="msg-tabs">
       <button id="tabCompose"  class="msg-tab active" onclick="switchMsgTab('compose')">Compose &amp; Send</button>
       <button id="tabContacts" class="msg-tab" onclick="switchMsgTab('contacts')">Contacts</button>
+      <button id="tabSegments" class="msg-tab" onclick="switchMsgTab('segments')">Segments</button>
       <button id="tabHistory"  class="msg-tab" onclick="switchMsgTab('history')">History</button>
     </div>
 
@@ -121,6 +122,12 @@
             <div class="char-count" id="charCount">0 characters · 0 segments</div>
           </div>
           <div class="field-row">
+            <label for="composeSegment">Send to a saved segment (optional)</label>
+            <select id="composeSegment" class="msg-text" onchange="updateSelectedCount()">
+              <option value="">No segment</option>
+            </select>
+          </div>
+          <div class="field-row">
             <label for="campaignName">Campaign name (optional, for bulk sends)</label>
             <input type="text" id="campaignName" class="msg-text" placeholder="e.g. July listing reminder">
           </div>
@@ -159,6 +166,42 @@
       </div>
     </div>
 
+    <!-- ══ Segments ══ -->
+    <div id="panelSegments" style="display:none;">
+      <div class="compose-grid">
+        <!-- Build / add to a segment -->
+        <div class="panel">
+          <h3>Add contacts to a segment</h3>
+          <p class="hint">Type a segment name (new or existing), tick contacts, then add them. A segment is a saved group you can bulk-send to.</p>
+          <div class="field-row">
+            <label for="segName">Segment name</label>
+            <input type="text" id="segName" class="msg-text" placeholder="e.g. London hosts" list="segNameList">
+            <datalist id="segNameList"></datalist>
+          </div>
+          <div class="toolbar">
+            <div class="search-box" style="flex:1; min-width:180px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+              <input type="text" id="segSearch" placeholder="Search contacts..." oninput="debouncedLoadSegPicker()">
+            </div>
+          </div>
+          <div class="toolbar">
+            <button class="btn btn-secondary btn-sm" onclick="segSelectAll(true)">Select all shown</button>
+            <button class="btn btn-secondary btn-sm" onclick="segSelectAll(false)">Clear</button>
+            <span class="selected-count" id="segSelectedCount" style="margin-left:auto;">0 selected</span>
+          </div>
+          <div class="recipient-list" id="segPickerList"><div class="empty-state" style="padding:24px;">Loading…</div></div>
+          <button class="btn btn-primary" style="margin-top:14px; width:100%; justify-content:center;" onclick="assignSegment()">Add to segment</button>
+        </div>
+
+        <!-- Existing segments -->
+        <div class="panel">
+          <h3>Your segments</h3>
+          <p class="hint">Send an SMS to everyone in a segment, or manage its members.</p>
+          <div id="segmentsList"><div class="empty-state" style="padding:24px;">Loading…</div></div>
+        </div>
+      </div>
+    </div>
+
     <!-- ══ History ══ -->
     <div id="panelHistory" style="display:none;">
       <div class="toolbar" style="margin-bottom:18px;">
@@ -184,14 +227,17 @@
       if (!session) return;
       document.getElementById('userEmail').textContent = session.user.email;
       loadRecipients();
+      loadComposeSegments();
     })();
 
     function switchMsgTab(tab) {
-      ['compose', 'contacts', 'history'].forEach(t => {
+      ['compose', 'contacts', 'segments', 'history'].forEach(t => {
         document.getElementById('panel' + t[0].toUpperCase() + t.slice(1)).style.display = t === tab ? 'block' : 'none';
         document.getElementById('tab' + t[0].toUpperCase() + t.slice(1)).classList.toggle('active', t === tab);
       });
+      if (tab === 'compose') loadComposeSegments();
       if (tab === 'contacts') loadContacts();
+      if (tab === 'segments') { loadSegPicker(); loadSegments(); }
       if (tab === 'history') loadHistory();
     }
 
@@ -273,15 +319,19 @@
       const body = document.getElementById('msgBody').value.trim();
       const contactIds = [..._selected];
       const phones = parseAdhoc();
+      const tag = document.getElementById('composeSegment').value || undefined;
       const campaignName = document.getElementById('campaignName').value.trim();
       const total = contactIds.length + phones.length;
 
       if (!body) return showAlert({ title: 'Message required', message: 'Type a message before sending.', variant: 'warning' });
-      if (total === 0) return showAlert({ title: 'No recipients', message: 'Select contacts or paste at least one number.', variant: 'warning' });
+      if (total === 0 && !tag) return showAlert({ title: 'No recipients', message: 'Select contacts, choose a segment, or paste at least one number.', variant: 'warning' });
 
+      const audience = tag
+        ? `everyone in the "${tag}" segment${total ? ` plus ${total} more` : ''}`
+        : `${total} recipient${total === 1 ? '' : 's'}`;
       const ok = await showConfirm({
         title: 'Send SMS?',
-        message: `This will send to ${total} recipient${total === 1 ? '' : 's'}. Opted-out numbers are skipped automatically.`,
+        message: `This will send to ${audience}. Opted-out numbers are skipped automatically.`,
         confirmText: 'Send', variant: 'info',
       });
       if (!ok) return;
@@ -291,7 +341,7 @@
       try {
         const res = await adminFetch('/api/admin?action=send-sms', {
           method: 'POST',
-          body: JSON.stringify({ body, contactIds, phones, campaignName: campaignName || undefined }),
+          body: JSON.stringify({ body, contactIds, phones, tag, campaignName: campaignName || undefined }),
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Send failed');
@@ -302,6 +352,7 @@
         });
         document.getElementById('msgBody').value = '';
         document.getElementById('campaignName').value = '';
+        document.getElementById('composeSegment').value = '';
         updateCharCount();
       } catch (err) {
         showAlert({ title: 'Send failed', message: err.message, variant: 'danger' });
@@ -400,6 +451,144 @@
         </tr>
       `).join('');
     }
+
+    // ── Segments tab ─────────────────────────────────────────────────────
+    let _segContacts = [];
+    const _segSelected = new Set();
+    let _segTimer = null;
+
+    // Populate the Compose "send to segment" dropdown + the name autocomplete.
+    async function loadComposeSegments() {
+      const res = await adminFetch('/api/admin?action=segments-list', { method: 'GET' });
+      if (!res) return;
+      const { segments } = await res.json();
+      const sel = document.getElementById('composeSegment');
+      const current = sel.value;
+      sel.innerHTML = '<option value="">No segment</option>' +
+        (segments || []).map(s => `<option value="${escapeAttr(s.name)}">${escapeHtml(s.name)} (${s.count})</option>`).join('');
+      sel.value = current;
+      const dl = document.getElementById('segNameList');
+      if (dl) dl.innerHTML = (segments || []).map(s => `<option value="${escapeAttr(s.name)}">`).join('');
+    }
+
+    function debouncedLoadSegPicker() { clearTimeout(_segTimer); _segTimer = setTimeout(loadSegPicker, 300); }
+
+    async function loadSegPicker() {
+      const search = document.getElementById('segSearch').value.trim();
+      const params = new URLSearchParams();
+      if (search) params.set('search', search);
+      const res = await adminFetch('/api/admin?action=contacts-list&' + params.toString(), { method: 'GET' });
+      if (!res) return;
+      const { contacts } = await res.json();
+      _segContacts = contacts || [];
+      renderSegPicker();
+    }
+
+    function renderSegPicker() {
+      const list = document.getElementById('segPickerList');
+      if (!_segContacts.length) {
+        list.innerHTML = '<div class="empty-state" style="padding:24px;">No contacts. Sync applicants or add some first.</div>';
+        segSelectedCount();
+        return;
+      }
+      list.innerHTML = _segContacts.map(c => `
+        <label class="recipient-row">
+          <input type="checkbox" ${_segSelected.has(c.id) ? 'checked' : ''} onchange="segToggleSelect('${c.id}', this.checked)">
+          <span class="r-name">${escapeHtml(c.name || '—')}</span>
+          <span class="r-phone">${escapeHtml(c.phone)}</span>
+          <span class="recipient-meta"><span class="pill pill-${c.source}">${c.source}</span></span>
+        </label>
+      `).join('');
+      segSelectedCount();
+    }
+
+    function segToggleSelect(id, checked) { if (checked) _segSelected.add(id); else _segSelected.delete(id); segSelectedCount(); }
+    function segSelectAll(select) { _segContacts.forEach(c => { if (select) _segSelected.add(c.id); else _segSelected.delete(c.id); }); renderSegPicker(); }
+    function segSelectedCount() { document.getElementById('segSelectedCount').textContent = `${_segSelected.size} selected`; }
+
+    async function assignSegment() {
+      const segment = document.getElementById('segName').value.trim();
+      const contactIds = [..._segSelected];
+      if (!segment) return showAlert({ title: 'Name required', message: 'Give the segment a name.', variant: 'warning' });
+      if (!contactIds.length) return showAlert({ title: 'No contacts', message: 'Tick at least one contact to add.', variant: 'warning' });
+      const res = await adminFetch('/api/admin?action=segment-assign', { method: 'POST', body: JSON.stringify({ segment, contactIds }) });
+      const data = await res.json();
+      if (!res.ok) return showAlert({ title: 'Failed', message: data.error || 'Error', variant: 'danger' });
+      _segSelected.clear();
+      showToast({ title: 'Segment updated', lines: [`Added ${data.added} to "${segment}"`], variant: 'info' });
+      renderSegPicker();
+      loadSegments();
+      loadComposeSegments();
+    }
+
+    async function loadSegments() {
+      const res = await adminFetch('/api/admin?action=segments-list', { method: 'GET' });
+      if (!res) return;
+      const { segments } = await res.json();
+      const el = document.getElementById('segmentsList');
+      if (!segments?.length) {
+        el.innerHTML = '<div class="empty-state" style="padding:24px;">No segments yet. Create one on the left.</div>';
+        return;
+      }
+      el.innerHTML = segments.map(s => `
+        <div style="border:1px solid #E5E7EB; border-radius:10px; padding:12px 14px; margin-bottom:10px;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <div style="font-weight:600;">${escapeHtml(s.name)}</div>
+            <span class="pill pill-application">${s.count} member${s.count === 1 ? '' : 's'}</span>
+            <span style="margin-left:auto; display:flex; gap:6px;">
+              <button class="btn btn-primary btn-sm" onclick="sendToSegment('${escapeAttr(s.name)}')">Send SMS</button>
+              <button class="btn btn-secondary btn-sm" onclick="toggleMembers('${escapeAttr(s.name)}')">Members</button>
+            </span>
+          </div>
+          <div id="members-${cssId(s.name)}" style="display:none; margin-top:10px;"></div>
+        </div>
+      `).join('');
+    }
+
+    async function toggleMembers(name) {
+      const box = document.getElementById('members-' + cssId(name));
+      if (!box) return;
+      if (box.style.display !== 'none') { box.style.display = 'none'; return; }
+      box.style.display = 'block';
+      box.innerHTML = '<div style="color:#6B7280; font-size:13px; padding:6px 0;">Loading…</div>';
+      const res = await adminFetch('/api/admin?action=segment-members&segment=' + encodeURIComponent(name), { method: 'GET' });
+      if (!res) return;
+      const { members } = await res.json();
+      if (!members?.length) { box.innerHTML = '<div style="color:#6B7280; font-size:13px;">No members.</div>'; return; }
+      box.innerHTML = members.map(m => `
+        <div style="display:flex; align-items:center; gap:8px; font-size:13px; padding:5px 0; border-top:1px solid #F3F4F6;">
+          <span>${escapeHtml(m.name || m.phone)}</span>
+          <span style="color:#6B7280;">${escapeHtml(m.phone)}</span>
+          ${m.opted_out ? '<span class="pill pill-optout">opted out</span>' : ''}
+          <button class="btn btn-danger btn-sm" style="margin-left:auto;" onclick="removeFromSegment('${escapeAttr(name)}', '${m.id}')">Remove</button>
+        </div>
+      `).join('');
+    }
+
+    async function removeFromSegment(name, contactId) {
+      const res = await adminFetch('/api/admin?action=segment-unassign', { method: 'POST', body: JSON.stringify({ segment: name, contactId }) });
+      if (!res) return;
+      if (!res.ok) { const d = await res.json(); return showAlert({ title: 'Failed', message: d.error || 'Error', variant: 'danger' }); }
+      showToast({ title: 'Removed from segment', variant: 'info' });
+      loadSegments();
+      loadComposeSegments();
+    }
+
+    async function sendToSegment(name) {
+      // Switch first, then ensure the dropdown is populated before selecting.
+      ['compose', 'contacts', 'segments', 'history'].forEach(t => {
+        document.getElementById('panel' + t[0].toUpperCase() + t.slice(1)).style.display = t === 'compose' ? 'block' : 'none';
+        document.getElementById('tab' + t[0].toUpperCase() + t.slice(1)).classList.toggle('active', t === 'compose');
+      });
+      await loadComposeSegments();
+      document.getElementById('composeSegment').value = name;
+      updateSelectedCount();
+      document.getElementById('msgBody').focus();
+      showToast({ title: `Targeting "${name}"`, lines: ['Write your message and hit Send SMS.'], variant: 'info' });
+    }
+
+    // Safe DOM id fragment from an arbitrary segment name.
+    function cssId(s) { return String(s).replace(/[^a-zA-Z0-9_-]/g, c => '_' + c.charCodeAt(0)); }
 
     // ── Utils ────────────────────────────────────────────────────────────
     function escapeHtml(s) { return String(s ?? '').replace(/[&<>"']/g, m => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m])); }
