@@ -9,8 +9,12 @@
 <body>
   <div class="admin-container">
     <div class="admin-header">
-      <div>
+      <div style="display:flex; align-items:center; gap:28px;">
         <a href="/admin/applications"><img src="/assets/Swapspace wordmark.svg" height="28" alt="SwapSpace"></a>
+        <nav class="admin-nav">
+          <a href="/admin/applications" class="admin-nav-link active">Applications</a>
+          <a href="/admin/messaging" class="admin-nav-link">Messaging</a>
+        </nav>
       </div>
       <div class="profile-menu-wrap">
         <button class="profile-icon-btn" onclick="toggleProfileMenu(event)" aria-label="Account menu">

@@ -39,6 +39,32 @@ body {
   text-decoration: none;
 }
 
+/* Top-level section nav (Applications / Messaging) */
+.admin-nav {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.admin-nav-link {
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #6B7280;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.admin-nav-link:hover {
+  background: #F3F4F6;
+  color: #111827;
+}
+
+.admin-nav-link.active {
+  color: #079455;
+  background: #ECFDF3;
+}
+
 .btn {
   display: inline-flex;
   align-items: center;

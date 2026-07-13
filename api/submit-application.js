@@ -54,6 +54,8 @@ export default async function handler(req, res) {
         listing_ready: fields['Listing Ready'] || null,
         top_cities: fields['Top Cities'] || null,
         travel_dates: fields['Travel Dates'] || null,
+        sms_consent: fields['SMS Consent'] === true,
+        sms_consent_at: fields['SMS Consent'] === true ? new Date().toISOString() : null,
         submission_date: fields['Submission Date'] || new Date().toISOString(),
         application_status: 'Application Received',
       })
