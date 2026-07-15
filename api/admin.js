@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { autoRegisterUser } from '../lib/auto-register.js';
-import { sendSms } from '../lib/infobip.js';
+import { sendSms, fetchDeliveryReports } from '../lib/infobip.js';
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -682,6 +682,29 @@ async function logList(req, res) {
   return res.status(200).json({ log: rows });
 }
 
+// Pull delivery reports from Infobip and fold the true, human-readable status
+// into messaging_log (status: sent → delivered/undelivered/failed, with reason).
+async function syncReports(req, res) {
+  const { ok, reports, skipped, error } = await fetchDeliveryReports();
+  if (skipped) return res.status(200).json({ updated: 0, note: 'Infobip not configured' });
+  if (!ok) return res.status(502).json({ error: `Could not fetch delivery reports: ${error?.message || 'unknown'}` });
+  if (!reports.length) return res.status(200).json({ updated: 0 });
+
+  const supabase = getSupabase();
+  let updated = 0;
+  for (const r of reports) {
+    if (!r.messageId) continue;
+    const { data, error: upErr } = await supabase
+      .from('messaging_log')
+      .update({ status: r.status, error_code: r.detail || null, updated_at: new Date().toISOString() })
+      .eq('bird_message_id', r.messageId)
+      .select('id');
+    if (upErr) { console.error('syncReports update error:', upErr); continue; }
+    updated += data?.length || 0;
+  }
+  return res.status(200).json({ updated });
+}
+
 const POST_ACTIONS = {
   approve, reject, 'resend-photos': resendPhotos, 'delete-application': deleteApplication,
   'delete-photo': deletePhoto, 'check-password-status': checkPasswordStatus,
@@ -690,6 +713,7 @@ const POST_ACTIONS = {
   'contact-add': contactAdd, 'contacts-import': contactsImport, 'sync-applications': syncApplications,
   'send-sms': sendSmsAction, 'optout-add': optoutAdd,
   'segment-assign': segmentAssign, 'segment-unassign': segmentUnassign,
+  'sync-reports': syncReports,
 };
 const GET_ACTIONS  = {
   'calculator-leads': calculatorLeads,

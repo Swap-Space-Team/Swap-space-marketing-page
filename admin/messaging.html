@@ -433,11 +433,23 @@
     }
 
     // ── History tab ──────────────────────────────────────────────────────
-    async function loadHistory() {
+    // Human-readable labels for our status enum.
+    const STATUS_LABEL = {
+      queued: 'Queued', sent: 'Sent', delivered: 'Delivered',
+      undelivered: 'Undelivered', failed: 'Failed', received: 'Received',
+    };
+
+    async function loadHistory({ sync = true } = {}) {
+      const body = document.getElementById('historyBody');
+      // Pull the latest delivery reports from Infobip first, so statuses reflect
+      // real handset delivery — not just "accepted".
+      if (sync) {
+        body.innerHTML = '<tr><td colspan="4" style="padding:24px; color:#6B7280;">Checking delivery status…</td></tr>';
+        await adminFetch('/api/admin?action=sync-reports', { method: 'POST', body: '{}' });
+      }
       const res = await adminFetch('/api/admin?action=log-list', { method: 'GET' });
       if (!res) return;
       const { log } = await res.json();
-      const body = document.getElementById('historyBody');
       if (!log?.length) {
         body.innerHTML = '<tr><td colspan="4" style="padding:24px; color:#6B7280;">No messages sent yet.</td></tr>';
         return;
@@ -447,7 +459,10 @@
           <td style="white-space:nowrap;">${formatDateTime(r.created_at)}</td>
           <td>${escapeHtml(r.name || r.phone)}<br><span style="color:#6B7280; font-size:12px;">${escapeHtml(r.phone)}</span></td>
           <td style="max-width:340px;">${escapeHtml((r.body || '').slice(0, 120))}${(r.body || '').length > 120 ? '…' : ''}</td>
-          <td><span class="status-badge st-${r.status}">${r.status}</span>${r.error_code ? `<br><span style="color:#991B1B; font-size:11px;">${escapeHtml(r.error_code)}</span>` : ''}</td>
+          <td>
+            <span class="status-badge st-${r.status}">${STATUS_LABEL[r.status] || r.status}</span>
+            ${r.error_code ? `<br><span style="color:#6B7280; font-size:11px;">${escapeHtml(r.error_code)}</span>` : ''}
+          </td>
         </tr>
       `).join('');
     }
