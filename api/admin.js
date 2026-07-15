@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { autoRegisterUser } from '../lib/auto-register.js';
-import { sendSms } from '../lib/bird.js';
+import { sendSms } from '../lib/infobip.js';
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
