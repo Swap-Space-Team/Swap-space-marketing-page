@@ -308,6 +308,7 @@ function dismissToast(toast) {
 
 const ADMIN_NAV_ITEMS = [
   { href: '/admin/applications',    label: 'Applications',      icon: '📋', match: ['/admin/applications', '/admin/application'] },
+  { href: '/admin/messaging',       label: 'Messaging',         icon: '💬' },
   { href: '/admin/email-snippet/',  label: 'Email Snippets',    icon: '✉️' },
   { href: '/admin/email-tracking/', label: 'Email Tracking',    icon: '📬' },
 ];

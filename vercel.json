@@ -20,6 +20,9 @@
     "api/upload-images.js": {
       "maxDuration": 60
     },
+    "api/admin.js": {
+      "maxDuration": 60
+    },
     "api/property-image.js": {
       "maxDuration": 30
     },
