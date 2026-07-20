@@ -189,7 +189,35 @@ async function calculatorLeads(req, res) {
 }
 
 // ── Router ────────────────────────────────────────────────────────────────────
-async function checkPasswordStatus(req, res) {
+
+// The onboarding funnel past manual approval. A poll of the platform backend can
+// only ever advance a row along this ladder — it must never override a human
+// decision (Rejected) or an earlier funnel stage (Photos*), so only these
+// statuses are eligible to be updated by check-onboarding-status.
+const ONBOARDING_STATUSES = ['Approved', 'Registered', 'Listing Started', 'Listing Completed'];
+
+// The backend echoes emails lower-cased, but our stored emails keep the case the
+// applicant typed — so we match case-insensitively with ilike. Escape ilike's
+// wildcards (% _) and its escape char (\) first, since '_' is valid in an email
+// local-part and would otherwise match any character.
+function ilikeExact(value) {
+  return String(value).replace(/[\\%_]/g, m => '\\' + m);
+}
+
+// Maps the backend's raw onboarding signal to our coarse application_status.
+// Returns null when the user hasn't logged in yet — the row stays 'Approved' and
+// we only refresh the raw columns.
+function mapOnboardingStatus(r) {
+  if (!r?.found || !r.passwordChanged) return null;
+  switch (r.listingStatus) {
+    case 'completed': return 'Listing Completed';
+    case 'started':   return 'Listing Started';
+    case 'none':
+    default:          return 'Registered';
+  }
+}
+
+async function checkOnboardingStatus(req, res) {
   const { emails } = req.body;
   if (!Array.isArray(emails) || emails.length === 0) {
     return res.status(400).json({ error: 'Missing or empty emails array' });
@@ -203,38 +231,68 @@ async function checkPasswordStatus(req, res) {
 
   let results;
   try {
-    const backendRes = await fetch(`${BACKEND_URL}/api/internal/password-status`, {
+    const backendRes = await fetch(`${BACKEND_URL}/api/internal/onboarding-status`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'X-Internal-API-Key': AUTO_REGISTER_API_KEY },
       body: JSON.stringify(emails),
     });
     if (!backendRes.ok) {
       const err = await backendRes.json().catch(() => ({}));
-      console.error('password-status backend error:', err);
+      console.error('onboarding-status backend error:', err);
       return res.status(502).json({ error: 'Backend request failed' });
     }
     results = await backendRes.json();
   } catch (err) {
-    console.error('password-status fetch error:', err);
+    console.error('onboarding-status fetch error:', err);
     return res.status(502).json({ error: 'Could not reach backend' });
   }
 
-  // Update status to "Completed" for users who have set their password
-  const completedEmails = results.filter(r => r.passwordChanged === true).map(r => r.email);
-  if (completedEmails.length > 0) {
-    const supabase = getSupabase();
-    const { error: updateError } = await supabase
-      .from('applications')
-      .update({ application_status: 'Completed' })
-      .in('email', completedEmails)
-      .eq('application_status', 'Approved');
-    if (updateError) {
-      console.error('Failed to update completed statuses:', updateError);
-      // Non-fatal — still return results to the frontend
-    }
+  if (!Array.isArray(results)) {
+    console.error('onboarding-status: unexpected backend payload', results);
+    return res.status(502).json({ error: 'Unexpected response from backend' });
   }
 
-  return res.status(200).json({ results, completedCount: completedEmails.length });
+  const supabase = getSupabase();
+  const nowIso = new Date().toISOString();
+  const counts = { Registered: 0, 'Listing Started': 0, 'Listing Completed': 0 };
+
+  // Persist per-row: the raw signal always, the mapped status only when the row
+  // is still in the onboarding funnel. Backend echoes emails lower-cased, so match
+  // case-insensitively via ilike.
+  await Promise.all(results.map(async (r) => {
+    if (!r?.email) return;
+
+    const update = {
+      listing_status: r.listingStatus ?? null,
+      listing_count: Number.isInteger(r.listingCount) ? r.listingCount : 0,
+      listing_status_checked_at: nowIso,
+    };
+    const mapped = mapOnboardingStatus(r);
+    if (mapped) {
+      update.application_status = mapped;
+      counts[mapped] = (counts[mapped] || 0) + 1;
+    }
+
+    const { error } = await supabase
+      .from('applications')
+      .update(update)
+      .ilike('email', ilikeExact(r.email))
+      .in('application_status', ONBOARDING_STATUSES);
+    if (error) console.error(`Failed to update onboarding status for ${r.email}:`, error);
+
+    // Stamp the first-seen login time once, without clobbering it on later polls.
+    if (r.found && r.passwordChanged) {
+      const { error: loginErr } = await supabase
+        .from('applications')
+        .update({ logged_in_at: nowIso })
+        .ilike('email', ilikeExact(r.email))
+        .is('logged_in_at', null);
+      if (loginErr) console.error(`Failed to stamp logged_in_at for ${r.email}:`, loginErr);
+    }
+  }));
+
+  const advancedCount = counts.Registered + counts['Listing Started'] + counts['Listing Completed'];
+  return res.status(200).json({ results, counts, advancedCount });
 }
 
 async function resendWelcomeEmail(req, res) {
@@ -313,7 +371,7 @@ async function resendApprovalEmail(req, res) {
   }
 }
 
-const POST_ACTIONS = { approve, reject, 'resend-photos': resendPhotos, 'delete-application': deleteApplication, 'delete-photo': deletePhoto, 'check-password-status': checkPasswordStatus, 'resend-welcome-email': resendWelcomeEmail, 'resend-approval-email': resendApprovalEmail };
+const POST_ACTIONS = { approve, reject, 'resend-photos': resendPhotos, 'delete-application': deleteApplication, 'delete-photo': deletePhoto, 'check-onboarding-status': checkOnboardingStatus, 'check-password-status': checkOnboardingStatus, 'resend-welcome-email': resendWelcomeEmail, 'resend-approval-email': resendApprovalEmail };
 const GET_ACTIONS  = { 'calculator-leads': calculatorLeads };
 
 export default async function handler(req, res) {

@@ -137,6 +137,14 @@
         `;
       } else if (app.application_status === 'Rejected') {
         actionsHtml = `<span style="color: #991B1B; font-weight: 500;">✕ This application has been rejected.</span>`;
+      } else if (app.application_status === 'Registered') {
+        actionsHtml = `<span style="color: #3730A3; font-weight: 500;">👤 Logged in to the platform — hasn't started a listing yet.</span>`;
+      } else if (app.application_status === 'Listing Started') {
+        const n = app.listing_count || 0;
+        actionsHtml = `<span style="color: #9A3412; font-weight: 500;">🏗️ Started a property listing${n ? ` (${n} in progress)` : ''} — not yet completed.</span>`;
+      } else if (app.application_status === 'Listing Completed') {
+        const n = app.listing_count || 0;
+        actionsHtml = `<span style="color: #166534; font-weight: 500;">✅ Property listing completed${n ? ` (${n} live)` : ''}.</span>`;
       }
 
       // Photos section
