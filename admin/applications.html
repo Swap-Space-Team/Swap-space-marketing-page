@@ -557,14 +557,17 @@
         const notSetup = stalled.filter(r => r.found);
         const notFound = stalled.filter(r => !r.found);
 
+        // Failures first — they were previously buried under a list of 70-odd
+        // addresses, which is how a run where every write was rejected still read
+        // as an ordinary result.
         const lines = [];
+        if (errorCount)        lines.push(`⚠️ ${errorCount} database write${errorCount !== 1 ? 's' : ''} rejected — check the function logs.`);
+        if (skippedCount)      lines.push(`↷ ${skippedCount} matched no updatable row (rejected, or outside the funnel).`);
         if (registered.length) lines.push(`👤 Registered — no listing yet (${registered.length}): ${registered.join(', ')}`);
         if (started.length)    lines.push(`🏗️ Listing Started (${started.length}): ${started.join(', ')}`);
         if (completed.length)  lines.push(`✅ Listing Completed (${completed.length}): ${completed.join(', ')}`);
         if (notSetup.length)   lines.push(`⏳ Not yet active (${notSetup.length}): ${notSetup.map(r => r.email).join(', ')}`);
         if (notFound.length)   lines.push(`✗ No account found (${notFound.length}): ${notFound.map(r => r.email).join(', ')}`);
-        if (skippedCount)      lines.push(`↷ ${skippedCount} matched no updatable row (rejected, or outside the funnel).`);
-        if (errorCount)        lines.push(`⚠️ ${errorCount} database write${errorCount !== 1 ? 's' : ''} failed — check the function logs.`);
 
         showToast({
           title: `Refreshed ${emails.length} applicant${emails.length !== 1 ? 's' : ''} — ${advancedCount} updated`,

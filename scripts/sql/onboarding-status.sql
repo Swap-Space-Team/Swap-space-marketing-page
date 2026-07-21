@@ -2,10 +2,12 @@
 --
 -- Lets the admin panel track an applicant PAST the "logged in" point: whether
 -- they've started listing a property and whether they've finished. The coarse
--- label still lives in `applications.application_status` (a plain text column, no
--- enum/check — new values like 'Listing Started' store as-is). These columns keep
--- the richer raw signal returned by BACKEND_URL/api/internal/onboarding-status so
--- we don't lose it behind the coarse status.
+-- label still lives in `applications.application_status`. These columns keep the
+-- richer raw signal returned by BACKEND_URL/api/internal/onboarding-status so we
+-- don't lose it behind the coarse status.
+--
+-- NOTE: application_status carries a CHECK constraint that must be widened before
+-- the new labels will store — see onboarding-status-constraint.sql. Run that too.
 --
 -- Nothing is dropped or repurposed, so rolling back the application code never
 -- requires reverting this migration. Safe to run before deploying.
