@@ -194,7 +194,11 @@ async function calculatorLeads(req, res) {
 // only ever advance a row along this ladder — it must never override a human
 // decision (Rejected) or an earlier funnel stage (Photos*), so only these
 // statuses are eligible to be updated by check-onboarding-status.
-const ONBOARDING_STATUSES = ['Approved', 'Registered', 'Listing Started', 'Listing Completed'];
+// Statuses a poll result is allowed to overwrite. 'Completed' is the legacy label
+// this ladder replaced — rows still carrying it need to be re-graded. Everything
+// else (Pending, Photos*, Rejected) is a human decision the poll must not touch,
+// even though we now ask the backend about every applicant.
+const ONBOARDING_STATUSES = ['Approved', 'Completed', 'Registered', 'Listing Started', 'Listing Completed'];
 
 // The backend echoes emails lower-cased, but our stored emails keep the case the
 // applicant typed — so we match case-insensitively with ilike. Escape ilike's
