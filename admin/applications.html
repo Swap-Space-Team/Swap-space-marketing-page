@@ -484,16 +484,19 @@
     }
 
     async function checkOnboardingStatus() {
-      // Poll every applicant still moving through the post-approval funnel, so we
-      // can keep advancing them (Approved → Registered → Listing Started → …).
-      const funnelStatuses = ['Approved', 'Registered', 'Listing Started', 'Listing Completed'];
-      const emails = allApplications
-        .filter(a => funnelStatuses.includes(a.application_status))
-        .map(a => a.email)
-        .filter(Boolean);
+      // Poll every applicant we have an email for, whatever their status — a row
+      // parked on a legacy 'Completed' (or any other) status still has a real
+      // listing state on the platform that we want to see. The API decides which
+      // rows are safe to actually advance; here we just ask about everyone.
+      const emails = [...new Map(
+        allApplications
+          .map(a => a.email)
+          .filter(Boolean)
+          .map(e => [e.toLowerCase(), e])
+      ).values()];
 
       if (emails.length === 0) {
-        await showAlert({ title: 'Nothing to Refresh', message: 'There are no approved or onboarding applicants to check.', variant: 'info' });
+        await showAlert({ title: 'Nothing to Refresh', message: 'There are no applicants with an email address to check.', variant: 'info' });
         return;
       }
 
@@ -502,26 +505,43 @@
       btn.textContent = 'Refreshing…';
 
       try {
-        const response = await adminFetch('/api/admin?action=check-onboarding-status', {
-          method: 'POST',
-          body: JSON.stringify({ emails }),
-        });
-        if (!response) return;
+        // The backend caps each call at ~500 emails, so send in chunks and merge.
+        const BATCH_SIZE = 400;
+        const results = [];
+        let advancedCount = 0;
 
-        const data = await response.json();
-        if (!response.ok || !data.results) {
-          await showAlert({ title: 'Error', message: data.error || 'Unexpected response from server.', variant: 'danger' });
-          return;
+        for (let i = 0; i < emails.length; i += BATCH_SIZE) {
+          const batch = emails.slice(i, i + BATCH_SIZE);
+          if (emails.length > BATCH_SIZE) {
+            btn.textContent = `Refreshing ${Math.min(i + batch.length, emails.length)}/${emails.length}…`;
+          }
+
+          const response = await adminFetch('/api/admin?action=check-onboarding-status', {
+            method: 'POST',
+            body: JSON.stringify({ emails: batch }),
+          });
+          if (!response) return;
+
+          const data = await response.json();
+          if (!response.ok || !data.results) {
+            await showAlert({ title: 'Error', message: data.error || 'Unexpected response from server.', variant: 'danger' });
+            return;
+          }
+
+          results.push(...data.results);
+          advancedCount += data.advancedCount || 0;
         }
 
-        const { results, counts = {}, advancedCount = 0 } = data;
-
-        // Merge mapped statuses + raw listing signal back into local state.
+        // Merge mapped statuses + raw listing signal back into local state. Mirrors
+        // ONBOARDING_STATUSES in api/admin.js — we now ask about every applicant, but
+        // only these rows are actually re-graded server-side, so only these may move
+        // locally. Pending / Photos* / Rejected keep their human-set status.
+        const advanceable = ['Approved', 'Completed', 'Registered', 'Listing Started', 'Listing Completed'];
         const byEmail = new Map(results.filter(r => r.email).map(r => [r.email.toLowerCase(), r]));
         allApplications = allApplications.map(a => {
           const r = a.email ? byEmail.get(a.email.toLowerCase()) : null;
           if (!r) return a;
-          const mapped = mapOnboardingStatus(r);
+          const mapped = advanceable.includes(a.application_status) ? mapOnboardingStatus(r) : null;
           return {
             ...a,
             application_status: mapped || a.application_status,
