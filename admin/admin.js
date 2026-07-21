@@ -401,6 +401,9 @@ function statusBadge(status) {
     'Photos Received': 'background: #DBEAFE; color: #1E40AF;',
     'Approved': 'background: #D1FAE5; color: #065F46;',
     'Rejected': 'background: #FEE2E2; color: #991B1B;',
+    'Registered': 'background: #E0E7FF; color: #3730A3;',
+    'Listing Started': 'background: #FFEDD5; color: #9A3412;',
+    'Listing Completed': 'background: #DCFCE7; color: #166534;',
     'Completed': 'background: #E0E7FF; color: #3730A3;',
   };
   const style = colors[status] || 'background: #F3F4F6; color: #374151;';
