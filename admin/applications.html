@@ -474,15 +474,6 @@
     }
     // ── End CSV downloads ────────────────────────────────────────────────────
 
-    // Maps the backend's raw onboarding signal to our coarse status. Mirrors
-    // mapOnboardingStatus() in api/admin.js — keep the two in sync.
-    function mapOnboardingStatus(r) {
-      if (!r.found || !r.passwordChanged) return null; // hasn't logged in — stays Approved
-      if (r.listingStatus === 'completed') return 'Listing Completed';
-      if (r.listingStatus === 'started')   return 'Listing Started';
-      return 'Registered';
-    }
-
     async function checkOnboardingStatus() {
       // Poll every applicant we have an email for, whatever their status — a row
       // parked on a legacy 'Completed' (or any other) status still has a real
@@ -508,7 +499,8 @@
         // The backend caps each call at ~500 emails, so send in chunks and merge.
         const BATCH_SIZE = 400;
         const results = [];
-        let advancedCount = 0;
+        const applied = [];
+        let advancedCount = 0, skippedCount = 0, errorCount = 0;
 
         for (let i = 0; i < emails.length; i += BATCH_SIZE) {
           const batch = emails.slice(i, i + BATCH_SIZE);
@@ -529,47 +521,55 @@
           }
 
           results.push(...data.results);
+          applied.push(...(data.applied || []));
           advancedCount += data.advancedCount || 0;
+          skippedCount  += data.skippedCount || 0;
+          errorCount    += data.errorCount || 0;
         }
 
-        // Merge mapped statuses + raw listing signal back into local state. Mirrors
-        // ONBOARDING_STATUSES in api/admin.js — we now ask about every applicant, but
-        // only these rows are actually re-graded server-side, so only these may move
-        // locally. Pending / Photos* / Rejected keep their human-set status.
-        const advanceable = ['Approved', 'Completed', 'Registered', 'Listing Started', 'Listing Completed'];
-        const byEmail = new Map(results.filter(r => r.email).map(r => [r.email.toLowerCase(), r]));
+        // Merge from `applied` — what the API read back out of the database — rather
+        // than re-deriving a status from the raw backend payload. The old mirror could
+        // paint a row green that the write never touched, so the badge changed and
+        // then reverted on reload. Now the table can only show what was stored.
+        const byEmail = new Map(applied.filter(w => w.email).map(w => [w.email.toLowerCase(), w]));
         allApplications = allApplications.map(a => {
-          const r = a.email ? byEmail.get(a.email.toLowerCase()) : null;
-          if (!r) return a;
-          const mapped = advanceable.includes(a.application_status) ? mapOnboardingStatus(r) : null;
+          const w = a.email ? byEmail.get(a.email.toLowerCase()) : null;
+          if (!w || !w.rowsUpdated) return a;
           return {
             ...a,
-            application_status: mapped || a.application_status,
-            listing_status: r.listingStatus ?? a.listing_status,
-            listing_count: Number.isInteger(r.listingCount) ? r.listingCount : a.listing_count,
+            application_status: w.status || a.application_status,
+            listing_status: w.listingStatus ?? a.listing_status,
+            listing_count: Number.isInteger(w.listingCount) ? w.listingCount : a.listing_count,
           };
         });
         updateStats();
         renderTable();
 
-        // Build toast summary grouped by resulting stage.
-        const registered = results.filter(r => mapOnboardingStatus(r) === 'Registered');
-        const started    = results.filter(r => mapOnboardingStatus(r) === 'Listing Started');
-        const completed  = results.filter(r => mapOnboardingStatus(r) === 'Listing Completed');
-        const notSetup   = results.filter(r => r.found && !r.passwordChanged);
-        const notFound   = results.filter(r => !r.found);
+        // Toast summary: stored stages come from `applied`, the "why not" buckets from
+        // the raw backend payload for applicants who didn't move.
+        const stored = s => applied.filter(w => w.status === s).map(w => w.email);
+        const registered = stored('Registered');
+        const started    = stored('Listing Started');
+        const completed  = stored('Listing Completed');
+
+        const movedSet = new Set(applied.filter(w => w.status).map(w => w.email.toLowerCase()));
+        const stalled  = results.filter(r => r.email && !movedSet.has(r.email.toLowerCase()));
+        const notSetup = stalled.filter(r => r.found);
+        const notFound = stalled.filter(r => !r.found);
 
         const lines = [];
-        if (registered.length) lines.push(`👤 Registered — no listing yet (${registered.length}): ${registered.map(r => r.email).join(', ')}`);
-        if (started.length)    lines.push(`🏗️ Listing Started (${started.length}): ${started.map(r => r.email).join(', ')}`);
-        if (completed.length)  lines.push(`✅ Listing Completed (${completed.length}): ${completed.map(r => r.email).join(', ')}`);
-        if (notSetup.length)   lines.push(`⏳ Not yet logged in (${notSetup.length}): ${notSetup.map(r => r.email).join(', ')}`);
+        if (registered.length) lines.push(`👤 Registered — no listing yet (${registered.length}): ${registered.join(', ')}`);
+        if (started.length)    lines.push(`🏗️ Listing Started (${started.length}): ${started.join(', ')}`);
+        if (completed.length)  lines.push(`✅ Listing Completed (${completed.length}): ${completed.join(', ')}`);
+        if (notSetup.length)   lines.push(`⏳ Not yet active (${notSetup.length}): ${notSetup.map(r => r.email).join(', ')}`);
         if (notFound.length)   lines.push(`✗ No account found (${notFound.length}): ${notFound.map(r => r.email).join(', ')}`);
+        if (skippedCount)      lines.push(`↷ ${skippedCount} matched no updatable row (rejected, or outside the funnel).`);
+        if (errorCount)        lines.push(`⚠️ ${errorCount} database write${errorCount !== 1 ? 's' : ''} failed — check the function logs.`);
 
         showToast({
-          title: `Refreshed ${emails.length} applicant${emails.length !== 1 ? 's' : ''} — ${advancedCount} advanced`,
+          title: `Refreshed ${emails.length} applicant${emails.length !== 1 ? 's' : ''} — ${advancedCount} updated`,
           lines,
-          variant: advancedCount > 0 ? 'info' : 'warning',
+          variant: errorCount ? 'danger' : (advancedCount > 0 ? 'info' : 'warning'),
           duration: 8000,
         });
       } catch (err) {

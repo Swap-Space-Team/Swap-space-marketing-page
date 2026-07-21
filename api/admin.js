@@ -198,7 +198,9 @@ async function calculatorLeads(req, res) {
 // this ladder replaced — rows still carrying it need to be re-graded. Everything
 // else (Pending, Photos*, Rejected) is a human decision the poll must not touch,
 // even though we now ask the backend about every applicant.
-const ONBOARDING_STATUSES = ['Approved', 'Completed', 'Registered', 'Listing Started', 'Listing Completed'];
+// 'Welcome Sent' is another legacy post-approval label no code writes any more, but
+// two rows still carry it — without it here they could never leave that dead end.
+const ONBOARDING_STATUSES = ['Approved', 'Welcome Sent', 'Completed', 'Registered', 'Listing Started', 'Listing Completed'];
 
 // The backend echoes emails lower-cased, but our stored emails keep the case the
 // applicant typed — so we match case-insensitively with ilike. Escape ilike's
@@ -209,16 +211,27 @@ function ilikeExact(value) {
 }
 
 // Maps the backend's raw onboarding signal to our coarse application_status.
-// Returns null when the user hasn't logged in yet — the row stays 'Approved' and
-// we only refresh the raw columns.
+// Returns null when there's nothing to say — the row keeps its status and we only
+// refresh the raw columns.
+//
+// listingStatus is authoritative and checked FIRST. passwordChanged means the user
+// reset the password we emailed them, which is not the same as having used the
+// platform: plenty of hosts sign in with the emailed password, never reset it, and
+// go on to publish a listing. Gating listing progress behind that flag left users
+// with live properties stuck on 'Approved'. passwordChanged now only decides the
+// bottom rung — whether someone with no listing has logged in at all.
 function mapOnboardingStatus(r) {
-  if (!r?.found || !r.passwordChanged) return null;
-  switch (r.listingStatus) {
-    case 'completed': return 'Listing Completed';
-    case 'started':   return 'Listing Started';
-    case 'none':
-    default:          return 'Registered';
-  }
+  if (!r?.found) return null;
+  if (r.listingStatus === 'completed') return 'Listing Completed';
+  if (r.listingStatus === 'started')   return 'Listing Started';
+  if (r.listingCount > 0)              return 'Listing Started'; // has listings, status unrecognised
+  return r.passwordChanged ? 'Registered' : null;
+}
+
+// Has the applicant demonstrably used the platform? Same reasoning as above — a
+// listing proves it just as well as a password reset does.
+function hasEngaged(r) {
+  return !!r?.found && (r.passwordChanged === true || r.listingStatus === 'started' || r.listingStatus === 'completed' || r.listingCount > 0);
 }
 
 async function checkOnboardingStatus(req, res) {
@@ -258,13 +271,18 @@ async function checkOnboardingStatus(req, res) {
 
   const supabase = getSupabase();
   const nowIso = new Date().toISOString();
-  const counts = { Registered: 0, 'Listing Started': 0, 'Listing Completed': 0 };
 
   // Persist per-row: the raw signal always, the mapped status only when the row
   // is still in the onboarding funnel. Backend echoes emails lower-cased, so match
   // case-insensitively via ilike.
-  await Promise.all(results.map(async (r) => {
-    if (!r?.email) return;
+  //
+  // Every outcome below is read back from the write via .select(), never inferred
+  // from the backend payload. An update whose filters match no row succeeds with
+  // zero rows, so reporting "advanced" off the payload claimed success for writes
+  // that silently did nothing — which is exactly how the funnel looked correct in
+  // the UI while the database never moved.
+  const applied = await Promise.all(results.map(async (r) => {
+    if (!r?.email) return null;
 
     const update = {
       listing_status: r.listingStatus ?? null,
@@ -272,20 +290,22 @@ async function checkOnboardingStatus(req, res) {
       listing_status_checked_at: nowIso,
     };
     const mapped = mapOnboardingStatus(r);
-    if (mapped) {
-      update.application_status = mapped;
-      counts[mapped] = (counts[mapped] || 0) + 1;
-    }
+    if (mapped) update.application_status = mapped;
 
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from('applications')
       .update(update)
       .ilike('email', ilikeExact(r.email))
-      .in('application_status', ONBOARDING_STATUSES);
-    if (error) console.error(`Failed to update onboarding status for ${r.email}:`, error);
+      .in('application_status', ONBOARDING_STATUSES)
+      .select('id, application_status');
 
-    // Stamp the first-seen login time once, without clobbering it on later polls.
-    if (r.found && r.passwordChanged) {
+    if (error) {
+      console.error(`Failed to update onboarding status for ${r.email}:`, error);
+      return { email: r.email, rowsUpdated: 0, status: null, error: error.message };
+    }
+
+    // Stamp the first-seen engagement time once, without clobbering it on later polls.
+    if (hasEngaged(r)) {
       const { error: loginErr } = await supabase
         .from('applications')
         .update({ logged_in_at: nowIso })
@@ -293,10 +313,31 @@ async function checkOnboardingStatus(req, res) {
         .is('logged_in_at', null);
       if (loginErr) console.error(`Failed to stamp logged_in_at for ${r.email}:`, loginErr);
     }
+
+    const rowsUpdated = data?.length || 0;
+    return {
+      email: r.email,
+      rowsUpdated,
+      // The status actually stored, read back from the row — null when the write
+      // matched nothing (status outside the funnel) or carried no status change.
+      status: rowsUpdated && mapped ? data[0].application_status : null,
+      listingStatus: update.listing_status,
+      listingCount: update.listing_count,
+    };
   }));
 
-  const advancedCount = counts.Registered + counts['Listing Started'] + counts['Listing Completed'];
-  return res.status(200).json({ results, counts, advancedCount });
+  const written = applied.filter(Boolean);
+  const counts = { Registered: 0, 'Listing Started': 0, 'Listing Completed': 0 };
+  written.forEach(w => { if (w.status) counts[w.status] = (counts[w.status] || 0) + 1; });
+
+  const advancedCount = written.filter(w => w.status).length;
+  const skippedCount = written.filter(w => !w.rowsUpdated).length;
+  const errorCount = written.filter(w => w.error).length;
+  if (skippedCount || errorCount) {
+    console.warn(`onboarding-status: ${skippedCount} row(s) matched nothing, ${errorCount} write error(s)`);
+  }
+
+  return res.status(200).json({ results, applied: written, counts, advancedCount, skippedCount, errorCount });
 }
 
 async function resendWelcomeEmail(req, res) {
