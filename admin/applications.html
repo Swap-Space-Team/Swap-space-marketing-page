@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Applications | SwapSpace Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
   <link rel="stylesheet" href="/admin/admin.css">
 </head>
 <body>
@@ -27,50 +30,44 @@
       </div>
     </div>
 
-    <!-- Tab switcher -->
-    <div style="display:flex; gap:4px; margin-bottom:28px; border-bottom:1px solid #E5E7EB; padding-bottom:0;">
-      <button id="tabApplications" onclick="switchTab('applications')" style="padding:8px 18px 10px; font-size:14px; font-weight:500; background:none; border:none; border-bottom:2px solid #079455; color:#079455; cursor:pointer; margin-bottom:-1px; font-family:inherit;">Applications</button>
-      <button id="tabLeads" onclick="switchTab('leads')" style="padding:8px 18px 10px; font-size:14px; font-weight:500; background:none; border:none; border-bottom:2px solid transparent; color:#6B7280; cursor:pointer; margin-bottom:-1px; font-family:inherit;">Calculator Leads</button>
+    <!-- ── Stat panel: tab switcher + the active tab's summary ── -->
+    <div class="stat-panel">
+      <div class="stat-tabs" role="tablist">
+        <button id="tabApplications" class="stat-tab is-active" role="tab" aria-selected="true" onclick="switchTab('applications')">Applications</button>
+        <button id="tabLeads" class="stat-tab" role="tab" aria-selected="false" onclick="switchTab('leads')">Calculator Leads</button>
+      </div>
+
+      <div class="stat-body" id="statBodyApplications">
+        <div class="stat-hero">
+          <div class="stat-hero-top">
+            <div class="stat-hero-label">Total Applications</div>
+            <div class="stat-hero-dot"></div>
+          </div>
+          <div class="stat-hero-figure">
+            <div class="stat-hero-value" id="statTotal">—</div>
+            <div class="stat-hero-caption">All applications this period</div>
+          </div>
+        </div>
+        <div class="stat-grid" id="statGridApplications"></div>
+      </div>
+
+      <div class="stat-body" id="statBodyLeads" style="display:none;">
+        <div class="stat-hero">
+          <div class="stat-hero-top">
+            <div class="stat-hero-label">Total Leads</div>
+            <div class="stat-hero-dot"></div>
+          </div>
+          <div class="stat-hero-figure">
+            <div class="stat-hero-value" id="leadStatTotal">—</div>
+            <div class="stat-hero-caption">All calculator leads this period</div>
+          </div>
+        </div>
+        <div class="stat-grid stat-grid--3" id="statGridLeads"></div>
+      </div>
     </div>
 
     <!-- ── Applications tab ── -->
     <div id="panelApplications">
-      <!-- Stats -->
-      <div class="stats-bar" id="statsBar">
-        <div class="stat-card">
-          <div class="stat-label">Total</div>
-          <div class="stat-value" id="statTotal">—</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Received</div>
-          <div class="stat-value" id="statReceived">—</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Approved</div>
-          <div class="stat-value" id="statApproved">—</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Auto-approved</div>
-          <div class="stat-value" id="statAutoApproved">—</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Rejected</div>
-          <div class="stat-value" id="statRejected">—</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Registered</div>
-          <div class="stat-value" id="statRegistered">—</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Listing Started</div>
-          <div class="stat-value" id="statListingStarted">—</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Listing Completed</div>
-          <div class="stat-value" id="statListingCompleted">—</div>
-        </div>
-      </div>
-
       <!-- Filters -->
       <div class="filters">
         <div class="filter-btns">
@@ -141,26 +138,6 @@
 
     <!-- ── Calculator Leads tab ── -->
     <div id="panelLeads" style="display:none;">
-      <!-- Stats -->
-      <div class="stats-bar">
-        <div class="stat-card">
-          <div class="stat-label">Total Leads</div>
-          <div class="stat-value" id="leadStatTotal">—</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Budget</div>
-          <div class="stat-value" id="leadStatBudget">—</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Mid-range</div>
-          <div class="stat-value" id="leadStatMid">—</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Comfortable</div>
-          <div class="stat-value" id="leadStatComfort">—</div>
-        </div>
-      </div>
-
       <!-- Search + Download -->
       <div class="filters" style="justify-content:flex-end; gap:8px;">
         <button onclick="downloadLeadsCSV()" class="btn btn-secondary" style="font-size:13px; display:inline-flex; align-items:center; gap:6px;">
@@ -245,22 +222,38 @@
       renderTable();
     }
 
+    // Renders the category tiles for a stat panel. Each tile shows its count,
+    // its share of the total, and a mini bar proportional to that share — with
+    // a 2% floor so a non-zero-but-tiny category still reads as a sliver.
+    function renderStatTiles(gridId, stats, total) {
+      document.getElementById(gridId).innerHTML = stats.map(s => {
+        const pct = total > 0 ? Math.round((s.value / total) * 100) : 0;
+        return `<div class="stat-tile">
+          <span class="stat-tile-rail" style="background:${s.color};"></span>
+          <div class="stat-tile-label">${s.label}</div>
+          <div class="stat-tile-figure">
+            <div class="stat-tile-value">${s.value}</div>
+            <div class="stat-tile-pct">${pct}%</div>
+          </div>
+          <div class="stat-tile-bar"><span style="width:${Math.max(pct, 2)}%; background:${s.color};"></span></div>
+        </div>`;
+      }).join('');
+    }
+
     function updateStats() {
-      document.getElementById('statTotal').textContent = allApplications.length;
-      document.getElementById('statReceived').textContent =
-        allApplications.filter(a => a.application_status === 'Application Received').length;
-      document.getElementById('statApproved').textContent =
-        allApplications.filter(a => a.application_status === 'Approved').length;
-      document.getElementById('statAutoApproved').textContent =
-        allApplications.filter(a => a.auto_approved === true).length;
-      document.getElementById('statRejected').textContent =
-        allApplications.filter(a => a.application_status === 'Rejected').length;
-      document.getElementById('statRegistered').textContent =
-        allApplications.filter(a => a.application_status === 'Registered').length;
-      document.getElementById('statListingStarted').textContent =
-        allApplications.filter(a => a.application_status === 'Listing Started').length;
-      document.getElementById('statListingCompleted').textContent =
-        allApplications.filter(a => a.application_status === 'Listing Completed').length;
+      const byStatus = status => allApplications.filter(a => a.application_status === status).length;
+      const total = allApplications.length;
+
+      document.getElementById('statTotal').textContent = total;
+      renderStatTiles('statGridApplications', [
+        { label: 'Received',          value: byStatus('Application Received'),                 color: '#94a3b8' },
+        { label: 'Approved',          value: byStatus('Approved'),                             color: '#059669' },
+        { label: 'Auto-Approved',     value: allApplications.filter(a => a.auto_approved === true).length, color: '#10b981' },
+        { label: 'Rejected',          value: byStatus('Rejected'),                             color: '#ef6a5a' },
+        { label: 'Registered',        value: byStatus('Registered'),                           color: '#6366f1' },
+        { label: 'Listing Started',   value: byStatus('Listing Started'),                      color: '#f0a83c' },
+        { label: 'Listing Completed', value: byStatus('Listing Completed'),                    color: '#3b93d9' },
+      ], total);
     }
 
     // Small pill shown alongside the status for applications that were approved
@@ -361,13 +354,15 @@
       const isLeads = tab === 'leads';
       document.getElementById('panelApplications').style.display = isLeads ? 'none' : 'block';
       document.getElementById('panelLeads').style.display = isLeads ? 'block' : 'none';
+      document.getElementById('statBodyApplications').style.display = isLeads ? 'none' : '';
+      document.getElementById('statBodyLeads').style.display = isLeads ? '' : 'none';
 
       const tabApps  = document.getElementById('tabApplications');
       const tabLeads = document.getElementById('tabLeads');
-      tabApps.style.borderBottomColor  = isLeads ? 'transparent' : '#079455';
-      tabApps.style.color              = isLeads ? '#6B7280' : '#079455';
-      tabLeads.style.borderBottomColor = isLeads ? '#079455' : 'transparent';
-      tabLeads.style.color             = isLeads ? '#079455' : '#6B7280';
+      tabApps.classList.toggle('is-active', !isLeads);
+      tabApps.setAttribute('aria-selected', String(!isLeads));
+      tabLeads.classList.toggle('is-active', isLeads);
+      tabLeads.setAttribute('aria-selected', String(isLeads));
 
       if (isLeads && allLeads === null) loadLeads();
     }
@@ -385,10 +380,15 @@
     }
 
     function updateLeadsStats() {
-      document.getElementById('leadStatTotal').textContent   = allLeads.length;
-      document.getElementById('leadStatBudget').textContent  = allLeads.filter(l => l.style === 'budget').length;
-      document.getElementById('leadStatMid').textContent     = allLeads.filter(l => l.style === 'mid-range').length;
-      document.getElementById('leadStatComfort').textContent = allLeads.filter(l => l.style === 'comfortable').length;
+      const byStyle = style => allLeads.filter(l => l.style === style).length;
+      const total = allLeads.length;
+
+      document.getElementById('leadStatTotal').textContent = total;
+      renderStatTiles('statGridLeads', [
+        { label: 'Budget',      value: byStyle('budget'),      color: '#059669' },
+        { label: 'Mid-range',   value: byStyle('mid-range'),   color: '#6366f1' },
+        { label: 'Comfortable', value: byStyle('comfortable'), color: '#3b93d9' },
+      ], total);
     }
 
     function renderLeadsTable() {
