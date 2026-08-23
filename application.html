@@ -1266,7 +1266,9 @@
               </div>
             </div>
 
-            <a href="https://swap-space.com" class="btn-go-home">Go home</a>
+            <!-- Label and destination are set in showStep(6): the password-setup page for
+                 pre-approved applicants, the marketing home page for everyone else. -->
+            <a href="https://swap-space.com" class="btn-go-home" id="confirmationCta">Go home</a>
 
             <div style="width: 100%;">
               <div class="confirmation-photos">
@@ -1431,7 +1433,27 @@
       if (step === 6) {
         const body = document.getElementById('confirmationBody');
         const title = document.querySelector('[data-step="6"] .confirmation-title');
-        if (lastSubmitResult && lastSubmitResult.preApproved) {
+        const cta = document.getElementById('confirmationCta');
+        const setupLink = lastSubmitResult?.passwordSetupLink;
+        if (lastSubmitResult && lastSubmitResult.preApproved && setupLink) {
+          if (title) title.textContent = "You've been pre-approved!";
+          if (body) {
+            body.innerHTML =
+              `<p>Great news — your application has been pre-approved. Set up your account now to create your listing and start swapping.</p>
+               <p>It only takes a minute.</p>`;
+          }
+          if (cta) {
+            cta.textContent = 'Set up your account';
+            cta.href = setupLink;
+            cta.onclick = () => {
+              if (typeof posthog !== 'undefined') {
+                posthog.capture('preapproval_setup_clicked', { experiment_variant: reorderVariant });
+              }
+            };
+          }
+        } else if (lastSubmitResult && lastSubmitResult.preApproved) {
+          // Pre-approved but no setup link came back (older backend, or the link failed the origin
+          // check). The welcome email carries the same link, so point them there instead.
           if (title) title.textContent = "You've been pre-approved!";
           if (body) {
             body.innerHTML =

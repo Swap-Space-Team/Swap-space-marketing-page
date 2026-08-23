@@ -89,6 +89,11 @@ export default async function handler(req, res) {
     // applicant back into the manual pile so we never promise an account we didn't
     // create. This decides which confirmation emails and success screen they get.
     let preApproved = false;
+    // Absolute link to the app's password-setup page, origin-validated in lib/auto-register.js.
+    // Handed to the confirmation screen so a pre-approved applicant can set their password without
+    // leaving for their inbox. Null when the backend didn't return one — the screen then falls back
+    // to pointing at the welcome email, which carries the same link.
+    let passwordSetupLink = null;
     if (wantAutoApprove) {
       const register = await autoRegisterUser({
         email: fields.Email,
@@ -98,6 +103,7 @@ export default async function handler(req, res) {
 
       if (register.ok) {
         preApproved = true;
+        passwordSetupLink = register.passwordSetupLink || null;
         console.log(`Auto-approved and registered ${fields.Email} (${region})`);
       } else {
         // Fallback: revert to the manual review pile.
@@ -454,7 +460,7 @@ export default async function handler(req, res) {
       console.log('Skipping Meta CAPI: META_PIXEL_ID or META_ACCESS_TOKEN missing');
     }
 
-    return res.status(200).json({ success: true, id: data.id, eventId, preApproved, region });
+    return res.status(200).json({ success: true, id: data.id, eventId, preApproved, region, passwordSetupLink });
   } catch (error) {
     console.error('Server error:', error);
     return res.status(500).json({ error: 'Internal server error' });
