@@ -1436,14 +1436,14 @@
         const cta = document.getElementById('confirmationCta');
         const setupLink = lastSubmitResult?.passwordSetupLink;
         if (lastSubmitResult && lastSubmitResult.preApproved && setupLink) {
-          if (title) title.textContent = "You've been pre-approved!";
+          if (title) title.textContent = "You’ve been approved!";
           if (body) {
             body.innerHTML =
-              `<p>Great news — your application has been pre-approved. Set up your account now to create your listing and start swapping.</p>
-               <p>It only takes a minute.</p>`;
+              `<p>Great news, your application has been approved. You can now set up your account, create your home listing and start swapping.</p>
+               <p>To create your listing, you’ll need to upload at least 5 photos of your home. You can save your progress and come back to finish your listing at any time.</p>`;
           }
           if (cta) {
-            cta.textContent = 'Set up your account';
+            cta.textContent = 'Complete account setup';
             cta.href = setupLink;
             cta.onclick = () => {
               if (typeof posthog !== 'undefined') {
@@ -1454,11 +1454,11 @@
         } else if (lastSubmitResult && lastSubmitResult.preApproved) {
           // Pre-approved but no setup link came back (older backend, or the link failed the origin
           // check). The welcome email carries the same link, so point them there instead.
-          if (title) title.textContent = "You've been pre-approved!";
+          if (title) title.textContent = "You’ve been approved!";
           if (body) {
             body.innerHTML =
-              `<p>Great news — your application has been pre-approved. We've sent you an email with a link to set up your account and list your property.</p>
-               <p>Check your inbox (and your spam folder, just in case) to get started.</p>`;
+              `<p>Great news, your application has been approved. We’ve sent you an email with a link to set up your account, create your home listing and start swapping.</p>
+               <p>To create your listing, you’ll need to upload at least 5 photos of your home. You can save your progress and come back to finish your listing at any time.</p>`;
           }
         } else {
           const isReady = document.getElementById('listingReady')?.value === 'ready';
