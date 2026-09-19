@@ -571,6 +571,37 @@
       text-align: center;
     }
 
+    .confirmation-title--reward .confirmation-title-main {
+      display: block;
+    }
+
+    .confirmation-offer {
+      display: block;
+      margin-top: 10px;
+      font-size: 22px;
+      font-weight: 600;
+      line-height: 30px;
+      letter-spacing: -0.22px;
+    }
+
+    .confirmation-credits {
+      color: #079455;
+      white-space: nowrap;
+    }
+
+    .confirmation-countdown {
+      display: inline-flex;
+      min-width: 5ch;
+      align-items: center;
+      justify-content: center;
+      padding: 1px 7px;
+      border-radius: 8px;
+      background: rgba(7, 148, 85, 0.08);
+      color: #079455;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
     .confirmation-body {
       font-family: 'Geist', sans-serif;
       font-size: 14px;
@@ -605,6 +636,10 @@
 
     .btn-go-home:hover { background: #067647; }
 
+    .confirmation-gallery {
+      width: 100%;
+    }
+
     .confirmation-photos {
       display: flex;
       gap: 12px;
@@ -624,6 +659,27 @@
       border-radius: 6px;
       object-fit: cover;
       scroll-snap-align: start;
+    }
+
+    @media (min-width: 601px) {
+      .confirmation-gallery {
+        width: 100vw;
+        margin-inline: calc(50% - 50vw);
+        padding-inline: 120px;
+      }
+
+      .confirmation-photos {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        overflow: visible;
+      }
+
+      .confirmation-photo {
+        display: block;
+        width: 100%;
+        min-width: 0;
+        height: auto;
+      }
     }
 
     .confirmation-caption {
@@ -805,6 +861,12 @@
       .confirmation-title {
         font-size: 28px;
         line-height: 36px;
+      }
+
+      .confirmation-offer {
+        margin-top: 8px;
+        font-size: 20px;
+        line-height: 28px;
       }
 
       .btn-go-home {
@@ -1270,7 +1332,7 @@
                  pre-approved applicants, the marketing home page for everyone else. -->
             <a href="https://swap-space.com" class="btn-go-home" id="confirmationCta">Go home</a>
 
-            <div style="width: 100%;">
+            <div class="confirmation-gallery">
               <div class="confirmation-photos">
                 <img
                   class="confirmation-photo"
@@ -1304,6 +1366,71 @@
     // Holds the /api/submit-application response so the confirmation screen (step 6)
     // can branch on whether the applicant was pre-approved.
     let lastSubmitResult = null;
+    let preApprovalCountdownInterval = null;
+
+    const PRE_APPROVAL_COUNTDOWN_MS = 30 * 60 * 1000;
+
+    function stopPreApprovalCountdown() {
+      if (preApprovalCountdownInterval) {
+        clearInterval(preApprovalCountdownInterval);
+        preApprovalCountdownInterval = null;
+      }
+    }
+
+    function startPreApprovalCountdown() {
+      stopPreApprovalCountdown();
+
+      const countdown = document.getElementById('preApprovalCountdown');
+      if (!countdown) return;
+
+      const applicationId = lastSubmitResult?.id || 'current';
+      const storageKey = `swapspace_preapproval_deadline_${applicationId}`;
+      let deadline = 0;
+
+      try {
+        deadline = Number(sessionStorage.getItem(storageKey));
+        if (!deadline) {
+          deadline = Date.now() + PRE_APPROVAL_COUNTDOWN_MS;
+          sessionStorage.setItem(storageKey, String(deadline));
+        }
+      } catch (_) {
+        deadline = Date.now() + PRE_APPROVAL_COUNTDOWN_MS;
+      }
+
+      const updateCountdown = () => {
+        const remainingSeconds = Math.max(0, Math.ceil((deadline - Date.now()) / 1000));
+        const minutes = Math.floor(remainingSeconds / 60);
+        const seconds = remainingSeconds % 60;
+
+        countdown.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        countdown.setAttribute('aria-label', `${minutes} minutes and ${seconds} seconds remaining`);
+
+        if (remainingSeconds === 0) stopPreApprovalCountdown();
+      };
+
+      updateCountdown();
+      if (deadline > Date.now()) {
+        preApprovalCountdownInterval = setInterval(updateCountdown, 1000);
+      }
+    }
+
+    function renderPreApprovedTitle(title) {
+      if (!title) return;
+
+      title.classList.add('confirmation-title--reward');
+      title.innerHTML =
+        `<span class="confirmation-title-main">You’ve been pre-approved.</span>
+         <span class="confirmation-offer">Unlock <span class="confirmation-credits">7 SwapCredits</span> when you list in <span class="confirmation-countdown" id="preApprovalCountdown" role="timer" aria-atomic="true">30:00</span></span>`;
+      startPreApprovalCountdown();
+    }
+
+    function renderStandardConfirmationTitle(title, text) {
+      stopPreApprovalCountdown();
+      if (!title) return;
+
+      title.classList.remove('confirmation-title--reward');
+      title.textContent = text;
+    }
 
     // PostHog experiment state
     let reorderVariant = 'control';
@@ -1436,14 +1563,14 @@
         const cta = document.getElementById('confirmationCta');
         const setupLink = lastSubmitResult?.passwordSetupLink;
         if (lastSubmitResult && lastSubmitResult.preApproved && setupLink) {
-          if (title) title.textContent = "You’ve been approved!";
+          renderPreApprovedTitle(title);
           if (body) {
             body.innerHTML =
-              `<p>Great news, your application has been approved. You can now set up your account, create your home listing and start swapping.</p>
-               <p>To create your listing, you’ll need to upload at least 5 photos of your home. You can save your progress and come back to finish your listing at any time.</p>`;
+              `<p>Your 7 SwapCredits cover 7 nights in another member’s home, so you can take your first trip for free without hosting anyone first.</p>
+               <p>To create your listing, you’ll need to upload at least <strong>5 photos of your home in landscape orientation.</strong> You can save your progress and come back to finish your listing at any time.</p>`;
           }
           if (cta) {
-            cta.textContent = 'Complete account setup';
+            cta.textContent = 'List my home';
             cta.href = setupLink;
             cta.onclick = () => {
               if (typeof posthog !== 'undefined') {
@@ -1454,15 +1581,15 @@
         } else if (lastSubmitResult && lastSubmitResult.preApproved) {
           // Pre-approved but no setup link came back (older backend, or the link failed the origin
           // check). The welcome email carries the same link, so point them there instead.
-          if (title) title.textContent = "You’ve been approved!";
+          renderPreApprovedTitle(title);
           if (body) {
             body.innerHTML =
-              `<p>Great news, your application has been approved. We’ve sent you an email with a link to set up your account, create your home listing and start swapping.</p>
-               <p>To create your listing, you’ll need to upload at least 5 photos of your home. You can save your progress and come back to finish your listing at any time.</p>`;
+              `<p>Your 7 SwapCredits cover 7 nights in another member’s home, so you can take your first trip for free without hosting anyone first.</p>
+               <p>We’ve emailed your account setup link. To create your listing, you’ll need to upload at least <strong>5 photos of your home in landscape orientation.</strong> You can save your progress and come back to finish your listing at any time.</p>`;
           }
         } else {
           const isReady = document.getElementById('listingReady')?.value === 'ready';
-          if (title) title.textContent = 'Application submitted';
+          renderStandardConfirmationTitle(title, 'Application submitted');
           if (body) {
             body.innerHTML = isReady
               ? `<p>Thanks for applying to SwapSpace. We'll review your application and get back to you within 24 hours.</p>
