@@ -2,7 +2,7 @@
    Lists every listing on the platform and lets an admin unpublish one or
    delete individual photos.
 
-   All data comes from our own /api/admin-properties proxy, which holds the
+   All data comes from our own /api/admin?resource=properties proxy, which holds the
    internal API key server-side and forwards to the SwapSpace backend along
    with the signed-in admin's email (the backend audits every action under
    it). The browser only talks to the proxy, via adminFetch() from
@@ -10,7 +10,7 @@
 
 'use strict';
 
-const PROXY = '/api/admin-properties';
+const PROXY = '/api/admin?resource=properties';
 const PAGE_SIZE = 25;
 
 let currentSearch = '';
@@ -63,7 +63,7 @@ async function loadRows() {
   if (currentStatus) params.set('published', currentStatus);
 
   try {
-    const res = await adminFetch(`${PROXY}?${params.toString()}`);
+    const res = await adminFetch(`${PROXY}&${params.toString()}`);
     if (!res) return; // redirected to login
     const data = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error(data.error || `Server responded ${res.status}`);
@@ -138,7 +138,7 @@ async function openRow(i) {
   openDrawer();
 
   try {
-    const res = await adminFetch(`${PROXY}?id=${encodeURIComponent(row.id)}`);
+    const res = await adminFetch(`${PROXY}&id=${encodeURIComponent(row.id)}`);
     if (!res) return;
     const data = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error(data.error || `Server responded ${res.status}`);
@@ -232,7 +232,7 @@ async function unpublish() {
 
   const btn = document.getElementById('unpublishBtn');
   await runAction(btn, 'Unpublishing…',
-    `${PROXY}?id=${openProperty.summary.id}&action=unpublish`,
+    `${PROXY}&id=${openProperty.summary.id}&op=unpublish`,
     { method: 'POST', body: JSON.stringify({ reason }) },
     'Listing unpublished');
 }
@@ -247,7 +247,7 @@ async function deleteImage(imageId) {
   if (!ok) return;
 
   await runAction(null, null,
-    `${PROXY}?id=${openProperty.summary.id}&imageId=${imageId}`,
+    `${PROXY}&id=${openProperty.summary.id}&imageId=${imageId}`,
     { method: 'DELETE' },
     'Photo deleted');
 }

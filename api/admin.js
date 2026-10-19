@@ -1,10 +1,11 @@
 import { createClient } from '@supabase/supabase-js';
 import { requireAdmin } from '../lib/verify-admin.js';
 import { autoRegisterUser } from '../lib/auto-register.js';
+import { handleAdminProperties } from '../lib/admin-properties.js';
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 };
 
@@ -416,6 +417,12 @@ export default async function handler(req, res) {
   const action = req.query.action;
   const user = await requireAdmin(req, res);
   if (!user) return;
+
+  // Property moderation lives here, not in its own api/ file, to stay within
+  // the Vercel Hobby plan's 12-function limit. See lib/admin-properties.js.
+  if (req.query.resource === 'properties') {
+    return handleAdminProperties(req, res, user);
+  }
 
   let fn;
   if (req.method === 'POST') {
