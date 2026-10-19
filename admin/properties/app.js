@@ -171,7 +171,7 @@ function renderDrawer(detail) {
   const unpublishSection = s.published ? `
     <section class="pp-section">
       <h3>Unpublish</h3>
-      <p class="pp-help">Removes the listing from search and browse. The host can see it in their account and edit it.</p>
+      <p class="pp-help">Removes the listing from search and browse and sends the host back to the first step of the listing flow. Their answers and photos stay filled in.</p>
       <label class="pp-label" for="reasonInput">Reason (kept in the audit log)</label>
       <textarea id="reasonInput" class="pp-textarea" rows="3" maxlength="1000" placeholder="e.g. Photos don't match the address"></textarea>
       <p class="pp-field-error" id="reasonError"></p>
