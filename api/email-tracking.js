@@ -17,7 +17,7 @@
 //   types     -> GET /api/internal/email-tracking/types
 //   timeline  -> GET /api/internal/email-tracking/{messageId}
 
-import { createClient } from '@supabase/supabase-js';
+import { requireAdmin } from '../lib/verify-admin.js';
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -27,18 +27,6 @@ const CORS = {
 
 const BASE_URL = process.env.BACKEND_URL || 'https://production-backend.swap-space.com';
 const API_KEY = process.env.AUTO_REGISTER_API_KEY;
-
-// Verify the admin's Bearer JWT with the anon-key client; returns user or null.
-// (Mirrors verifyAdmin in /api/admin.js.)
-async function verifyAdmin(req) {
-  const authHeader = req.headers.authorization;
-  if (!authHeader?.startsWith('Bearer ')) return null;
-  const token = authHeader.slice(7);
-  const authClient = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY);
-  const { data: { user }, error } = await authClient.auth.getUser(token);
-  if (error || !user) return null;
-  return user;
-}
 
 // Translate the incoming request into the upstream URL. Returns null when a
 // required parameter is missing (timeline needs a messageId).
@@ -72,8 +60,8 @@ export default async function handler(req, res) {
   // endpoint) is what tells the browser helper (adminFetch) to bounce to the
   // login screen — so it must mean "your admin session is invalid", never
   // "the upstream internal key is wrong".
-  const user = await verifyAdmin(req);
-  if (!user) return res.status(401).json({ error: 'Unauthorized' });
+  const user = await requireAdmin(req, res);
+  if (!user) return;
 
   if (!API_KEY) {
     console.error('AUTO_REGISTER_API_KEY is not set — cannot reach the email-tracking service.');

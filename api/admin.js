@@ -1,23 +1,13 @@
 import { createClient } from '@supabase/supabase-js';
+import { requireAdmin } from '../lib/verify-admin.js';
 import { autoRegisterUser } from '../lib/auto-register.js';
+import { handleAdminProperties } from '../lib/admin-properties.js';
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 };
-
-// ── Auth helper ───────────────────────────────────────────────────────────────
-// Verifies the Bearer JWT using the anon key client; returns the user or null.
-async function verifyAdmin(req) {
-  const authHeader = req.headers.authorization;
-  if (!authHeader?.startsWith('Bearer ')) return null;
-  const token = authHeader.slice(7);
-  const authClient = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY);
-  const { data: { user }, error } = await authClient.auth.getUser(token);
-  if (error || !user) return null;
-  return user;
-}
 
 // ── Service-role Supabase client ──────────────────────────────────────────────
 function getSupabase() {
@@ -425,8 +415,14 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   const action = req.query.action;
-  const user = await verifyAdmin(req);
-  if (!user) return res.status(401).json({ error: 'Unauthorized' });
+  const user = await requireAdmin(req, res);
+  if (!user) return;
+
+  // Property moderation lives here, not in its own api/ file, to stay within
+  // the Vercel Hobby plan's 12-function limit. See lib/admin-properties.js.
+  if (req.query.resource === 'properties') {
+    return handleAdminProperties(req, res, user);
+  }
 
   let fn;
   if (req.method === 'POST') {
