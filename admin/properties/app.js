@@ -186,7 +186,7 @@ function renderDrawer(detail) {
     <div class="pp-photos">
       ${images.map(img => `
         <div class="photo-item pp-photo">
-          <img src="${escapeAttr(img.imageUrl || '')}" alt="" loading="lazy">
+          <img src="${escapeAttr(normalizeImageUrl(img.imageUrl))}" alt="" loading="lazy">
           <button class="photo-delete-btn" onclick="deleteImage(${Number(img.id)})" title="Delete photo" aria-label="Delete photo">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
           </button>
@@ -299,6 +299,17 @@ function statusChip(p) {
   if (p.published && p.available) return `<span class="pp-chip pp-chip--green">Live</span>`;
   if (p.published) return `<span class="pp-chip pp-chip--blue">Published · paused</span>`;
   return `<span class="pp-chip pp-chip--grey">Not published</span>`;
+}
+
+// The backend returns bare hostnames like "d3vretalihqpwb.cloudfront.net/img.jpg",
+// which the browser would resolve relative to this page. Make them absolute https.
+// (Same as normalizeImageUrl in /admin/email-snippet/app.js.)
+function normalizeImageUrl(url) {
+  if (!url) return '';
+  if (/^(https?:\/\/|data:)/.test(url)) return url;
+  if (/^\/\//.test(url)) return 'https:' + url;
+  if (/^[a-zA-Z0-9][a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\//.test(url)) return 'https://' + url;
+  return url;
 }
 
 function escapeHtml(s) {
