@@ -35,6 +35,7 @@ let busy = false;         // an unpublish/delete is in flight
   document.getElementById('statusFilter').addEventListener('change', onStatusChange);
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeDrawer(); });
 
+  updateExportLabel();
   await loadRows();
 })();
 
@@ -47,6 +48,7 @@ function onSearch(e) {
 
 function onStatusChange(e) {
   currentStatus = e.target.value;
+  updateExportLabel();
   currentPage = 0;
   loadRows();
 }
@@ -125,6 +127,103 @@ function changePage(delta) {
   if (next < 0 || next >= totalPages) return;
   currentPage = next;
   loadRows();
+}
+
+// ── Export ──────────────────────────────────────────────────────────────────
+// Downloads a CSV of host emails for every listing matching the current Status
+// filter and search, one row per host. Walks every page of the list since the
+// table only holds one.
+const EXPORT_LABELS = {
+  '': { button: 'Export all emails', file: 'all' },
+  'true': { button: 'Export published emails', file: 'published' },
+  'false': { button: 'Export not-published emails', file: 'not-published' },
+};
+
+function updateExportLabel() {
+  document.getElementById('exportLabel').textContent = EXPORT_LABELS[currentStatus].button;
+}
+
+async function exportEmails() {
+  const btn = document.getElementById('exportBtn');
+  if (btn.disabled) return;
+  const label = btn.innerHTML;
+  btn.disabled = true;
+  btn.textContent = 'Exporting…';
+
+  try {
+    const listings = [];
+    for (let page = 0, pages = 1; page < pages; page++) {
+      const params = new URLSearchParams({ page: String(page), size: '100' });
+      if (currentSearch) params.set('search', currentSearch);
+      if (currentStatus) params.set('published', currentStatus);
+      const res = await adminFetch(`${PROXY}&${params.toString()}`);
+      if (!res) return; // redirected to login
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || `Server responded ${res.status}`);
+      const content = Array.isArray(data.content) ? data.content : [];
+      listings.push(...content);
+      pages = data.totalPages || 0;
+      if (content.length === 0) break;
+    }
+
+    // Group listings by host email so each host appears once.
+    const hosts = new Map();
+    let missingEmail = 0;
+    for (const p of listings) {
+      const email = (p.hostEmail || '').trim().toLowerCase();
+      if (!email) { missingEmail++; continue; }
+      if (!hosts.has(email)) hosts.set(email, { email, name: p.hostName || '', ids: [], titles: [], published: 0 });
+      const h = hosts.get(email);
+      h.ids.push(p.id);
+      h.titles.push(p.title || 'Untitled listing');
+      if (p.published) h.published++;
+    }
+
+    if (hosts.size === 0) {
+      showAlert({ title: 'Nothing to export', message: 'No listings with a host email match the current filter.' });
+      return;
+    }
+
+    const lines = [['email', 'host_name', 'listing_count', 'published_count', 'not_published_count', 'listing_ids', 'listing_titles']];
+    for (const h of hosts.values()) {
+      lines.push([h.email, h.name, h.ids.length, h.published, h.ids.length - h.published, h.ids.join('; '), h.titles.join('; ')]);
+    }
+    const csv = lines.map(cols => cols.map(csvCell).join(',')).join('\r\n');
+    const searchPart = currentSearch ? `-${currentSearch.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}` : '';
+    downloadFile(`${EXPORT_LABELS[currentStatus].file}${searchPart}-host-emails-${new Date().toISOString().slice(0, 10)}.csv`, csv);
+
+    showToast({
+      title: `Exported ${hosts.size} email${hosts.size === 1 ? '' : 's'}`,
+      lines: [`From ${listings.length} listing${listings.length === 1 ? '' : 's'}`]
+        .concat(missingEmail ? [`${missingEmail} listing${missingEmail === 1 ? ' has' : 's have'} no host email`] : []),
+      variant: 'info',
+    });
+  } catch (err) {
+    console.error('Failed to export emails:', err);
+    showAlert({ title: 'Export failed', message: `Couldn't export emails: ${err.message}.`, variant: 'danger' });
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = label;
+    updateExportLabel();
+  }
+}
+
+function csvCell(v) {
+  const s = String(v == null ? '' : v);
+  return /[",\r\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+}
+
+function downloadFile(filename, text) {
+  // Leading BOM so Excel reads the file as UTF-8 (accented names).
+  const blob = new Blob(['\ufeff' + text], { type: 'text/csv;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 // ── Drawer ──────────────────────────────────────────────────────────────────
@@ -330,3 +429,4 @@ window.changePage = changePage;
 window.loadRows = loadRows;
 window.unpublish = unpublish;
 window.deleteImage = deleteImage;
+window.exportEmails = exportEmails;
