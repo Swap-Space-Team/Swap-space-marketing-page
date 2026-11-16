@@ -2,6 +2,7 @@ import { createClient } from '@supabase/supabase-js';
 import { requireAdmin } from '../lib/verify-admin.js';
 import { autoRegisterUser } from '../lib/auto-register.js';
 import { handleAdminProperties } from '../lib/admin-properties.js';
+import { handleAdminMetrics } from '../lib/admin-metrics.js';
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -422,6 +423,9 @@ export default async function handler(req, res) {
   // the Vercel Hobby plan's 12-function limit. See lib/admin-properties.js.
   if (req.query.resource === 'properties') {
     return handleAdminProperties(req, res, user);
+  }
+  if (req.query.resource === 'metrics') {
+    return handleAdminMetrics(req, res);
   }
 
   let fn;

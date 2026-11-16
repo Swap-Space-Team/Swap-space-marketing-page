@@ -1,0 +1,143 @@
+/* Metrics dashboard: page-specific styles.
+   Shared chrome (header, nav, table, buttons) comes from /admin/admin.css. */
+
+/* ── Intro ─────────────────────────────────────────────────────────────────── */
+.mx-intro {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px 16px;
+  margin-bottom: 22px;
+}
+.mx-intro h1 { margin: 0 0 6px; font-size: 24px; font-weight: 700; color: #111827; }
+.mx-intro p { margin: 0; font-size: 14px; line-height: 1.6; color: #6B7280; }
+.mx-updated { font-size: 12px; color: #9CA3AF; }
+
+/* ── Sections ──────────────────────────────────────────────────────────────── */
+.mx-section { margin-bottom: 32px; }
+.mx-section h2 { margin: 0 0 4px; font-size: 16px; font-weight: 600; color: #111827; }
+.mx-section-intro { margin: 0 0 12px; font-size: 13px; line-height: 1.5; color: #6B7280; max-width: 760px; }
+.mx-section h2 + .mx-cards,
+.mx-section h2 + .mx-panel { margin-top: 12px; }
+
+.mx-panel {
+  background: #fff;
+  border: 1px solid #E5E7EB;
+  border-radius: 12px;
+  padding: 18px 20px;
+}
+.mx-empty { color: #6B7280; font-size: 14px; text-align: center; }
+.mx-error { text-align: center; padding: 48px 16px; color: #6B7280; }
+.mx-error p { margin: 0 0 14px; font-size: 14px; }
+.mx-num { text-align: right; font-variant-numeric: tabular-nums; }
+/* Three short columns: no need for the shared 900px table minimum. */
+.mx-section table { min-width: 0; }
+
+/* ── Cards ─────────────────────────────────────────────────────────────────── */
+.mx-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 12px;
+}
+.mx-card {
+  background: #fff;
+  border: 1px solid #E5E7EB;
+  border-radius: 12px;
+  padding: 16px 18px;
+}
+.mx-card-label { font-size: 13px; color: #6B7280; }
+.mx-card-value {
+  margin: 6px 0 4px;
+  font-size: 30px;
+  font-weight: 700;
+  color: #111827;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+.mx-card-sub { font-size: 12px; color: #6B7280; line-height: 1.4; }
+
+/* ── Funnel ────────────────────────────────────────────────────────────────── */
+.mx-funnel { display: grid; gap: 12px; }
+.mx-funnel-row {
+  display: grid;
+  grid-template-columns: 230px 1fr 110px;
+  grid-template-areas: "label track count" ". step .";
+  align-items: center;
+  column-gap: 14px;
+}
+.mx-funnel-label { grid-area: label; font-size: 13px; color: #374151; }
+.mx-funnel-track { grid-area: track; height: 14px; background: #F3F4F6; border-radius: 7px; overflow: hidden; }
+.mx-funnel-bar { height: 100%; background: #F79009; border-radius: 7px; }
+.mx-funnel-count {
+  grid-area: count;
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.mx-funnel-count span { margin-left: 8px; font-weight: 400; color: #6B7280; font-size: 12px; }
+.mx-funnel-step { grid-area: step; font-size: 11px; color: #9CA3AF; margin-top: 2px; }
+
+/* ── Weekly chart ──────────────────────────────────────────────────────────── */
+.mx-legend { display: flex; gap: 16px; font-size: 12px; color: #6B7280; margin-bottom: 12px; }
+.mx-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.mx-swatch { display: inline-block; width: 10px; height: 10px; border-radius: 2px; }
+.mx-weekly {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 6px;
+  height: 200px;
+}
+.mx-week { display: flex; flex-direction: column; min-width: 0; }
+.mx-week-bars {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 3px;
+  border-bottom: 1px solid #E5E7EB;
+}
+.mx-bar {
+  position: relative;
+  width: 40%;
+  max-width: 18px;
+  border-radius: 3px 3px 0 0;
+}
+.mx-bar span {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding-bottom: 2px;
+  font-size: 10px;
+  color: #6B7280;
+  font-variant-numeric: tabular-nums;
+}
+.mx-bar--signups { background: #F79009; }
+.mx-bar--listings { background: #155EEF; }
+.mx-week-label {
+  margin-top: 6px;
+  font-size: 11px;
+  color: #9CA3AF;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* ── Small screens ─────────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .mx-funnel-row {
+    grid-template-columns: 1fr auto;
+    grid-template-areas: "label count" "track track" "step step";
+    row-gap: 4px;
+  }
+  .mx-weekly { gap: 2px; height: 160px; }
+  .mx-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .mx-card { padding: 12px 14px; }
+  .mx-card-value { font-size: 24px; }
+  .mx-bar span { display: none; }
+  /* Label every other week so the dates don't run into each other. */
+  .mx-week:nth-child(even) .mx-week-label { visibility: hidden; }
+  .mx-week-label { font-size: 10px; }
+}

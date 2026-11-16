@@ -311,6 +311,7 @@ const ADMIN_NAV_ITEMS = [
   { href: '/admin/email-snippet/',  label: 'Email Snippets',    icon: '✉️' },
   { href: '/admin/email-tracking/', label: 'Email Tracking',    icon: '📬' },
   { href: '/admin/properties/',     label: 'Properties',        icon: '🏠' },
+  { href: '/admin/metrics/',        label: 'Metrics',           icon: '📊' },
 ];
 
 (function injectAdminNav() {
