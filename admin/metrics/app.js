@@ -77,7 +77,6 @@ function renderCards(m) {
     card('Members', mem.total, `+${fmt(mem.newLast30Days)} in the last 30 days`),
     card('Active members', mem.activeLast30Days, 'Logged in during the last 30 days'),
     card('Published homes', homes.published, `+${fmt(homes.newLast30Days)} in the last 30 days, ${fmt(homes.unpublished)} unpublished`),
-    card('Members with a published home', mem.withPublishedHome, `${pct(mem.withPublishedHome, mem.total)} of members`),
     card('Swap requests', swaps.requests, `+${fmt(swaps.requestsLast30Days)} in the last 30 days`),
     card('Completed swaps', swaps.completed, `${pct(swaps.completed, swaps.requests)} of requests`),
     card('ID verified', mem.idVerified, `${pct(mem.idVerified, mem.total)} of members`),
